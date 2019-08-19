@@ -23,34 +23,30 @@ class NFA{
 	set<State> getNewStatesName(const string& prefix);
 	void addTransition(const State& from, const set<State>& to, char symbol);
 	static set<State> getNewStatesName(const set<State>& states, const string& prefix);
+	friend std::ostream & operator<<(std::ostream & str, const NFA & obj);
 
 public:
 	NFA(set<State> states, State initial_state, map<pair<State, char>, set<State>> transitions, set<State> accepting_states);
-    const set<State> &getStates() const;
-    const State &getInitialState() const;
-    const map<pair<State, char>, set<State>> & getTransitions() const;
-    const set<State> &getAcceptingStates() const;
+    virtual ~NFA();
     bool accept(const string& str);
 	static NFA simpleNFA(char c);
 	NFA nfa_concat(NFA nfa);
 	NFA nfa_union(NFA nfa);
 	NFA kleene_closure();
 	NFA plus_closure();
-
-    virtual ~NFA();
 };
 
 inline std::ostream & operator<<(std::ostream & str, const NFA & obj){
     str << "------------------------\n";
     str << "States: ";
-    for(State const& element : obj.getStates())
+    for(State const& element : obj.states)
         str << element << ", ";
     str << "\n";
 
     str << "Transition function: \n";
 
     map<pair<State, char>, set<State>>::const_iterator it;
-    for (it = obj.getTransitions().begin(); it != obj.getTransitions().end(); ++it){
+    for (it = obj.transitions.begin(); it != obj.transitions.end(); ++it){
         if(it->first.second == '\0')
             str << "\t(" << it->first.first << ", ) => {";
         else
@@ -60,9 +56,9 @@ inline std::ostream & operator<<(std::ostream & str, const NFA & obj){
         str << "}\n";
     }
 
-    str << "Initial state: " << obj.getInitialState() << endl;
+    str << "Initial state: " << obj.initial_state << endl;
     str << "Accepting states: ";
-    for(State const& element : obj.getAcceptingStates())
+    for(State const& element : obj.accepting_states)
         str << element << ", ";
     str << "\n";
     str << "------------------------\n";

@@ -1,6 +1,5 @@
 #include "../include/NFA.h"
 
-#include <iostream>
 #include <vector>
 #include <map>
 #include <set>
@@ -10,6 +9,11 @@
 #include <cstring>
 
 using namespace std;
+
+NFA::NFA(set<State> states, State initial_state, map<pair<State, char>, set<State>> transitions, set<State> accepting_states):
+        states(std::move(states)), initial_state(std::move(initial_state)), transitions(std::move(transitions)), accepting_states(std::move(accepting_states)){}
+
+NFA::~NFA() = default;
 
 set<State> NFA::next_states(const State& state, char symbol){
 	set<State> empty_set;
@@ -249,23 +253,3 @@ NFA NFA::plus_closure(){
 	return nfa;
 }
 
-NFA::NFA(set<State> states, State initial_state, map<pair<State, char>, set<State>> transitions, set<State> accepting_states):
-states(std::move(states)), initial_state(std::move(initial_state)), transitions(std::move(transitions)), accepting_states(std::move(accepting_states)){}
-
-const set<State> &NFA::getStates() const {
-    return states;
-}
-
-const State &NFA::getInitialState() const {
-    return initial_state;
-}
-
-const map<pair<State, char>, set<State>> &NFA::getTransitions() const {
-    return transitions;
-}
-
-const set<State> &NFA::getAcceptingStates() const {
-    return accepting_states;
-}
-
-NFA::~NFA() = default;

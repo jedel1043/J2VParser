@@ -10,10 +10,10 @@ using namespace std;
 class Regex{
 	static bool isOperator(char c);
 	static bool hasLessOrEqualPriority(char operator1, char operator2);
-	static string toPostfix(string infix);
+	static string toPostfix(const string& infix);
 
 public:
-	static NFA compile(string str);
+	static NFA compile(const string& str);
 };
 
 #endif

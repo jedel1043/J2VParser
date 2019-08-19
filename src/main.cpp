@@ -2,8 +2,6 @@
 #include "Regex.h"
 
 #include <iostream>
-#include <set>
-#include <cstring>
 
 using namespace std;
 

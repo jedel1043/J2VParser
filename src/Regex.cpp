@@ -1,17 +1,13 @@
-#include "Regex.h"
-#include "NFA.h"
+#include "../include/Regex.h"
+
 #include <map>
 #include <set>
 #include <stack>
-#include <cstring>
-#include <iostream>
 
 using namespace std;
 
 bool Regex::isOperator(char c){
-	if(c == '*' or c == '|' or c == '.' or c == '+')
-		return true;
-	return false;
+    return c == '*' or c == '|' or c == '.' or c == '+';
 }
 
 bool Regex::hasLessOrEqualPriority(char operator1, char operator2){
@@ -24,9 +20,9 @@ bool Regex::hasLessOrEqualPriority(char operator1, char operator2){
 	return operators[operator1] <= operators[operator2];
 }
 
-string Regex::toPostfix(string infix){
+string Regex::toPostfix(const string& infix){
 	stack<char> s;
-	string postfix = "";
+	string postfix;
 	for(char const c : infix){
 		if(c == '('){
 			s.push(c);
@@ -56,7 +52,7 @@ string Regex::toPostfix(string infix){
 	return postfix;
 }
 
-NFA Regex::compile(string str){
+NFA Regex::compile(const string& str){
 	stack<NFA> results;
 	string postfix = Regex::toPostfix(str);
 	for(char const c : postfix){

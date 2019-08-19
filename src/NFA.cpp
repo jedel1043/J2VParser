@@ -1,4 +1,4 @@
-#include "NFA.h"
+#include "../include/NFA.h"
 
 #include <iostream>
 #include <vector>
@@ -11,30 +11,30 @@
 
 using namespace std;
 
-set<State> NFA::next_states(State state, char symbol){
+set<State> NFA::next_states(const State& state, char symbol){
 	set<State> empty_set;
 	pair<State, char> input(state, symbol);
-	map<pair<State, char>, set<State>>::iterator transition = transitions.find(input);
+	auto transition = transitions.find(input);
 	if(transitions.find(input) != transitions.end())
 		return transition->second;
 	return empty_set;
 }
 
-set<State> NFA::eclousure(State state){
+set<State> NFA::eclousure(const State& state){
 	set<State> clousure_set;
-	stack<State> states;
-	states.push(state);
+	stack<State> aux_states_stack;
+	aux_states_stack.push(state);
 
-	while(!states.empty()){
-		State check_state = states.top();
-		states.pop();
+	while(!aux_states_stack.empty()){
+		State check_state = aux_states_stack.top();
+		aux_states_stack.pop();
 		if(!clousure_set.count(check_state))
 			clousure_set.insert(check_state);
 		set<State> state_set = this->next_states(check_state);
-		for(State const element : state_set){
+		for(State const& element : state_set){
 			if(!clousure_set.count(element)){
 				clousure_set.insert(element);
-				states.push(element);
+				aux_states_stack.push(element);
 			}
 		}
 	}
@@ -42,24 +42,24 @@ set<State> NFA::eclousure(State state){
 	return clousure_set;
 }
 
-set<State> NFA::eclousure(set<State> states){
+set<State> NFA::eclousure(const set<State>& states_set){
 	set<State> result;
-	for(State const state : states){
+	for(State const& state : states_set){
 		set<State> e_state = this->eclousure(state);
 		result.insert(e_state.begin(), e_state.end());
 	}
 	return result;
 }
 
-set<State> NFA::compute(set<State> states, char *string){
+set<State> NFA::compute(const set<State>& states_set, char *string){
 	set<State> result;
 	if(*string == '\0'){
-		return this->eclousure(states);
+		return this->eclousure(states_set);
 	}
 	else{
-		for(State const state : states){
+		for(State const& state : states_set){
 			set<State> clousure = this->eclousure(state);
-			for(State const s : clousure){
+			for(State const& s : clousure){
 				set<State> s_states = this->next_states(s, *string);
 				result.insert(s_states.begin(), s_states.end());
 			}
@@ -69,7 +69,7 @@ set<State> NFA::compute(set<State> states, char *string){
 	return this->compute(result, string);
 }
 
-bool NFA::accept(string str){
+bool NFA::accept(const string& str){
 	set<State> configuration;
 	configuration.insert(this->initial_state);
 	char cstr[str.size() + 1];
@@ -79,13 +79,13 @@ bool NFA::accept(string str){
 	set<State> intersection;
 	set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(), inserter(intersection, intersection.begin()));
 
-	return (intersection.size() > 0);
+	return (!intersection.empty());
 }
 
 void NFA::print(){
 	cout << "------------------------\n";
 	cout << "States: ";
-	for(State const element : states)
+	for(State const& element : states)
     		cout << element << ", ";
     cout << "\n";
 
@@ -94,16 +94,16 @@ void NFA::print(){
 	for (it = transitions.begin(); it != transitions.end(); ++it){
 		if(it->first.second == '\0')
     		cout << "\t(" << it->first.first << ", ) => {";
-    	else
-    		cout << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
-    	for(State const element : it->second)
+		else
+    	    cout << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
+    	for(State const& element : it->second)
     		cout << element << ", ";
     	cout << "}\n";
 	}
 
 	cout << "Initial state: " << initial_state << endl;
 	cout << "Accepting states: ";
-	for(State const element : accepting_states)
+	for(State const& element : accepting_states)
     		cout << element << ", ";
     cout << "\n";
 
@@ -126,19 +126,19 @@ NFA NFA::simpleNFA(char c){
 	return NFA(states, "0", transitions, accepting_states);
 }
 
-void NFA::addTransition(State from, set<State> to, char symbol){
+void NFA::addTransition(const State& from, const set<State>& to, char symbol){
 	this->transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair(from, symbol), to));
 }
 
-set<State> NFA::getNewStatesName(string prefix){
+set<State> NFA::getNewStatesName(const string& prefix){
 	set<State> newSates;
-	for(State const state : this->states)
+	for(State const& state : this->states)
 		newSates.insert(prefix + state);
 	return newSates;
 }
-set<State> NFA::getNewStatesName(set<State> states, string prefix){
+set<State> NFA::getNewStatesName(const set<State>& states, const string& prefix){
 	set<State> newSates;
-	for(State const state : states)
+	for(State const& state : states)
 		newSates.insert(prefix + state);
 	return newSates;
 }
@@ -170,7 +170,7 @@ NFA NFA::nfa_concat(NFA nfa){
 	}
 	set<State> thompson_concat;
 	thompson_concat.insert("q" + nfa.initial_state);
-	for(State const state : this->accepting_states){
+	for(State const& state : this->accepting_states){
 		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + state, '\0'), thompson_concat));
 	}
 
@@ -213,10 +213,10 @@ NFA NFA::nfa_union(NFA nfa){
 
 	set<State> f_thompson_concat;
 	f_thompson_concat.insert(new_final_state);
-	for(State const state : this->accepting_states){
+	for(State const& state : this->accepting_states){
 		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + state, '\0'), f_thompson_concat));
 	}
-	for(State const state : nfa.accepting_states){
+	for(State const& state : nfa.accepting_states){
 		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("q" + state, '\0'), f_thompson_concat));
 	}
 
@@ -243,7 +243,7 @@ NFA NFA::kleene_clousure(){
 	set<State> old_initial_state;
 	old_initial_state.insert(this->initial_state);
 	old_initial_state.insert(new_final_state);
-	for(State const state : this->accepting_states){
+	for(State const& state : this->accepting_states){
 		nfa.addTransition(state, old_initial_state, '\0');
 	}
 	// Returning the result
@@ -270,7 +270,7 @@ NFA NFA::plus_clousure(){
 	set<State> old_initial_state;
 	old_initial_state.insert(this->initial_state);
 	old_initial_state.insert(new_final_state);
-	for(State const state : this->accepting_states){
+	for(State const& state : this->accepting_states){
 		nfa.addTransition(state, old_initial_state, '\0');
 	}
 	// Returning the result

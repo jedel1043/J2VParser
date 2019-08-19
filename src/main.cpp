@@ -7,6 +7,7 @@ using namespace std;
 
 int main(){
 	NFA result = Regex::compile("a.b*.(c|d).b+");
+	cout << result << endl;
 	cout << "T: abbbcb: " << result.accept("abbbcb") << endl;
 	cout << "F: abbbbbbbbd: " << result.accept("abbbbbbbbd") << endl;
 	cout << "F: bbbbcbbb: " << result.accept("bbbbcbbb") << endl;

@@ -59,12 +59,12 @@ NFA Regex::compile(const string& str){
 		if(c == '*'){
 			NFA nfa = results.top();
 			results.pop();
-			results.push(nfa.kleene_clousure());
+			results.push(nfa.kleene_closure());
 		}
 		else if(c == '+'){
 			NFA nfa = results.top();
 			results.pop();
-			results.push(nfa.plus_clousure());
+			results.push(nfa.plus_closure());
 		}
 		else if(c == '.'){
 			NFA nfa2 = results.top();

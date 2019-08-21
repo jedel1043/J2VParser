@@ -8,24 +8,32 @@
 #include <iostream>
 
 using namespace std;
-typedef string State;
 
 class NFA{
-	set<State> states;
-	State initial_state;
-	map<pair<State, char>, set<State>> transitions;
-	set<State> accepting_states;
+	static int StateCounter;
+	static int getStateNumber(){
+		int number = NFA::StateCounter;
+		NFA::StateCounter++;
+		return number;
+	}
 
-	set<State> next_states(State state, char symbol = '\0');
-	set<State> eclousure(State state);
-	set<State> eclousure(set<State> states);
-	set<State> compute(set<State> states, char *string);
-	set<State> getNewStatesName(string prefix);
-	void addTransition(State from, set<State> to, char symbol);
-	static set<State> getNewStatesName(set<State> states, string prefix);
+	NFA();
+
+	set<int> states;
+	int initial_state;
+	map<pair<int, char>, set<int>> transitions;
+	set<int> accepting_states;
+	int number_of_states;
+
+	set<int> next_states(int state, char symbol = '\0');
+	set<int> eclousure(int state);
+	set<int> eclousure(set<int> states);
+	set<int> compute(set<int> states, char *string);
+	set<int> getNewStatesName(string prefix);
+	void addTransition(int from, set<int> to, char symbol);
 
 public:
-	NFA(set<State> states, State initial_state, map<pair<State, char>, set<State>> transitions, set<State> accepting_states): states(states), initial_state(initial_state), transitions(transitions), accepting_states(accepting_states){}
+	NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, set<int> accepting_states);
 	bool accept(string str);
 	void print();
 	static NFA simpleNFA(char c);

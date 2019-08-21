@@ -5,62 +5,85 @@
 #include <map>
 #include <set>
 #include <utility>
-#include <algorithm> 
+#include <algorithm>
 #include <stack>
 #include <cstring>
 
 using namespace std;
 
-set<State> NFA::next_states(State state, char symbol){
-	set<State> empty_set;
-	pair<State, char> input(state, symbol);
-	map<pair<State, char>, set<State>>::iterator transition = transitions.find(input);
-	if(transitions.find(input) != transitions.end())
+int NFA::StateCounter = 0;
+
+NFA::NFA(){}
+
+NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, set<int> accepting_states){
+	this->number_of_states = size;
+	map<int, int> tmp_dic;
+	for(int i=0; i<size; i++){
+		this->states.insert(NFA::StateCounter);
+		tmp_dic.insert(pair<int, int>(std::make_pair(i, NFA::StateCounter)));
+		NFA::StateCounter++;
+	}
+	map<pair<int, char>, set<int>>::iterator map_it;
+	for(map_it = transitions.begin(); map_it != transitions.end(); ++map_it){
+		set<int> transition_states;
+		for(int const t : map_it->second)
+			transition_states.insert(tmp_dic[t]);
+		this->transitions.insert(pair<pair<int, char>, set<int>>(std::make_pair(tmp_dic[map_it->first.first], map_it->first.second), transition_states));
+	}
+	for(int const state : accepting_states)
+		this->accepting_states.insert(tmp_dic[state]);
+	this->initial_state = tmp_dic[initial_state];
+}
+
+set<int> NFA::next_states(int state, char symbol){
+	set<int> empty_set;
+	pair<int, char> input(state, symbol);
+	map<pair<int, char>, set<int>>::iterator transition = this->transitions.find(input);
+	if(transition != this->transitions.end())
 		return transition->second;
 	return empty_set;
 }
 
-set<State> NFA::eclousure(State state){
-	set<State> clousure_set;
-	stack<State> states;
+set<int> NFA::eclousure(int state){
+	set<int> clousure_set;
+	stack<int> states;
 	states.push(state);
 
 	while(!states.empty()){
-		State check_state = states.top();
+		int check_state = states.top();
 		states.pop();
 		if(!clousure_set.count(check_state))
 			clousure_set.insert(check_state);
-		set<State> state_set = this->next_states(check_state);
-		for(State const element : state_set){
+		set<int> state_set = this->next_states(check_state);
+		for(int const element : state_set){
 			if(!clousure_set.count(element)){
 				clousure_set.insert(element);
 				states.push(element);
 			}
 		}
 	}
-
 	return clousure_set;
 }
 
-set<State> NFA::eclousure(set<State> states){
-	set<State> result;
-	for(State const state : states){
-		set<State> e_state = this->eclousure(state);
+set<int> NFA::eclousure(set<int> states){
+	set<int> result;
+	for(int const state : states){
+		set<int> e_state = this->eclousure(state);
 		result.insert(e_state.begin(), e_state.end());
 	}
 	return result;
 }
 
-set<State> NFA::compute(set<State> states, char *string){
-	set<State> result;
+set<int> NFA::compute(set<int> states, char *string){
+	set<int> result;
 	if(*string == '\0'){
 		return this->eclousure(states);
 	}
 	else{
-		for(State const state : states){
-			set<State> clousure = this->eclousure(state);
-			for(State const s : clousure){
-				set<State> s_states = this->next_states(s, *string);
+		for(int const state : states){
+			set<int> clousure = this->eclousure(state);
+			for(int const s : clousure){
+				set<int> s_states = this->next_states(s, *string);
 				result.insert(s_states.begin(), s_states.end());
 			}
 		}
@@ -70,13 +93,13 @@ set<State> NFA::compute(set<State> states, char *string){
 }
 
 bool NFA::accept(string str){
-	set<State> configuration;
+	set<int> configuration;
 	configuration.insert(this->initial_state);
 	char cstr[str.size() + 1];
 	strcpy(cstr, str.c_str());
-	set<State> result = this->compute(configuration, cstr);
+	set<int> result = this->compute(configuration, cstr);
 
-	set<State> intersection;
+	set<int> intersection;
 	set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(), inserter(intersection, intersection.begin()));
 
 	return (intersection.size() > 0);
@@ -85,25 +108,25 @@ bool NFA::accept(string str){
 void NFA::print(){
 	cout << "------------------------\n";
 	cout << "States: ";
-	for(State const element : states)
-    		cout << element << ", ";
-    cout << "\n";
+	for(int const state : this->states)
+		cout << state << ", ";
+	cout << endl;
 
-    cout << "Transition function: \n";
-	map<pair<State, char>, set<State>>::iterator it;
-	for (it = transitions.begin(); it != transitions.end(); ++it){
+  cout << "Transition function: \n";
+	map<pair<int, char>, set<int>>::iterator it;
+	for (it = this->transitions.begin(); it != this->transitions.end(); ++it){
 		if(it->first.second == '\0')
     		cout << "\t(" << it->first.first << ", ) => {";
     	else
     		cout << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
-    	for(State const element : it->second)
+    	for(int const element : it->second)
     		cout << element << ", ";
     	cout << "}\n";
 	}
 
-	cout << "Initial state: " << initial_state << endl;
+	cout << "Initial state: " << this->initial_state << endl;
 	cout << "Accepting states: ";
-	for(State const element : accepting_states)
+	for(int const element : this->accepting_states)
     		cout << element << ", ";
     cout << "\n";
 
@@ -111,168 +134,125 @@ void NFA::print(){
 }
 
 NFA NFA::simpleNFA(char c){
-	set<string> states;
-	map<pair<string, char>, set<string>> transitions;
-	set<string> accepting_states;
+	map<pair<int, char>, set<int>> transitions;
+	set<int> accepting_states;
 
-	set<string> t;
-	t.insert("1");
+	set<int> t;
+	t.insert(1);
 
-	states.insert("0");
-	states.insert("1");
-	transitions.insert(pair<pair<string, char>, set<string>>(std::make_pair("0", c), t));
-	accepting_states.insert("1");
+	transitions.insert(pair<pair<int, char>, set<int>>(std::make_pair(0, c), t));
+	accepting_states.insert(1);
 
-	return NFA(states, "0", transitions, accepting_states);
+	return NFA(2, 0, transitions, accepting_states);
 }
 
-void NFA::addTransition(State from, set<State> to, char symbol){
-	this->transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair(from, symbol), to));
-}
-
-set<State> NFA::getNewStatesName(string prefix){
-	set<State> newSates;
-	for(State const state : this->states)
-		newSates.insert(prefix + state);
-	return newSates;
-}
-set<State> NFA::getNewStatesName(set<State> states, string prefix){
-	set<State> newSates;
-	for(State const state : states)
-		newSates.insert(prefix + state);
-	return newSates;
+void NFA::addTransition(int from, set<int> to, char symbol){
+	this->transitions.insert(pair<pair<int, char>, set<int>>(std::make_pair(from, symbol), to));
 }
 
 NFA NFA::nfa_concat(NFA nfa){
+	// New NFA
+	NFA result;
 	// New composite states
-	set<State> new_states;
-	set<State> modified_states1 = NFA::getNewStatesName(this->states, "p");
-	set<State> modified_states2 = NFA::getNewStatesName(nfa.states, "q");
-	new_states.insert(modified_states1.begin(), modified_states1.end());
-	new_states.insert(modified_states2.begin(), modified_states2.end());
+	result.states.insert(this->states.begin(), this->states.end());
+	result.states.insert(nfa.states.begin(), nfa.states.end());
 	// New initial state
-	State new_initial_state = "p" + this->initial_state;
+	result.initial_state = this->initial_state;
 	// New accepting states
-	set<State> new_accepting_states;
-	new_accepting_states = NFA::getNewStatesName(nfa.accepting_states, "q");
+	result.accepting_states.insert(nfa.accepting_states.begin(), nfa.accepting_states.end());
 	// New transition function
-	map<pair<State, char>, set<State>> new_transitions;
-	map<pair<State, char>, set<State>>::iterator map_it;
-	for(map_it = this->transitions.begin(); map_it != this->transitions.end(); ++map_it){
-		set<State> transition_states;
-		transition_states = NFA::getNewStatesName(map_it->second, "p");
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + map_it->first.first, map_it->first.second), transition_states));
-	}
-	for(map_it = nfa.transitions.begin(); map_it != nfa.transitions.end(); ++map_it){
-		set<State> transition_states;
-		transition_states = NFA::getNewStatesName(map_it->second, "q");
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("q" + map_it->first.first, map_it->first.second), transition_states));
-	}
-	set<State> thompson_concat;
-	thompson_concat.insert("q" + nfa.initial_state);
-	for(State const state : this->accepting_states){
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + state, '\0'), thompson_concat));
+	result.transitions.insert(this->transitions.begin(), this->transitions.end());
+	result.transitions.insert(nfa.transitions.begin(), nfa.transitions.end());
+	set<int> thompson_concat;
+	thompson_concat.insert(nfa.initial_state);
+	for(int const state : this->accepting_states){
+		result.addTransition(state, thompson_concat, '\0');
 	}
 
-	return NFA(new_states, new_initial_state, new_transitions, new_accepting_states);
+	return result;
 }
 
 NFA NFA::nfa_union(NFA nfa){
+	// New NFA
+	NFA result;
 	// New composite states
-	set<State> new_states;
-	set<State> modified_states1 = NFA::getNewStatesName(this->states, "p");
-	set<State> modified_states2 = NFA::getNewStatesName(nfa.states, "q");
-	new_states.insert(modified_states1.begin(), modified_states1.end());
-	new_states.insert(modified_states2.begin(), modified_states2.end());
+	result.states.insert(this->states.begin(), this->states.end());
+	result.states.insert(nfa.states.begin(), nfa.states.end());
 	// New initial state
-	State new_initial_state = "i" + this->initial_state  + nfa.initial_state;
+	result.initial_state = NFA::getStateNumber();
 	// New accepting states
-	State new_final_state = "f" + this->initial_state  + nfa.initial_state;
-	set<State> new_accepting_states;
-	new_accepting_states.insert(new_final_state);
+	int new_final_state = NFA::getStateNumber();
+	result.accepting_states.insert(new_final_state);
 	// Adding the new states
-	new_states.insert(new_initial_state);
-	new_states.insert(new_final_state);
+	result.states.insert(result.initial_state);
+	result.states.insert(new_final_state);
 	// New transition function
-	map<pair<State, char>, set<State>> new_transitions;
-	map<pair<State, char>, set<State>>::iterator map_it;
-	for(map_it = this->transitions.begin(); map_it != this->transitions.end(); ++map_it){
-		set<State> transition_states;
-		transition_states = NFA::getNewStatesName(map_it->second, "p");
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + map_it->first.first, map_it->first.second), transition_states));
-	}
-	for(map_it = nfa.transitions.begin(); map_it != nfa.transitions.end(); ++map_it){
-		set<State> transition_states;
-		transition_states = NFA::getNewStatesName(map_it->second, "q");
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("q" + map_it->first.first, map_it->first.second), transition_states));
-	}
-	set<State> s_thompson_concat;
-	s_thompson_concat.insert("p" + this->initial_state);
-	s_thompson_concat.insert("q" + nfa.initial_state);
-	new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair(new_initial_state, '\0'), s_thompson_concat));
+	result.transitions.insert(this->transitions.begin(), this->transitions.end());
+	result.transitions.insert(nfa.transitions.begin(), nfa.transitions.end());
+	set<int> thompson_union;
+	thompson_union.insert(this->initial_state);
+	thompson_union.insert(nfa.initial_state);
+	result.addTransition(result.initial_state, thompson_union, '\0');
+	set<int> thompson_union2;
+	thompson_union2.insert(new_final_state);
+	for(int const state : this->accepting_states)
+		result.addTransition(state, thompson_union2, '\0');
+	for(int const state : nfa.accepting_states)
+		result.addTransition(state, thompson_union2, '\0');
 
-	set<State> f_thompson_concat;
-	f_thompson_concat.insert(new_final_state);
-	for(State const state : this->accepting_states){
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("p" + state, '\0'), f_thompson_concat));
-	}
-	for(State const state : nfa.accepting_states){
-		new_transitions.insert(pair<pair<State, char>, set<State>>(std::make_pair("q" + state, '\0'), f_thompson_concat));
-	}
-
-	return NFA(new_states, new_initial_state, new_transitions, new_accepting_states);
+	return result;
 }
 
 NFA NFA::kleene_clousure(){
-	// New composite states
-	set<State> new_states;
-	State new_initial_state = "p_i" + this->initial_state;
-	State new_final_state = "p_f" + this->initial_state;
-	new_states = this->states;
-	new_states.insert(new_initial_state);
-	new_states.insert(new_final_state);
+	// New NFA
+	NFA result;
+	// New states
+	result.states.insert(this->states.begin(), this->states.end());
+	// New initial state
+	result.initial_state = NFA::getStateNumber();
 	// New final states
-	set<State> new_accepting_states;
-	new_accepting_states.insert(new_final_state);
-	// Resulting NFA created
-	NFA nfa(new_states, new_initial_state, this->transitions, new_accepting_states);
+	int new_final_state = NFA::getStateNumber();
+	result.accepting_states.insert(new_final_state);
+	// Adding the new states
+	result.states.insert(result.initial_state);
+	result.states.insert(new_final_state);
 	// New transitions
-	set<State> initial_trans_state = new_accepting_states;
+	result.transitions.insert(this->transitions.begin(), this->transitions.end());
+	set<int> initial_trans_state = result.accepting_states;
 	initial_trans_state.insert(this->initial_state);
-	nfa.addTransition(new_initial_state, initial_trans_state, '\0');
-	set<State> old_initial_state;
-	old_initial_state.insert(this->initial_state);
-	old_initial_state.insert(new_final_state);
-	for(State const state : this->accepting_states){
-		nfa.addTransition(state, old_initial_state, '\0');
-	}
+	result.addTransition(result.initial_state, initial_trans_state, '\0');
+	set<int> new_final_states;
+	new_final_states.insert(this->initial_state);
+	new_final_states.insert(new_final_state);
+	for(int const state : this->accepting_states)
+		result.addTransition(state, new_final_states, '\0');
 	// Returning the result
-	return nfa;
+	return result;
 }
 
 NFA NFA::plus_clousure(){
-	// New composite states
-	set<State> new_states;
-	State new_initial_state = "p_i" + this->initial_state;
-	State new_final_state = "p_f" + this->initial_state;
-	new_states = this->states;
-	new_states.insert(new_initial_state);
-	new_states.insert(new_final_state);
+	// New NFA
+	NFA result;
+	// New states
+	result.states.insert(this->states.begin(), this->states.end());
+	// New initial state
+	result.initial_state = NFA::getStateNumber();
 	// New final states
-	set<State> new_accepting_states;
-	new_accepting_states.insert(new_final_state);
-	// Resulting NFA created
-	NFA nfa(new_states, new_initial_state, this->transitions, new_accepting_states);
+	int new_final_state = NFA::getStateNumber();
+	result.accepting_states.insert(new_final_state);
+	// Adding the new states
+	result.states.insert(result.initial_state);
+	result.states.insert(new_final_state);
 	// New transitions
-	set<State> initial_trans_state;
+	result.transitions.insert(this->transitions.begin(), this->transitions.end());
+	set<int> initial_trans_state;
 	initial_trans_state.insert(this->initial_state);
-	nfa.addTransition(new_initial_state, initial_trans_state, '\0');
-	set<State> old_initial_state;
-	old_initial_state.insert(this->initial_state);
-	old_initial_state.insert(new_final_state);
-	for(State const state : this->accepting_states){
-		nfa.addTransition(state, old_initial_state, '\0');
-	}
+	result.addTransition(result.initial_state, initial_trans_state, '\0');
+	set<int> new_final_states;
+	new_final_states.insert(this->initial_state);
+	new_final_states.insert(new_final_state);
+	for(int const state : this->accepting_states)
+		result.addTransition(state, new_final_states, '\0');
 	// Returning the result
-	return nfa;
+	return result;
 }

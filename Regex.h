@@ -12,8 +12,13 @@ class Regex{
 	static bool hasLessOrEqualPriority(char operator1, char operator2);
 	static string toPostfix(string infix);
 
+	static const string alpha_lower;
+	static const string alpha_upper;
+	static const string digit;
+
 public:
 	static NFA compile(string str);
+	static string preCompile(string str);
 };
 
 #endif

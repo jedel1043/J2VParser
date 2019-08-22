@@ -17,9 +17,8 @@ class Regex{
 	static const string digit;
 
 public:
-	static NFA compile(const string& str);
-	static NFA compile(string str);
-	static string preCompile(string str);
+	static NFA compile(const string & str);
+	static string preCompile(const string & str);
 };
 
 #endif

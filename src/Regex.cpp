@@ -24,8 +24,8 @@ bool Regex::hasLessOrEqualPriority(char operator1, char operator2){
 	return operators[operator1] <= operators[operator2];
 }
 
-string Regex::preCompile(string str){
-	string result = "";
+string Regex::preCompile(const string & str){
+	string result;
 
 	int flag_union = 0;
 	int flag_range = 0;
@@ -33,7 +33,7 @@ string Regex::preCompile(string str){
 	int flag_begin = 0;
 	int flag_concat = 0;
 
-	string range_name = "";
+	string range_name;
 
 	for(char const c : str){
 		switch(c){

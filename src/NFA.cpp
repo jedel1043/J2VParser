@@ -1,6 +1,5 @@
 #include "NFA.h"
 
-#include <iostream>
 #include <vector>
 #include <map>
 #include <set>
@@ -13,9 +12,9 @@ using namespace std;
 
 int NFA::StateCounter = 0;
 
-NFA::NFA(){}
+NFA::NFA()= default;
 
-NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, set<int> accepting_states){
+NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int>& accepting_states){
 	this->number_of_states = size;
 	map<int, int> tmp_dic;
 	for(int i=0; i<size; i++){
@@ -38,51 +37,51 @@ NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions
 set<int> NFA::next_states(int state, char symbol){
 	set<int> empty_set;
 	pair<int, char> input(state, symbol);
-	map<pair<int, char>, set<int>>::iterator transition = this->transitions.find(input);
+	auto transition = this->transitions.find(input);
 	if(transition != this->transitions.end())
 		return transition->second;
 	return empty_set;
 }
 
-set<int> NFA::eclousure(int state){
-	set<int> clousure_set;
-	stack<int> states;
-	states.push(state);
+set<int> NFA::e_closure(int state){
+	set<int> closure_set;
+	stack<int> states_saver;
+	states_saver.push(state);
 
-	while(!states.empty()){
-		int check_state = states.top();
-		states.pop();
-		if(!clousure_set.count(check_state))
-			clousure_set.insert(check_state);
+	while(!states_saver.empty()){
+		int check_state = states_saver.top();
+		states_saver.pop();
+		if(!closure_set.count(check_state))
+			closure_set.insert(check_state);
 		set<int> state_set = this->next_states(check_state);
 		for(int const element : state_set){
-			if(!clousure_set.count(element)){
-				clousure_set.insert(element);
-				states.push(element);
+			if(!closure_set.count(element)){
+				closure_set.insert(element);
+				states_saver.push(element);
 			}
 		}
 	}
-	return clousure_set;
+	return closure_set;
 }
 
-set<int> NFA::eclousure(set<int> states){
+set<int> NFA::e_closure(const set<int>& states_set){
 	set<int> result;
-	for(int const state : states){
-		set<int> e_state = this->eclousure(state);
+	for(int const state : states_set){
+		set<int> e_state = this->e_closure(state);
 		result.insert(e_state.begin(), e_state.end());
 	}
 	return result;
 }
 
-set<int> NFA::compute(set<int> states, char *string){
+set<int> NFA::compute(const set<int>& states_set, char *string){
 	set<int> result;
 	if(*string == '\0'){
-		return this->eclousure(states);
+		return this->e_closure(states_set);
 	}
 	else{
-		for(int const state : states){
-			set<int> clousure = this->eclousure(state);
-			for(int const s : clousure){
+		for(int const state : states_set){
+			set<int> closure = this->e_closure(state);
+			for(int const s : closure){
 				set<int> s_states = this->next_states(s, *string);
 				result.insert(s_states.begin(), s_states.end());
 			}
@@ -92,7 +91,7 @@ set<int> NFA::compute(set<int> states, char *string){
 	return this->compute(result, string);
 }
 
-bool NFA::accept(string str){
+bool NFA::accept(const string& str){
 	set<int> configuration;
 	configuration.insert(this->initial_state);
 	char cstr[str.size() + 1];
@@ -102,35 +101,7 @@ bool NFA::accept(string str){
 	set<int> intersection;
 	set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(), inserter(intersection, intersection.begin()));
 
-	return (intersection.size() > 0);
-}
-
-void NFA::print(){
-	cout << "------------------------\n";
-	cout << "States: ";
-	for(int const state : this->states)
-		cout << state << ", ";
-	cout << endl;
-
-  cout << "Transition function: \n";
-	map<pair<int, char>, set<int>>::iterator it;
-	for (it = this->transitions.begin(); it != this->transitions.end(); ++it){
-		if(it->first.second == '\0')
-    		cout << "\t(" << it->first.first << ", ) => {";
-    	else
-    		cout << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
-    	for(int const element : it->second)
-    		cout << element << ", ";
-    	cout << "}\n";
-	}
-
-	cout << "Initial state: " << this->initial_state << endl;
-	cout << "Accepting states: ";
-	for(int const element : this->accepting_states)
-    		cout << element << ", ";
-    cout << "\n";
-
-    cout << "------------------------\n";
+	return (!intersection.empty());
 }
 
 NFA NFA::simpleNFA(char c){
@@ -146,7 +117,7 @@ NFA NFA::simpleNFA(char c){
 	return NFA(2, 0, transitions, accepting_states);
 }
 
-void NFA::addTransition(int from, set<int> to, char symbol){
+void NFA::addTransition(int from, const set<int>& to, char symbol){
 	this->transitions.insert(pair<pair<int, char>, set<int>>(std::make_pair(from, symbol), to));
 }
 
@@ -203,7 +174,7 @@ NFA NFA::nfa_union(NFA nfa){
 	return result;
 }
 
-NFA NFA::kleene_clousure(){
+NFA NFA::kleene_closure(){
 	// New NFA
 	NFA result;
 	// New states
@@ -230,7 +201,7 @@ NFA NFA::kleene_clousure(){
 	return result;
 }
 
-NFA NFA::plus_clousure(){
+NFA NFA::plus_closure(){
 	// New NFA
 	NFA result;
 	// New states

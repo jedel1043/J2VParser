@@ -8,27 +8,33 @@
 #include <iostream>
 
 using namespace std;
-typedef string State;
 
 class NFA{
-	set<State> states;
-	State initial_state;
-	map<pair<State, char>, set<State>> transitions;
-	set<State> accepting_states;
+	static int StateCounter;
+	static int getStateNumber(){
+		int number = NFA::StateCounter;
+		NFA::StateCounter++;
+		return number;
+	}
 
-	set<State> next_states(const State& state, char symbol = '\0');
-	set<State> e_closure(const State& state);
-	set<State> e_closure(const set<State>& states_set);
-	set<State> compute(const set<State>& states_set, char *string);
-	set<State> getNewStatesName(const string& prefix);
-	void addTransition(const State& from, const set<State>& to, char symbol);
-	static set<State> getNewStatesName(const set<State>& states, const string& prefix);
-	friend std::ostream & operator<<(std::ostream & str, const NFA & obj);
+	NFA();
+
+	set<int> states;
+	int initial_state{};
+	map<pair<int, char>, set<int>> transitions;
+	set<int> accepting_states;
+	int number_of_states{};
+
+	set<int> next_states(int state, char symbol = '\0');
+	set<int> e_closure(int state);
+	set<int> e_closure(const set<int>& states_set);
+	set<int> compute(const set<int>& states_set, char *string);
+	void addTransition(int from, const set<int>& to, char symbol);
+    friend std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
 
 public:
-	NFA(set<State> states, State initial_state, map<pair<State, char>, set<State>> transitions, set<State> accepting_states);
-    virtual ~NFA();
-    bool accept(const string& str);
+	NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int>& accepting_states);
+	bool accept(const string& str);
 	static NFA simpleNFA(char c);
 	NFA nfa_concat(NFA nfa);
 	NFA nfa_union(NFA nfa);
@@ -36,33 +42,34 @@ public:
 	NFA plus_closure();
 };
 
-inline std::ostream & operator<<(std::ostream & str, const NFA & obj){
-    str << "------------------------\n";
-    str << "States: ";
-    for(State const& element : obj.states)
-        str << element << ", ";
-    str << "\n";
+inline std::ostream & operator<<(std::ostream & ostream1, const NFA & obj){
+    ostream1 << "------------------------\n";
+    ostream1 << "States: ";
+    for(int const state : obj.states)
+        ostream1 << state << ", ";
+    ostream1 << endl;
 
-    str << "Transition function: \n";
-
-    map<pair<State, char>, set<State>>::const_iterator it;
+    ostream1 << "Transition function: \n";
+    map<pair<int, char>, set<int>>::const_iterator it;
     for (it = obj.transitions.begin(); it != obj.transitions.end(); ++it){
         if(it->first.second == '\0')
-            str << "\t(" << it->first.first << ", ) => {";
+            ostream1 << "\t(" << it->first.first << ", ) => {";
         else
-            str << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
-        for(State const& element : it->second)
-            str << element << ", ";
-        str << "}\n";
+            ostream1 << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
+        for(int const element : it->second)
+            ostream1 << element << ", ";
+        ostream1 << "}\n";
     }
 
-    str << "Initial state: " << obj.initial_state << endl;
-    str << "Accepting states: ";
-    for(State const& element : obj.accepting_states)
-        str << element << ", ";
-    str << "\n";
-    str << "------------------------\n";
-    return str;
+    ostream1 << "Initial state: " << obj.initial_state << endl;
+    ostream1 << "Accepting states: ";
+    for(int const element : obj.accepting_states)
+        ostream1 << element << ", ";
+    ostream1 << "\n";
+
+    ostream1 << "------------------------\n";
+
+    return ostream1;
 }
 
 #endif

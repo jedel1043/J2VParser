@@ -4,24 +4,26 @@
 #include <iostream>
 #include <set>
 #include <cstring>
+#include <vector>
 
 using namespace std;
 
 int main(int argc, char const *argv[]){
-	/*NFA result = Regex::compile("a.b*.(c|d).b+");
-	cout << "T: abbbcb: " << result.accept("abbbcb") << endl;
-	cout << "F: abbbbbbbbd: " << result.accept("abbbbbbbbd") << endl;
-	cout << "F: bbbbcbbb: " << result.accept("bbbbcbbb") << endl;
-	cout << "T: acb: " << result.accept("acb") << endl;
-	cout << "F: abbbbbbbbbbbbcdbbb: " << result.accept("abbbbbbbbbbbbcdbbb") << endl;
-	cout << "T: adbbbbbbbbbbbbb: " << result.accept("adbbbbbbbbbbbbb") << endl*/
+	string test(argv[1]);
+	NFA result = Regex::compile(Regex::preCompile(argv[1]));
+	cout << "Accept? " << argv[2] << ": " << result.accept(argv[2]) << endl;
 
 	/*NFA result = Regex::compile("(0|1|2|3|4|5|6|7|8|9).-.(0|1|2|3|4|5|6|7|8|9)");
 	cout << "T: 125446-47390124: " << result.accept("125446-47390124") << endl;
 	cout << "F: 125446: " << result.accept("125446") << endl;*/
 
-	string test(argv[1]);
-	cout << Regex::preCompile(test) << endl;
+	vector<int> r = Regex::preCompile(test);
+	for(int const d : r){
+		if(d>0)
+			cout << (char) d << " ";
+		else
+			cout << d << " ";
+	}
 
 	return 0;
 }

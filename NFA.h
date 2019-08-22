@@ -41,6 +41,7 @@ public:
 	NFA nfa_union(NFA nfa);
 	NFA kleene_clousure();
 	NFA plus_clousure();
+	NFA zero_or_one();
 };
 
 #endif

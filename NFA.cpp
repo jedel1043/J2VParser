@@ -256,3 +256,30 @@ NFA NFA::plus_clousure(){
 	// Returning the result
 	return result;
 }
+
+NFA NFA::zero_or_one(){
+	// New NFA
+	NFA result;
+	// New states
+	result.states.insert(this->states.begin(), this->states.end());
+	// New initial state
+	result.initial_state = NFA::getStateNumber();
+	// New final states
+	int new_final_state = NFA::getStateNumber();
+	result.accepting_states.insert(new_final_state);
+	// Adding the new states
+	result.states.insert(result.initial_state);
+	result.states.insert(new_final_state);
+	// New transitions
+	result.transitions.insert(this->transitions.begin(), this->transitions.end());
+	set<int> initial_trans_state;
+	initial_trans_state.insert(this->initial_state);
+	initial_trans_state.insert(new_final_state);
+	result.addTransition(result.initial_state, initial_trans_state, '\0');
+	set<int> new_final_states;
+	new_final_states.insert(new_final_state);
+	for(int const state : this->accepting_states)
+		result.addTransition(state, new_final_states, '\0');
+	// Returning the result
+	return result;
+}

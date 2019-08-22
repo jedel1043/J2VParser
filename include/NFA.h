@@ -41,36 +41,10 @@ public:
     NFA kleene_closure();
     NFA plus_closure();
     NFA zero_or_one();
+    virtual ~NFA();
+    friend std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
 };
 
-inline std::ostream & operator<<(std::ostream & ostream1, const NFA & obj){
-    ostream1 << "------------------------\n";
-    ostream1 << "States: ";
-    for(int const state : obj.states)
-        ostream1 << state << ", ";
-    ostream1 << endl;
-
-    ostream1 << "Transition function: \n";
-    map<pair<int, char>, set<int>>::const_iterator it;
-    for (it = obj.transitions.begin(); it != obj.transitions.end(); ++it){
-        if(it->first.second == '\0')
-            ostream1 << "\t(" << it->first.first << ", ) => {";
-        else
-            ostream1 << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
-        for(int const element : it->second)
-            ostream1 << element << ", ";
-        ostream1 << "}\n";
-    }
-
-    ostream1 << "Initial state: " << obj.initial_state << endl;
-    ostream1 << "Accepting states: ";
-    for(int const element : obj.accepting_states)
-        ostream1 << element << ", ";
-    ostream1 << "\n";
-
-    ostream1 << "------------------------\n";
-
-    return ostream1;
-}
+std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
 
 #endif

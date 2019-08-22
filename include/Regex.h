@@ -8,29 +8,25 @@
 
 using namespace std;
 
+
+
 class Regex{
 	static bool isOperator(int c);
 	static bool hasLessOrEqualPriority(int operator1, int operator2);
 	static vector<int> toPostfix(const vector<int> & infix);
 	static vector<int> toVector(const string & str);
-
-	static const string alpha_lower;
-	static const string alpha_upper;
-	static const string digit;
+    static vector<char> toCharVector(const vector<int> &v);
 
 public:
 	static NFA compile(const vector<int> & str);
 	static vector<int> preCompile(const string & str);
+    friend std::ostream& operator<< (std::ostream& out, const std::vector<int>& v);
+    static const string & getAlphaLower();
+    static const string & getAlphaUpper();
+    static const string & getDigit();
+    static const map<int, char> & getOperators();
 };
 
-template <typename T>
-std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
-    if ( !v.empty() ) {
-        out << '[';
-        std::copy (v.begin(), v.end(), std::ostream_iterator<T>(out, ", "));
-        out << "\b\b]";
-    }
-    return out;
-}
+std::ostream& operator<< (std::ostream& out, const std::vector<int>& v);
 
 #endif

@@ -8,9 +8,25 @@
 
 using namespace std;
 
-const string Regex::alpha_lower = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
-const string Regex::alpha_upper = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
-const string Regex::digit = "0|1|2|3|4|5|6|7|8|9";
+const string & Regex::getAlphaLower(){
+    static const string ALPHA_LOWER = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+    return ALPHA_LOWER;
+}
+
+const string & Regex::getAlphaUpper(){
+    static const string ALPHA_UPPER = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
+    return  ALPHA_UPPER;
+}
+const string & Regex::getDigit(){
+    static const string DIGIT = "0|1|2|3|4|5|6|7|8|9";
+    return DIGIT;
+}
+const map<int, char> & Regex::getOperators(){
+    // '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
+    static const map<int, char> OPS = {{0, '('}, {-1, '|'}, {-2, '.'}, {-3, '+'}, {-4, '*'}, {-5, ')'}, {-6, '?'}};
+    return OPS;
+}
+
 
 bool Regex::isOperator(int c){
 	return c<=0;
@@ -39,8 +55,18 @@ vector<int> Regex::toVector(const string & str){
 	return result;
 }
 
+vector<char> Regex::toCharVector(const vector<int> & v){
+    vector<char> result;
+    for (int const c : v){
+        if (c <= 0)
+            result.push_back(Regex::getOperators().find(c)->second);
+        else
+            result.push_back((char) c);
+    }
+    return result;
+}
+
 vector<int> Regex::preCompile(const string & str){
-	// '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	vector<int> result;
 
 	int flag_union = 0;
@@ -127,30 +153,30 @@ vector<int> Regex::preCompile(const string & str){
 						if(range_name == ":alpha:"){
 							vector<int> range;
 							result.push_back(0);
-							range = Regex::toVector(Regex::alpha_lower);
+							range = Regex::toVector(Regex::getAlphaLower());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-1);
-							range = Regex::toVector(Regex::alpha_upper);
+							range = Regex::toVector(Regex::getAlphaUpper());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-5);
 						}
 						else if(range_name == ":alnum:"){
 							vector<int> range;
 							result.push_back(0);
-							range = Regex::toVector(Regex::alpha_lower);
+							range = Regex::toVector(Regex::getAlphaLower());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-1);
-							range = Regex::toVector(Regex::alpha_upper);
+							range = Regex::toVector(Regex::getAlphaUpper());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-1);
-							range = Regex::toVector(Regex::digit);
+							range = Regex::toVector(Regex::getDigit());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-5);
 						}
 						else if(range_name == ":digit:"){
 							vector<int> range;
 							result.push_back(0);
-							range = Regex::toVector(Regex::digit);
+							range = Regex::toVector(Regex::getDigit());
 							result.insert(result.end(), range.begin(), range.end());
 							result.push_back(-5);
 						}
@@ -270,4 +296,14 @@ NFA Regex::compile(const vector<int> & str){
 	}
 	NFA result = results.top();
 	return result;
+}
+
+std::ostream& operator<< (std::ostream& out, const std::vector<int>& v) {
+    vector<char> vector = Regex::toCharVector(v);
+    if ( !v.empty() ) {
+        out << '[';
+        std::copy (vector.begin(), vector.end(), std::ostream_iterator<char>(out, ", "));
+        out << "\b\b]";
+    }
+    return out;
 }

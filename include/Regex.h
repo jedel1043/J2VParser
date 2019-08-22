@@ -8,17 +8,18 @@
 using namespace std;
 
 class Regex{
-	static bool isOperator(char c);
-	static bool hasLessOrEqualPriority(char operator1, char operator2);
-	static string toPostfix(const string& infix);
+	static bool isOperator(int c);
+	static bool hasLessOrEqualPriority(int operator1, int operator2);
+	static vector<int> toPostfix(vector<int> infix);
+	static vector<int> toVector(string str);
 
 	static const string alpha_lower;
 	static const string alpha_upper;
 	static const string digit;
 
 public:
-	static NFA compile(const string & str);
-	static string preCompile(const string & str);
+	static NFA compile(vector<int> str);
+	static vector<int> preCompile(string str);
 };
 
 #endif

@@ -39,7 +39,7 @@ vector<int> Regex::toVector(const string & str){
 	return result;
 }
 
-vector<int> Regex::preCompile(string str){
+vector<int> Regex::preCompile(const string & str){
 	// '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	vector<int> result;
 
@@ -87,7 +87,7 @@ vector<int> Regex::preCompile(string str){
 				}else{
 					if(c == '+') result.push_back(-3);
 					else if(c == '*') result.push_back(-4);
-					else if(c == '?') result.push_back(-6);
+					else result.push_back(-6);
 				}
 			continue;
 
@@ -197,7 +197,7 @@ vector<int> Regex::preCompile(string str){
 	return result;
 }
 
-vector<int> Regex::toPostfix(vector<int> infix){
+vector<int> Regex::toPostfix(const vector<int> & infix){
 	stack<int> s;
 	vector<int> postfix;
 	for(int const c : infix){
@@ -229,7 +229,7 @@ vector<int> Regex::toPostfix(vector<int> infix){
 	return postfix;
 }
 
-NFA Regex::compile(vector<int> str){
+NFA Regex::compile(const vector<int> & str){
 	// '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	stack<NFA> results;
 	vector<int> postfix = Regex::toPostfix(str);

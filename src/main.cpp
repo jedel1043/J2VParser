@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]){
 //	cout << "T: abbbcb: " << result.accept("abbbcb") << endl;
 //	cout << "F: abbbbbbbbd: " << result.accept("abbbbbbbbd") << endl;
 //	cout << "F: bbbbcbbb: " << result.accept("bbbbcbbb") << endl;
-//	cout << "T: acb: " << result.accept("acb") << endl;
+//	cout << "T: acb: " << resul t.accept("acb") << endl;
 //	cout << "F: abbbbbbbbbbbbcdbbb: " << result.accept("abbbbbbbbbbbbcdbbb") << endl;
 //	cout << "T: adbbbbbbbbbbbbb: " << result.accept("adbbbbbbbbbbbbb") << endl;
 //

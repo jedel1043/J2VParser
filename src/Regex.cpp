@@ -27,6 +27,26 @@ const map<int, char> & Regex::getOperators(){
     return OPS;
 }
 
+int Regex::getCharValue(char c){
+    switch (c) {
+        case '(':
+            return 0;
+        case '|':
+            return -1;
+        case '.':
+            return -2;
+        case '+':
+            return -3;
+        case '*':
+            return -4;
+        case ')':
+            return -5;
+        case '?':
+            return -6;
+        default:
+            return (int) c;
+    }
+}
 
 bool Regex::isOperator(int c){
 	return c<=0;
@@ -66,160 +86,83 @@ vector<char> Regex::toCharVector(const vector<int> & v){
     return result;
 }
 
+vector<int> Regex::getCharacterClassVector(const string & char_class){
+    vector<int> result;
+    if(char_class == "alpha"){
+        for(char c : Regex::getAlphaUpper())
+            result.push_back(Regex::getCharValue(c));
+        result.push_back(Regex::getCharValue('|'));
+        for(char c : Regex::getAlphaLower())
+            result.push_back(Regex::getCharValue(c));
+    }
+    else if (char_class == "alnum"){
+        for(char c : Regex::getAlphaUpper())
+            result.push_back(Regex::getCharValue(c));
+        result.push_back(Regex::getCharValue('|'));
+        for(char c : Regex::getAlphaLower())
+            result.push_back(Regex::getCharValue(c));
+        result.push_back(Regex::getCharValue('|'));
+        for(char c : Regex::getDigit())
+            result.push_back(Regex::getCharValue(c));
+    }
+    else if (char_class == "digit"){
+        for(char c : Regex::getDigit())
+            result.push_back(Regex::getCharValue(c));
+    }
+    else if (char_class == "upper"){
+        for(char c : Regex::getAlphaUpper())
+            result.push_back(Regex::getCharValue(c));
+    }
+    else if (char_class == "lower"){
+        for(char c : Regex::getAlphaLower())
+            result.push_back(Regex::getCharValue(c));
+    }
+    return result;
+}
+
 vector<int> Regex::preCompile(const string & str){
 	vector<int> result;
+	const string & op_search_util = ")+*?";
+	string::const_iterator it = str.begin();
+    while(it != str.end()){
+        if (it != str.begin() && *(it - 1) != '(' && op_search_util.find(*it) == string::npos)
+            result.push_back(Regex::getCharValue('.'));
+        if(*it == '['){
+            result.push_back(Regex::getCharValue('('));
+            it++;
+            if(*it == '[' && *(it+1) == ':'){
+                string saver;
+                vector<int> char_class_vector;
+                it +=2;
+                while(*it != ':')
+                    saver += *it++;
+                it+=2;
+                char_class_vector = Regex::getCharacterClassVector(saver);
+                result.insert(result.end(), char_class_vector.begin(), char_class_vector.end());
+            }
+            else
+                result.push_back((int) *it++);
 
-	int flag_union = 0;
-	int flag_range = 0;
-	int flag_open = 0;
-	int flag_begin = 0;
-	int flag_concat = 0;
-	int flag_escape = 0;
-
-	string range_name;
-
-	for(char const c : str){
-		switch(c){
-			case '+':
-			case '*':
-			case '?':
-				if(flag_escape){
-					flag_escape--;
-					if(flag_union){
-						if(!flag_begin)
-							flag_begin++;
-						if(flag_concat && flag_open){
-							flag_concat = 0;
-							result.push_back(-2);
-						}
-						if(flag_open){
-							flag_open--;
-							result.push_back(0);
-							result.push_back((int) c);
-						}else{
-							result.push_back(-1);
-							result.push_back((int) c);
-						}
-					} else if(flag_range){
-						range_name += c;
-					} else {
-						if(!flag_begin)
-							flag_begin++;
-						else
-							result.push_back(-2);
-						result.push_back((int) c);
-						flag_concat = 1;
-					}
-				}else{
-					if(c == '+') result.push_back(-3);
-					else if(c == '*') result.push_back(-4);
-					else result.push_back(-6);
-				}
-			continue;
-
-			case '\\':
-				if(!flag_escape)
-					flag_escape++;
-			continue;
-
-			case '[':
-				if(flag_range >= 2){
-					/* Error */
-				}
-				else if(flag_union){
-					flag_range += 2;
-					flag_union--;
-					flag_open--;
-				}
-				else{
-					flag_union++;
-					flag_open++;
-				}
-			continue;
-
-			case ']':
-				if(flag_union){
-					flag_union--;
-					result.push_back(-5);
-					flag_concat = 1;
-				}
-				else if(flag_range){
-					flag_range--;
-					if(!flag_range){
-						if(!flag_begin)
-							flag_begin++;
-						if(flag_concat)
-							result.push_back(-2);
-						if(range_name == ":alpha:"){
-							vector<int> range;
-							result.push_back(0);
-							range = Regex::toVector(Regex::getAlphaLower());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-1);
-							range = Regex::toVector(Regex::getAlphaUpper());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-5);
-						}
-						else if(range_name == ":alnum:"){
-							vector<int> range;
-							result.push_back(0);
-							range = Regex::toVector(Regex::getAlphaLower());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-1);
-							range = Regex::toVector(Regex::getAlphaUpper());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-1);
-							range = Regex::toVector(Regex::getDigit());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-5);
-						}
-						else if(range_name == ":digit:"){
-							vector<int> range;
-							result.push_back(0);
-							range = Regex::toVector(Regex::getDigit());
-							result.insert(result.end(), range.begin(), range.end());
-							result.push_back(-5);
-						}
-						else{
-							// Error
-						}
-						range_name = "";
-					}
-				}
-				else{
-					/* Error */
-				}
-			continue;
-
-			default:
-				if(flag_union){
-					if(!flag_begin)
-						flag_begin++;
-					if(flag_concat && flag_open){
-						flag_concat = 0;
-						result.push_back(-2);
-					}
-					if(flag_open){
-						flag_open--;
-						result.push_back(0);
-						result.push_back((int) c);
-					}else{
-						result.push_back(-1);
-						result.push_back((int) c);
-					}
-				} else if(flag_range){
-					range_name += c;
-				} else {
-					if(!flag_begin)
-						flag_begin++;
-					else
-						result.push_back(-2);
-					result.push_back((int) c);
-					flag_concat = 1;
-				}
-			continue;
-		}
-	}
+            while(*it != ']') {
+                if(*it == '-'){
+                    for(int i = ((int) *(it-1)) + 1; i <= (int) *(it+1) ; i++) {
+                        result.push_back(Regex::getCharValue('|'));
+                        result.push_back(i);
+                    }
+                    it += 2;
+                }
+                else {
+                    result.push_back(Regex::getCharValue('|'));
+                    result.push_back((int) *it++);
+                }
+            }
+            result.push_back(Regex::getCharValue(')'));
+            it++;
+        }
+        else {
+            result.push_back((int) *it++);
+        }
+    }
 	return result;
 }
 

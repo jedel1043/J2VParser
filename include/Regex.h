@@ -25,6 +25,9 @@ public:
     static const string & getAlphaUpper();
     static const string & getDigit();
     static const map<int, char> & getOperators();
+    static int getCharValue(char c);
+
+    static vector<int> getCharacterClassVector(const string &char_class);
 };
 
 std::ostream& operator<< (std::ostream& out, const std::vector<int>& v);

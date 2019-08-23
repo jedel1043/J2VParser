@@ -15,12 +15,10 @@ int main(int argc, char const *argv[]){
 //	cout << "F: abbbbbbbbbbbbcdbbb: " << result.accept("abbbbbbbbbbbbcdbbb") << endl;
 //	cout << "T: adbbbbbbbbbbbbb: " << result.accept("adbbbbbbbbbbbbb") << endl;
 //
-//	NFA result = Regex::compile("(0|1|2|3|4|5|6|7|8|9).-.(0|1|2|3|4|5|6|7|8|9)");
-//	cout << "T: 125446-47390124: " << result.accept("125446-47390124") << endl;
-//	cout << "F: 125446: " << result.accept("125446") << endl;
+//    NFA result;
+//    cout << result << endl;
 
-	string test(argv[1]);
-	cout << Regex::preCompile(test) << endl;
+	cout << Regex::compile(argv[1]) << endl;
 
 	return 0;
 }

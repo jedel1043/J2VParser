@@ -12,13 +12,14 @@ using namespace std;
 
 class Regex{
 	static bool isOperator(int c);
-	static bool hasLessOrEqualPriority(int operator1, int operator2);
+	static bool hasLessOrEqualPrecedence(int operator1, int operator2);
 	static vector<int> toPostfix(const vector<int> & infix);
 	static vector<int> toVector(const string & str);
     static vector<char> toCharVector(const vector<int> &v);
+    static NFA compile(const vector<int> & str_vector);
 
 public:
-	static NFA compile(const vector<int> & str);
+    static NFA compile(const string &str);
 	static vector<int> preCompile(const string & str);
     friend std::ostream& operator<< (std::ostream& out, const std::vector<int>& v);
     static const string & getAlphaLower();

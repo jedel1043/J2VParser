@@ -17,9 +17,7 @@ class NFA{
 		return number;
 	}
 
-	NFA();
-
-	set<int> states;
+    set<int> states;
 	int initial_state{};
 	map<pair<int, char>, set<int>> transitions;
 	set<int> accepting_states;
@@ -43,6 +41,8 @@ public:
     NFA zero_or_one();
     virtual ~NFA();
     friend std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
+
+    NFA();
 };
 
 std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);

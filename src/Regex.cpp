@@ -52,16 +52,19 @@ bool Regex::isOperator(int c){
 	return c<=0;
 }
 
-bool Regex::hasLessOrEqualPriority(int operator1, int operator2){
+bool Regex::hasLessOrEqualPrecedence(int operator1, int operator2){
+    // '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	map<int, int> operators;
-	operators.insert(pair<char,int>(-5, 4));
-	operators.insert(pair<char,int>(-4, 3));
-	operators.insert(pair<char,int>(-3, 3));
-	operators.insert(pair<char,int>(-2, 2));
-	operators.insert(pair<char,int>(-1, 1));
-	operators.insert(pair<char,int>(0, 0));
+    operators.insert(pair<char,int>(0, 4));
+    operators.insert(pair<char,int>(-5, 4));
+    operators.insert(pair<char,int>(-6, 5));
+	operators.insert(pair<char,int>(-4, 5));
+	operators.insert(pair<char,int>(-3, 5));
+	operators.insert(pair<char,int>(-2, 6));
+	operators.insert(pair<char,int>(-1, 8));
 
-	return operators[operator1] <= operators[operator2];
+
+	return operators[operator1] >= operators[operator2];
 }
 
 vector<int> Regex::toVector(const string & str){
@@ -122,10 +125,10 @@ vector<int> Regex::getCharacterClassVector(const string & char_class){
 
 vector<int> Regex::preCompile(const string & str){
 	vector<int> result;
-	const string & op_search_util = ")+*?";
+	const string & op_search_util = ")+*?|";
 	string::const_iterator it = str.begin();
     while(it != str.end()){
-        if (it != str.begin() && *(it - 1) != '(' && op_search_util.find(*it) == string::npos)
+        if (it != str.begin() && *(it - 1) != '(' && *(it - 1) != '|' && op_search_util.find(*it) == string::npos)
             result.push_back(Regex::getCharValue('.'));
         if(*it == '['){
             result.push_back(Regex::getCharValue('('));
@@ -160,7 +163,7 @@ vector<int> Regex::preCompile(const string & str){
             it++;
         }
         else {
-            result.push_back((int) *it++);
+            result.push_back(Regex::getCharValue(*it++));
         }
     }
 	return result;
@@ -181,7 +184,7 @@ vector<int> Regex::toPostfix(const vector<int> & infix){
 			s.pop();
 		}
 		else if(Regex::isOperator(c)){
-			while(!s.empty() && s.top() != 0 && Regex::hasLessOrEqualPriority(c, s.top())){
+			while(!s.empty() && s.top() != 0 && Regex::hasLessOrEqualPrecedence(c, s.top())){
 				postfix.push_back(s.top());
 				s.pop();
 			}
@@ -198,10 +201,14 @@ vector<int> Regex::toPostfix(const vector<int> & infix){
 	return postfix;
 }
 
-NFA Regex::compile(const vector<int> & str){
+NFA Regex::compile(const string & str){
+    return Regex::compile(Regex::preCompile(str));
+}
+
+NFA Regex::compile(const vector<int> & str_vector){
 	// '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	stack<NFA> results;
-	vector<int> postfix = Regex::toPostfix(str);
+	vector<int> postfix = Regex::toPostfix(str_vector);
 	for(int const c : postfix){
 		if(c == -4){
 			NFA nfa = results.top();

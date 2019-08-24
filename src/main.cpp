@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]){
 //    NFA result;
 //    cout << result << endl;
 
-	cout << Regex::compile(argv[1]) << endl;
+	cout << Regex::preCompile(argv[1]) << endl;
 
 	return 0;
 }

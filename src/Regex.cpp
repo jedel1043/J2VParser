@@ -143,27 +143,33 @@ vector<int> Regex::preCompile(const string & str){
                 char_class_vector = Regex::getCharacterClassVector(saver);
                 result.insert(result.end(), char_class_vector.begin(), char_class_vector.end());
             }
-            else
+            else {
+                it += *it == '\\' ? 1 : 0;
                 result.push_back((int) *it++);
-
-            while(*it != ']') {
-                if(*it == '-'){
-                    for(int i = ((int) *(it-1)) + 1; i <= (int) *(it+1) ; i++) {
+                while (*it != ']') {
+                    if (*it == '-') {
+                        for (int i = ((int) *(it - 1)) + 1; i <= (int) *(it + 1); i++) {
+                            result.push_back(Regex::getCharValue('|'));
+                            result.push_back(i);
+                        }
+                        it += 2;
+                    } else {
                         result.push_back(Regex::getCharValue('|'));
-                        result.push_back(i);
+                        it += *it == '\\' ? 1 : 0;
+                        result.push_back((int) *it++);
                     }
-                    it += 2;
-                }
-                else {
-                    result.push_back(Regex::getCharValue('|'));
-                    result.push_back((int) *it++);
                 }
             }
             result.push_back(Regex::getCharValue(')'));
             it++;
         }
         else {
-            result.push_back(Regex::getCharValue(*it++));
+            if (*it == '\\'){
+                result.push_back((int) *++it);
+                it++;
+            }
+            else
+                result.push_back(Regex::getCharValue(*it++));
         }
     }
 	return result;

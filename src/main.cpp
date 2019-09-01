@@ -2,23 +2,19 @@
 #include "Regex.h"
 
 #include <iostream>
+#include <fstream>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 using namespace std;
 
 int main(int argc, char const *argv[]){
-//	NFA result = Regex::compile("a.b*.(c|d).b+");
-//	cout << result << endl;
-//	cout << "T: abbbcb: " << result.accept("abbbcb") << endl;
-//	cout << "F: abbbbbbbbd: " << result.accept("abbbbbbbbd") << endl;
-//	cout << "F: bbbbcbbb: " << result.accept("bbbbcbbb") << endl;
-//	cout << "T: acb: " << resul t.accept("acb") << endl;
-//	cout << "F: abbbbbbbbbbbbcdbbb: " << result.accept("abbbbbbbbbbbbcdbbb") << endl;
-//	cout << "T: adbbbbbbbbbbbbb: " << result.accept("adbbbbbbbbbbbbb") << endl;
-//
-//    NFA result;
-//    cout << result << endl;
+    ofstream filea("newfile");
 
-	cout << Regex::preCompile(argv[1]) << endl;
+    {
+        boost::archive::text_oarchive oa(filea);
+        oa << Regex::compile("a*b*c");
+    }
 
 	return 0;
 }

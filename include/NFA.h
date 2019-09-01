@@ -6,29 +6,35 @@
 #include <set>
 #include <utility>
 #include <iostream>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/utility.hpp>
 
 using namespace std;
 
 class NFA{
-	static int StateCounter;
-	static int getStateNumber(){
-		int number = NFA::StateCounter;
-		NFA::StateCounter++;
-		return number;
-	}
-
+	int state_counter=0;
     set<int> states;
-	int initial_state{};
+	int initial_state=0;
 	map<pair<int, char>, set<int>> transitions;
 	set<int> accepting_states;
-	int number_of_states{};
 
+	friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version){
+        ar & state_counter;
+        ar & states;
+        ar & initial_state;
+        ar & transitions;
+        ar & accepting_states;
+    }
+	int getStateNumber();
 	set<int> next_states(int state, char symbol = '\0');
 	set<int> e_closure(int state);
 	set<int> e_closure(const set<int>& states_set);
 	set<int> compute(const set<int>& states_set, char *string);
 	void addTransition(int from, const set<int>& to, char symbol);
-    friend std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
 
 public:
     NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int> & accepting_states);
@@ -40,11 +46,7 @@ public:
     NFA plus_closure();
     NFA zero_or_one();
     virtual ~NFA();
-    friend std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
-
     NFA();
 };
-
-std::ostream & operator<<(std::ostream & ostream1, const NFA & obj);
 
 #endif

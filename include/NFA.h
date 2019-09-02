@@ -10,6 +10,7 @@
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/utility.hpp>
+#include "DFA.h"
 
 using namespace std;
 
@@ -51,6 +52,10 @@ public:
 
     //for test purposes
     void print();
+
+    set<char> getAlphabet();
+
+    DFA toDFA();
 };
 
 #endif

@@ -7,7 +7,8 @@
 #include <algorithm>
 #include <stack>
 #include <cstring>
-#include <iterator>
+#include <queue>
+#include <DFA.h>
 
 using namespace std;
 
@@ -17,6 +18,68 @@ NFA::~NFA() = default;
 
 int NFA::get_size(){
     return states.size();
+}
+
+set<char> NFA::getAlphabet(){
+    map<pair<int, char>, set<int>>::iterator it;
+    set<char> alphabet;
+    for(it = transitions.begin(); it != transitions.end(); ++it){
+        char c = it->first.second;
+        if(c != 0)
+            alphabet.insert(c);
+    }
+    return alphabet;
+}
+
+DFA NFA::toDFA(){
+    // Configuration for the equivalent DFA
+    int n = 1;
+    map<pair<int, char>, int> dfa_transition;
+    set<char> alphabet = this->getAlphabet();
+    set<int> new_states; new_states.insert(1);
+    set<int> final_states;
+
+    // Preparing the algorithm
+    vector<set<int>> old_states;
+    old_states.push_back(this->e_closure(initial_state));
+    queue<int> pending_states;
+    pending_states.push(1);
+
+    while(!pending_states.empty()){
+        int dstate = pending_states.front();
+        states.insert(dstate);
+        pending_states.pop();
+        set<int> state = old_states[dstate-1];
+        for(const char c : alphabet){
+            char str[2];
+            str[0] = c;
+            str[1] = '\0';
+            set<int> result = this->compute(state, &str[0]);
+
+            if(result.empty()){
+                dfa_transition.insert(pair<pair<int, char>, int>(make_pair(dstate, c), -1));
+                continue;
+            }
+
+            auto it = find(old_states.begin(), old_states.end(), result);
+            if(it != old_states.end()){
+                int state_index = (int)distance(old_states.begin(), it) + 1;
+                dfa_transition.insert(pair<pair<int, char>, int>(make_pair(dstate, c), state_index));
+            }else{
+                new_states.insert(++n);
+                pending_states.push(n);
+                old_states.push_back(result);
+                dfa_transition.insert(pair<pair<int, char>, int>(make_pair(dstate, c), n));
+            }
+        }
+
+        vector<int> intersection;
+        set_intersection(state.begin(), state.end(), accepting_states.begin(), accepting_states.end(), back_inserter(intersection));
+        if(!intersection.empty())
+            final_states.insert(dstate);
+    }
+
+    return DFA(alphabet, dfa_transition, new_states, 1, final_states);
 }
 
 set<int> NFA::next_states(int state, char symbol){

@@ -4,6 +4,10 @@
 #include <map>
 #include <set>
 #include <cstdio>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/utility.hpp>
 
 using namespace std;
 
@@ -13,6 +17,16 @@ class DFA{
 	map<pair<int, char>, int> transitions;
 	int initial_state;
 	set<int> accepting_states;
+
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version){
+	    ar & states;
+	    ar & alphabet;
+	    ar & transitions;
+	    ar & initial_state;
+	    ar & accepting_states;
+	}
 
 	set<int> inverse_transition(const set<int> & in_states, char c);
 	int compute(const string& str);
@@ -24,7 +38,7 @@ public:
 	states(move(states)),
 	initial_state(initial_state),
 	accepting_states(move(accepting_states)){}
-	void print();
+	string stringify();
 	int get_size();
 	DFA minimize();
 	bool accept(const string& str);

@@ -2,174 +2,206 @@
 #include "DFA.h"
 #include "Regex.h"
 #include <iostream>
-#include <cstdio>
 #include <cstring>
 #include <map>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <fstream>
 
 using namespace std;
 
 int main(int argc, char const *argv[]){
-
-    ofstream outfile;
-    if(argc == 4 && !strcmp(argv[1], "--nfa")){
-         outfile = ofstream(argv[3]);
+    int nextarg = 1;
+    bool nfaflag = false, opflag = false, regexflag = false, newflag=false, readflag=false, testflag=false;
+    if (nextarg < argc){
+        if(!strcmp(argv[nextarg], "--nfa"))
+            nfaflag = true;
+        else if (!strcmp(argv[nextarg], "--regex"))
+            regexflag = true;
+        nextarg++;
     }
-    else if(argc == 3 && !strcmp(argv[1], "--regex")){
-        cout << " DFA for " << argv[2] << "\n\n";
-        NFA nfa = Regex::compile(argv[2]);
-        DFA dfa = nfa.toDFA();
-        dfa = dfa.minimize();
-        dfa.print();
-        cout << "\n";
 
-        while(true){
-            string str;
-            cout << "\nWrite your string: ";
-            cin >> str;
-            if(dfa.accept(str))
-                cout << "  *String accepted*" << endl;
-            else
-                cout << "  *String rejected*" << endl;
+    if(nfaflag){
+        if(nextarg < argc){
+            if(!strcmp(argv[nextarg], "-op"))
+                opflag = true;
+            else if(!strcmp(argv[nextarg], "-n"))
+                newflag = true;
+            else if(!strcmp(argv[nextarg], "-r"))
+                readflag = true;
+            else if(!strcmp(argv[nextarg], "-t"))
+                testflag = true;
+            nextarg++;
+
+            if(opflag){
+                if(nextarg < argc){
+                    string operation = argv[nextarg];
+                    //-plus, -kleene, -opt, -union, -concat
+                    char op =   operation == "-plus"        ? '+' :
+                                operation == "-kleene"      ? '*' :
+                                operation == "-opt"         ? '?' :
+                                operation == "-union"       ? '|' :
+                                operation == "-concat"      ? '.' : '\0';
+                    if (++nextarg < argc){
+                        switch (op){
+                            case '*':
+                            case '?':
+                            case '+':
+                                if(nextarg+1 < argc){
+                                    ifstream infile1(argv[nextarg]);
+                                    ofstream outfile(argv[nextarg+1]);
+                                    boost::archive::text_iarchive inarchive1(infile1);
+                                    boost::archive::text_oarchive outarchive(outfile);
+                                    NFA in, out;
+                                    inarchive1 >> in;
+                                    cout << "Input automaton: " << endl << in.stringify() << endl;
+                                    if(op == '*')
+                                        out = in.kleene_closure();
+                                    else if (op == '?')
+                                        out = in.zero_or_one();
+                                    else
+                                        out = in.plus_closure();
+                                    outarchive << out;
+                                    cout << "Output automaton: " << endl << out.stringify();
+                                }
+                                else{
+                                    throw invalid_argument("No output file detected.");
+                                }
+                                break;
+                            case '|':
+                            case '.':
+                                if(nextarg+1 < argc){
+                                    if(nextarg+2 < argc){
+                                        ifstream infile1(argv[nextarg]);
+                                        ifstream infile2(argv[nextarg+1]);
+                                        ofstream outfile(argv[nextarg+2]);
+                                        boost::archive::text_iarchive inarchive1(infile1);
+                                        boost::archive::text_iarchive inarchive2(infile2);
+                                        boost::archive::text_oarchive outarchive(outfile);
+                                        NFA in1, in2, out;
+                                        inarchive1 >> in1;
+                                        inarchive2 >> in2;
+                                        cout << "Input automaton 1: " << endl << in1.stringify() << endl;
+                                        cout << "Input automaton 2: " << endl << in2.stringify() << endl;
+                                        if(op == '|')
+                                            out = in1.nfa_union(in2);
+                                        else
+                                            out = in1.nfa_concat(in2);
+                                        outarchive << out;
+                                        cout << "Output automaton: " << endl << out.stringify();
+                                    }
+                                    else{
+                                        throw invalid_argument("No output file detected.");
+                                    }
+                                }
+                                else{
+                                    throw invalid_argument("No input file 2 detected.");
+                                }
+                                break;
+                            default:
+                                throw invalid_argument("Invalid operation argument.");
+                        }
+                    }
+                    else {
+                        throw invalid_argument("No input file detected.");
+                    }
+                }
+                else {
+                    cout << "main.exe --nfa -op (-plus, -kleene, -opt, -union, -concat) {infile1} [infile2] {outfile}" << endl;
+                }
+            }
+            else if (newflag){
+                if(nextarg < argc && strlen(argv[nextarg]) == 1){
+                    if(nextarg + 1 < argc){
+                        ofstream outfile(argv[nextarg+1]);
+                        boost::archive::text_oarchive outarchive(outfile);
+                        NFA out = NFA::simpleNFA(argv[nextarg][0]);
+
+                        outarchive << out;
+                        cout << "Output automaton: " << endl << out.stringify();
+                    }
+                    else{
+                        throw invalid_argument("No output file detected.");
+                    }
+                }
+                else{
+                    cout << "usage: main --nfa -n {char} {outfile}" << endl;
+                }
+            }
+            else if (readflag){
+                if (nextarg < argc){
+                    ifstream infile1(argv[nextarg]);
+                    boost::archive::text_iarchive inarchive1(infile1);
+                    NFA in;
+                    inarchive1 >> in;
+                    cout << "Input automaton: " << endl;
+                    cout << in.stringify() << endl;
+                }
+                else{
+                    cout << "usage: main --nfa -r {infile}" << endl;
+                }
+            }
+            else if (testflag){
+                if (nextarg < argc){
+                    ifstream infile1(argv[nextarg]);
+                    boost::archive::text_iarchive inarchive1(infile1);
+                    NFA in;
+                    inarchive1 >> in;
+                    cout << "Input automaton: " << endl;
+                    cout << in.stringify() << endl;
+                    while(true){
+                        string str;
+                        cout << "\nWrite your string: ";
+                        cin >> str;
+                        if(in.accept(str))
+                            cout << "  *String accepted*" << endl;
+                        else
+                            cout << "  *String rejected*" << endl;
+                    }
+                }
+                else{
+                    cout << "usage: main --nfa -r {infile}" << endl;
+                }
+            }
+            else{
+                throw invalid_argument("Invalid execution mode argument.");
+            }
+
         }
-        return 1;
+        else{
+            throw invalid_argument("No execution mode argument detected.");
+        }
     }
-    string options[] = {"Add new simple automaton", "Concat operation", "Union operation", "Kleene clousure", "Positive clousure", "Optional DFA", "Print table", "Quit"};
-    bool on = true;
-    int opt_selected;
-    map<string, NFA> automata;
-
-    while(on){
-        system("cls");
-        cout << "     *** REGEX EVALUATOR ***     \n\n";
-        int index_opt = 1;
-        for(string opt : options){
-            cout << " [" << index_opt << "]  " << opt << endl;
-            index_opt++;
+    else if (regexflag){
+        if(nextarg < argc){
+            string regex = argv[nextarg];
+            cout << " DFA for " << regex << "\n\n";
+            NFA nfa = Regex::compile(regex);
+            DFA dfa = nfa.toDFA();
+            dfa = dfa.minimize();
+            cout << dfa.stringify();
+            cout << "\n";
+            while(true){
+                string str;
+                cout << "\nWrite your string: ";
+                cin >> str;
+                if(dfa.accept(str))
+                    cout << "  *String accepted*" << endl;
+                else
+                    cout << "  *String rejected*" << endl;
+            }
         }
-        printf("  OPTION SELECTED: ");
-        cin >> opt_selected;
-        cout << "\n\n";
-        map<string, NFA>:: iterator it;
-        switch(opt_selected){
-            case 1:{
-                cout << "Add automaton for: ";
-                char c;
-                cin >> c;
-                string name;
-                name += c;
-                automata.insert(make_pair(name, NFA::simpleNFA(c)));
-                break;
-            }
-
-            case 2:{
-                printf("Automata created:\n");
-                string first, second;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nFirst automaton:  ";
-                cin >> first;
-                cout << "Second automaton: ";
-                cin >> second;
-                string name = "(" + first + "." + second + ")";
-                automata.insert(make_pair(name, automata[first].nfa_concat(automata[second])));
-                break;
-            }
-
-            case 3:{
-                printf("Automata created:\n");
-                string first, second;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nFirst automaton:  ";
-                cin >> first;
-                cout << "Second automaton: ";
-                cin >> second;
-                string name = "(" + first + "|" + second + ")";
-                automata.insert(make_pair(name, automata[first].nfa_union(automata[second])));
-                break;
-            }
-
-            case 4:{
-                printf("Automata created:\n");
-                string first;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nSelect automaton:  ";
-                cin >> first;
-                string name;
-                if(first.size() == 1)
-                    name = first + "*";
-                else
-                    name = "(" +first + ")*";
-                automata.insert(make_pair(name, automata[first].kleene_closure()));
-                break;
-            }
-
-            case 5:{
-                printf("Automata created:\n");
-                string first;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nSelect automaton:  ";
-                cin >> first;
-                string name;
-                if(first.size() == 1)
-                    name = first + "+";
-                else
-                    name = "(" +first + ")+";
-                automata.insert(make_pair(name, automata[first].plus_closure()));
-                break;
-            }
-
-            case 6:{
-                printf("Automata created:\n");
-                string first;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nSelect automaton:  ";
-                cin >> first;
-                string name;
-                if(first.size() == 1)
-                    name = first + "?";
-                else
-                    name = "(" +first + ")?";
-                automata.insert(make_pair(name, automata[first].zero_or_one()));
-                break;
-            }
-
-            case 7:{
-                printf("Automata created:\n");
-                string first;
-                for(it=automata.begin(); it!=automata.end(); ++it){
-                    cout << "  " << it->first << endl;
-                }
-                cout << "\nSelect automaton:  ";
-                cin >> first;
-                DFA dfa = automata[first].toDFA();
-                dfa = dfa.minimize();
-                dfa.print();
-
-                char ch;
-                while (cin.readsome(&ch, 1) != 0);
-                cout << "Press any key to continue...\n";
-                getchar();
-                break;
-            }
-
-            case 8:
-                on = false;
-                break;
-
-            default:
-                continue;
-                break;
+        else{
+            throw invalid_argument("--regex requires a regular expression as input.");
         }
+    }
+    else{
+        cout << "usage:" << endl;
+        cout << "main.exe --regex {regular expression}" << endl;
+        cout << "main.exe --nfa -op (-plus, -kleene, -opt, -union, -concat) {infile1} [infile2] {outfile}" << endl;
+        cout << "main.exe --nfa -n {char} {outfile}" << endl;
+        cout << "main.exe --nfa -r {infile}" << endl;
+        cout << "main.exe --nfa -t {infile}" << endl;
     }
 
     return 0;

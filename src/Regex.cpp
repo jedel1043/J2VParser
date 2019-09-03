@@ -1,10 +1,7 @@
 #include "Regex.h"
-#include "NFA.h"
-#include <map>
 #include <set>
 #include <stack>
-#include <cstring>
-#include <iostream>
+#include <iterator>
 
 using namespace std;
 

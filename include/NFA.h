@@ -1,16 +1,15 @@
 #ifndef NFA_H
 #define NFA_H
 
-#include <vector>
+#include "DFA.h"
+
 #include <map>
 #include <set>
 #include <utility>
-#include <iostream>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/utility.hpp>
-#include "DFA.h"
 
 using namespace std;
 
@@ -51,7 +50,7 @@ public:
     NFA();
 
     //for test purposes
-    void print();
+    string stringify();
 
     set<char> getAlphabet();
 

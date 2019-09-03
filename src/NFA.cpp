@@ -1,14 +1,12 @@
 #include "NFA.h"
 
+#include "DFA.h"
+
 #include <vector>
-#include <map>
-#include <set>
-#include <utility>
-#include <algorithm>
 #include <stack>
+#include <iostream>
 #include <cstring>
 #include <queue>
-#include <DFA.h>
 
 using namespace std;
 
@@ -298,30 +296,32 @@ NFA NFA::zero_or_one(){
     return result;
 }
 
-void NFA::print(){
-    cout << "------------------------\n";
-    cout << "States: ";
+string NFA::stringify(){
+    string out;
+    out.append( "------------------------\n");
+    out.append( "States: ");
     for(int const state : this->states)
-        cout << state << ", ";
-    cout << endl;
+        out.append(to_string(state) + ", ");
+    out.append("\n");
 
-    cout << "Transition function: \n";
+    out.append( "Transition function: \n");
     map<pair<int, char>, set<int>>::iterator it;
     for (it = this->transitions.begin(); it != this->transitions.end(); ++it){
         if(it->first.second == '\0')
-            cout << "\t(" << it->first.first << ", ) => {";
+            out.append( "\t(" + to_string(it->first.first) + ", ) => {");
         else
-            cout << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
+            out.append( "\t(" + to_string(it->first.first) + ", " + (char)it->first.second + ") => { ");
         for(int const element : it->second)
-            cout << element << ", ";
-        cout << "}\n";
+            out.append( to_string(element) + ", ");
+        out.append( "}\n");
     }
 
-    cout << "Initial state: " << this->initial_state << endl;
-    cout << "Accepting states: ";
+    out.append( "Initial state: " + to_string(this->initial_state) + "\n");
+    out.append( "Accepting states: ");
     for(int const element : this->accepting_states)
-        cout << element << ", ";
-    cout << "\n";
+        out.append( to_string(element) + ", ");
+    out.append( "\n");
 
-    cout << "------------------------\n";
+    out.append( "------------------------\n");
+    return out;
 }

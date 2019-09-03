@@ -2,9 +2,9 @@
 #define REGEX_H
 
 #include "NFA.h"
-#include <set>
+#include <vector>
+#include <map>
 #include <iostream>
-#include <iterator>
 
 using namespace std;
 

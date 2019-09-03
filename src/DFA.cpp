@@ -1,38 +1,37 @@
 #include "DFA.h"
 
-#include <map>
-#include <set>
-#include <cstdio>
 #include <iostream>
-#include <algorithm>
+#include <boost/format.hpp>
 
 using namespace std;
 
-void DFA::print(){
-	printf("     |");
-	for(const char c : alphabet)
-		printf("  %c  |", c);
-	printf("\n------");
-	for(const char c : alphabet)
-		printf("------");
-	printf("\n");
+string DFA::stringify(){
+    string out;
+	out += "     |";
+    for(const char c : alphabet)
+        out += (boost::format("  %c  |") % c).str();
+    out += "\n------";
+    for(int i = 1; i <= (int)alphabet.size(); i++)
+        out += "------";
+    out += '\n';
 
 	for(int i=1; i<=get_size(); i++){
 		if(accepting_states.count(i) != 0)
-			printf("*");
+			out.append("*");
 		else
-			printf(" ");
+			out.append(" ");
 		if(initial_state == i)
-			printf(">");
+			out.append(">");
 		else
-			printf(" ");
+			out.append(" ");
 
-		printf("%2d |", i);
-		for(const char c : alphabet){
-			printf(" %3d |", transitions[make_pair(i, c)]);
-		}
-		printf("\n");
+        out += (boost::format("%2d |") % i).str();
+        for(const char c : alphabet){
+            out += (boost::format(" %3d |") % transitions[make_pair(i, c)]).str();
+        }
+		out += '\n';
 	}
+	return out;
 }
 
 set<int> DFA::inverse_transition(const set<int> & in_states, char c){
@@ -61,14 +60,13 @@ DFA DFA::minimize(){
 	W.insert(accepting_states);
 
 	while(!W.empty()){
-		set<set<int>>::iterator it;
-		it = W.begin();
-		set<int> A = *it;
-		W.erase(it);
+
+		set<int> A = *W.begin();
+		W.erase(W.begin());
 		for(const char c : alphabet){
 			set<int> X = this->inverse_transition(A, c);
-			for(it=P.begin(); it!=P.end(); ++it){
-				set<int> Y = *it;
+			for(const auto & it : P){
+				const set<int>& Y = it;
 				set<int> XY;
 				set<int> Y_X;
 				set_intersection(X.begin(), X.end(), Y.begin(), Y.end(), inserter(XY, XY.end()));

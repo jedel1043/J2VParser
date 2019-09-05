@@ -120,52 +120,78 @@ vector<int> Regex::getCharacterClassVector(const string & char_class){
     return result;
 }
 
+bool Regex::areParenthesisBalanced(const string & regex){
+    stack<char> aux_stack;
+    string::const_iterator it = regex.begin();
+    while(it < regex.end()){
+        if(*it == '\\')
+            it+=2;
+        else if (*it == '(' || *it == '[')
+            aux_stack.push(*it++);
+        else if (*it == ')' || *it == ']'){
+            if(!aux_stack.empty() && ((aux_stack.top() == '(' && *it == ')') || (aux_stack.top() == '[' && *it == ']'))) {
+                aux_stack.pop();
+                it++;
+            }
+            else
+                return false;
+        } else it++;
+    }
+    return aux_stack.empty();
+}
+
 vector<int> Regex::preCompile(const string & str){
+    if(!Regex::areParenthesisBalanced(str))
+        throw invalid_argument("Invalid regex input. Unbalanced parenthesis detected.");
 	vector<int> result;
 	const string & op_search_util = ")+*?|";
 	string::const_iterator it = str.begin();
-    while(it != str.end()){
+    while(it != str.end()) {
         if (it != str.begin() && *(it - 1) != '(' && *(it - 1) != '|' && op_search_util.find(*it) == string::npos)
             result.push_back(Regex::getCharValue('.'));
-        if(*it == '['){
+        if (*it == '[') {
             result.push_back(Regex::getCharValue('('));
             it++;
-            if(*it == '[' && *(it+1) == ':'){
+            if (*it == '[' && *(it + 1) == ':') {
                 string saver;
                 vector<int> char_class_vector;
-                it +=2;
-                while(*it != ':')
+                it += 2;
+                while (*it != ':')
                     saver += *it++;
-                it+=2;
+                it += 2;
                 char_class_vector = Regex::getCharacterClassVector(saver);
                 result.insert(result.end(), char_class_vector.begin(), char_class_vector.end());
             }
             else {
-                it += *it == '\\' ? 1 : 0;
-                result.push_back((int) *it++);
                 while (*it != ']') {
-                    if (*it == '-') {
-                        for (int i = ((int) *(it - 1)) + 1; i <= (int) *(it + 1); i++) {
-                            result.push_back(Regex::getCharValue('|'));
+                    it += *it == '\\' ? 1 : 0;
+                    if (*(it + 1) == '-' && *(it+2) != ']') {
+                        bool is_special_char = *(it + 2) == '\\';
+                        if (*it > (is_special_char ? *(it + 3) : *(it + 2)))
+                            throw invalid_argument(
+                                    "Range values reversed. Start char code must be less than end char code.");
+                        for (int i = ((int) *it); i <= ((int) is_special_char ? *(it + 3) : *(it + 2)); i++) {
                             result.push_back(i);
+                            result.push_back(Regex::getCharValue('|'));
                         }
-                        it += 2;
+                        it += (is_special_char ? 4 : 3);
                     } else {
-                        result.push_back(Regex::getCharValue('|'));
-                        it += *it == '\\' ? 1 : 0;
                         result.push_back((int) *it++);
+                        result.push_back(Regex::getCharValue('|'));
                     }
                 }
+                if (result.back() == Regex::getCharValue('|'))
+                    result.pop_back();
             }
             result.push_back(Regex::getCharValue(')'));
             it++;
-        }
-        else {
-            if (*it == '\\'){
+        } else {
+            if (*it == '\\') {
+                if(it + 1 == str.end())
+                    throw invalid_argument("Escape operator without char at end of the string. ");
                 result.push_back((int) *++it);
                 it++;
-            }
-            else
+            } else
                 result.push_back(Regex::getCharValue(*it++));
         }
     }
@@ -176,9 +202,8 @@ vector<int> Regex::toPostfix(const vector<int> & infix){
 	stack<int> s;
 	vector<int> postfix;
 	for(int const c : infix){
-		if(c == 0){
+		if(c == 0)
 			s.push(c);
-		}
 		else if(c == -5){
 			while(s.top() != 0){
 				postfix.push_back(s.top());
@@ -212,7 +237,7 @@ NFA Regex::compile(const vector<int> & str_vector){
 	// '(': 0, '|': -1, '.': -2, '+': -3, '*': -4, ')': -5, '?': -6
 	stack<NFA> results;
 	vector<int> postfix = Regex::toPostfix(str_vector);
-	for(int const c : postfix){
+	for(int c : postfix){
 		if(c == -4){
 			NFA nfa = results.top();
 			results.pop();

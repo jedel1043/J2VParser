@@ -48,6 +48,7 @@ DFA NFA::toDFA(){
         states.insert(dstate);
         pending_states.pop();
         set<int> state = old_states[dstate-1];
+
         for(const char c : alphabet){
             char str[2];
             str[0] = c;

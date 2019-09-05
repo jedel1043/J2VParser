@@ -29,6 +29,8 @@ public:
     static int getCharValue(char c);
 
     static vector<int> getCharacterClassVector(const string &char_class);
+
+    static bool areParenthesisBalanced(const string &regex);
 };
 
 std::ostream& operator<< (std::ostream& out, const std::vector<int>& v);

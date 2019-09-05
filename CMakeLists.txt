@@ -1,14 +1,15 @@
-cmake_minimum_required(VERSION 3.13)
-project(lexical-analyzer)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+project(lexical-analyzer VERSION 0.1 LANGUAGES CXX)
+
+# Must use GNUInstallDirs to install libraries into correct
+# locations on all platforms.
+include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 14)
 
+# Targets that we develop here
+
+enable_testing()
 add_subdirectory(boost-cmake)
-
-include_directories(include)
-
-file(GLOB SOURCES "src/*.cpp")
-
-add_executable(main ${SOURCES})
-
-target_link_libraries(main PUBLIC Boost::serialization)
+add_subdirectory(liblex_analizer)
+add_subdirectory(app)

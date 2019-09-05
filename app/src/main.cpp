@@ -175,10 +175,12 @@ int main(int argc, char const *argv[]){
     else if (regexflag){
         if(nextarg < argc){
             string regex = argv[nextarg];
-            cout << " DFA for " << regex << "\n\n";
+//            cout << Regex::preCompile(regex);
+//            return 0;
             NFA nfa = Regex::compile(regex);
             DFA dfa = nfa.toDFA();
             dfa = dfa.minimize();
+            cout << " DFA for " << regex << "\n\n";
             cout << dfa.stringify();
             cout << "\n";
             while(true){

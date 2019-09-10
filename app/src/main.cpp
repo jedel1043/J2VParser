@@ -175,8 +175,7 @@ int main(int argc, char const *argv[]){
     else if (regexflag){
         if(nextarg < argc){
             string regex = argv[nextarg];
-//            cout << Regex::preCompile(regex);
-//            return 0;
+            cout << Regex::preCompile(regex);
             NFA nfa = Regex::compile(regex);
             DFA dfa = nfa.toDFA();
             dfa = dfa.minimize();

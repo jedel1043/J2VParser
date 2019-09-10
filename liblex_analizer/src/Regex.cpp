@@ -3,6 +3,8 @@
 #include <stack>
 #include <iterator>
 
+int _CRT_glob = 0;
+
 using namespace std;
 
 const string & Regex::getAlphaLower(){

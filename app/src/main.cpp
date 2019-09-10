@@ -2,209 +2,215 @@
 #include "DFA.h"
 #include "Regex.h"
 #include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <map>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <fstream>
+#include <stack>
+#include <vector>
 
 using namespace std;
 
 int main(int argc, char const *argv[]){
-    int nextarg = 1;
-    bool nfaflag = false, opflag = false, regexflag = false, newflag=false, readflag=false, testflag=false;
-    if (nextarg < argc){
-        if(!strcmp(argv[nextarg], "--nfa"))
-            nfaflag = true;
-        else if (!strcmp(argv[nextarg], "--regex"))
-            regexflag = true;
-        nextarg++;
-    }
 
-    if(nfaflag){
-        if(nextarg < argc){
-            if(!strcmp(argv[nextarg], "-op"))
-                opflag = true;
-            else if(!strcmp(argv[nextarg], "-n"))
-                newflag = true;
-            else if(!strcmp(argv[nextarg], "-r"))
-                readflag = true;
-            else if(!strcmp(argv[nextarg], "-t"))
-                testflag = true;
-            nextarg++;
+	vector<pair<int, NFA>> automata;
+	int contador = 0;
+	string read = "";
+	
+	cout << "Creador de automatas\n Ingrese \"s\" para salir";
 
-            if(opflag){
-                if(nextarg < argc){
-                    string operation = argv[nextarg];
-                    //-plus, -kleene, -opt, -union, -concat
-                    char op =   operation == "-plus"        ? '+' :
-                                operation == "-kleene"      ? '*' :
-                                operation == "-opt"         ? '?' :
-                                operation == "-union"       ? '|' :
-                                operation == "-concat"      ? '.' : '\0';
-                    if (++nextarg < argc){
-                        switch (op){
-                            case '*':
-                            case '?':
-                            case '+':
-                                if(nextarg+1 < argc){
-                                    ifstream infile1(argv[nextarg]);
-                                    ofstream outfile(argv[nextarg+1]);
-                                    boost::archive::text_iarchive inarchive1(infile1);
-                                    boost::archive::text_oarchive outarchive(outfile);
-                                    NFA in, out;
-                                    inarchive1 >> in;
-                                    cout << "Input automaton: " << endl << in.stringify() << endl;
-                                    if(op == '*')
-                                        out = in.kleene_closure();
-                                    else if (op == '?')
-                                        out = in.zero_or_one();
-                                    else
-                                        out = in.plus_closure();
-                                    outarchive << out;
-                                    cout << "Output automaton: " << endl << out.stringify();
-                                }
-                                else{
-                                    throw invalid_argument("No output file detected.");
-                                }
-                                break;
-                            case '|':
-                            case '.':
-                                if(nextarg+1 < argc){
-                                    if(nextarg+2 < argc){
-                                        ifstream infile1(argv[nextarg]);
-                                        ifstream infile2(argv[nextarg+1]);
-                                        ofstream outfile(argv[nextarg+2]);
-                                        boost::archive::text_iarchive inarchive1(infile1);
-                                        boost::archive::text_iarchive inarchive2(infile2);
-                                        boost::archive::text_oarchive outarchive(outfile);
-                                        NFA in1, in2, out;
-                                        inarchive1 >> in1;
-                                        inarchive2 >> in2;
-                                        cout << "Input automaton 1: " << endl << in1.stringify() << endl;
-                                        cout << "Input automaton 2: " << endl << in2.stringify() << endl;
-                                        if(op == '|')
-                                            out = in1.nfa_union(in2);
-                                        else
-                                            out = in1.nfa_concat(in2);
-                                        outarchive << out;
-                                        cout << "Output automaton: " << endl << out.stringify();
-                                    }
-                                    else{
-                                        throw invalid_argument("No output file detected.");
-                                    }
-                                }
-                                else{
-                                    throw invalid_argument("No input file 2 detected.");
-                                }
-                                break;
-                            default:
-                                throw invalid_argument("Invalid operation argument.");
-                        }
-                    }
-                    else {
-                        throw invalid_argument("No input file detected.");
-                    }
-                }
-                else {
-                    cout << "main.exe --nfa -op (-plus, -kleene, -opt, -union, -concat) {infile1} [infile2] {outfile}" << endl;
-                }
-            }
-            else if (newflag){
-                if(nextarg < argc && strlen(argv[nextarg]) == 1){
-                    if(nextarg + 1 < argc){
-                        ofstream outfile(argv[nextarg+1]);
-                        boost::archive::text_oarchive outarchive(outfile);
-                        NFA out = NFA::simpleNFA(argv[nextarg][0]);
+	while (read != "s")
+	{
+		string opciones[] = {"Ingrese una de las opciones: ",
+		"b para crear automata basico",
+		"u para union", "c para concatenacion",
+		"k para cerradura de Kleene",
+		"+ para cerradura positiva",
+		"? para ?",
+		"n para computar",
+		"r para regex",
+		"i para imprimir"};
+		int  i = 0;
 
-                        outarchive << out;
-                        cout << "Output automaton: " << endl << out.stringify();
-                    }
-                    else{
-                        throw invalid_argument("No output file detected.");
-                    }
-                }
-                else{
-                    cout << "usage: main --nfa -n {char} {outfile}" << endl;
-                }
-            }
-            else if (readflag){
-                if (nextarg < argc){
-                    ifstream infile1(argv[nextarg]);
-                    boost::archive::text_iarchive inarchive1(infile1);
-                    NFA in;
-                    inarchive1 >> in;
-                    cout << "Input automaton: " << endl;
-                    cout << in.stringify() << endl;
-                }
-                else{
-                    cout << "usage: main --nfa -r {infile}" << endl;
-                }
-            }
-            else if (testflag){
-                if (nextarg < argc){
-                    ifstream infile1(argv[nextarg]);
-                    boost::archive::text_iarchive inarchive1(infile1);
-                    NFA in;
-                    inarchive1 >> in;
-                    cout << "Input automaton: " << endl;
-                    cout << in.stringify() << endl;
-                    while(true){
-                        string str;
-                        cout << "\nWrite your string: ";
-                        cin >> str;
-                        if(in.accept(str))
-                            cout << "  *String accepted*" << endl;
-                        else
-                            cout << "  *String rejected*" << endl;
-                    }
-                }
-                else{
-                    cout << "usage: main --nfa -r {infile}" << endl;
-                }
-            }
-            else{
-                throw invalid_argument("Invalid execution mode argument.");
-            }
+		cout << "\n Automatas: \n";
 
-        }
-        else{
-            throw invalid_argument("No execution mode argument detected.");
-        }
-    }
-    else if (regexflag){
-        if(nextarg < argc){
-            string regex = argv[nextarg];
-//            cout << Regex::preCompile(regex);
-//            return 0;
-            NFA nfa = Regex::compile(regex);
-            DFA dfa = nfa.toDFA();
-            dfa = dfa.minimize();
-            cout << " DFA for " << regex << "\n\n";
-            cout << dfa.stringify();
-            cout << "\n";
-            while(true){
-                string str;
-                cout << "\nWrite your string: ";
-                cin >> str;
-                if(dfa.accept(str))
-                    cout << "  *String accepted*" << endl;
-                else
-                    cout << "  *String rejected*" << endl;
-            }
-        }
-        else{
-            throw invalid_argument("--regex requires a regular expression as input.");
-        }
-    }
-    else{
-        cout << "usage:" << endl;
-        cout << "main.exe --regex {regular expression}" << endl;
-        cout << "main.exe --nfa -op (-plus, -kleene, -opt, -union, -concat) {infile1} [infile2] {outfile}" << endl;
-        cout << "main.exe --nfa -n {char} {outfile}" << endl;
-        cout << "main.exe --nfa -r {infile}" << endl;
-        cout << "main.exe --nfa -t {infile}" << endl;
-    }
+		if(!automata.empty()){
+			vector< pair<int, NFA> > :: iterator iterador;
 
-    return 0;
+			for(iterador = automata.begin(); iterador != automata.end(); ++iterador){
+				cout << "Automata " << iterador->first << "\n";
+			}
+
+		}
+
+		cout << "\n";
+
+		for(i = 0; i < 10; i++){
+			cout << opciones[i];
+			cout << "\n";
+		}
+
+		cin >> read;
+
+		if(read == "u" || read == "c"){
+			int ind1 = -1;
+			int ind2 = -1;
+
+			NFA a1;
+			NFA a2;
+
+			cout << "\nIngrese el indice del primer automata: ";
+			cin >> ind1;
+			cout << "\nIngrese el indice del segundo automata: ";
+			cin >> ind2;
+
+			cout << "\n";
+
+			vector< pair<int, NFA> > :: iterator iterador;
+			int  j = 0;
+
+			for(iterador = automata.begin(); iterador != automata.end(); ++iterador){
+				if(iterador->first == ind1){
+					a1 = iterador->second;
+					ind1 = j;
+				}
+
+				if(iterador->first == ind2){
+					a2 = iterador->second;
+					ind2 = j;
+				}
+				j = j + 1;
+			}
+
+			automata.erase(automata.begin() + ind1);
+			
+			if(ind1 < ind2){
+				automata.erase(automata.begin() + ind2 - 1);
+			}
+			else{
+				automata.erase(automata.begin() + ind2);
+			}
+
+			if(read == "u"){
+				automata.push_back(make_pair(contador, a1.nfa_union(a2)));
+			}
+			else{
+				automata.push_back(make_pair(contador, a1.nfa_concat(a2)));
+			}
+
+			cout << "\nEl automata creado tiene por indice " << contador << "\n";
+
+			
+			contador = contador + 1;
+			
+		}
+
+
+		if(read == "b"){
+			char reg = '\0';
+			cout << "\nIngrese un caracter: ";
+			cin >> reg;
+
+			automata.push_back(make_pair(contador, NFA::simpleNFA(reg)));
+
+			cout << "\nEl automata creado tiene por indice " << contador << "\n";
+
+			contador = contador + 1;
+		}
+
+		if(read == "k" || read == "+" || read == "?"){
+			int ind = -1;
+			NFA a;
+
+			cout << "\nIngrese el indice del automata: ";
+			cin >> ind;
+
+			vector< pair<int, NFA> > :: iterator iterador;
+
+			int  j = 0;
+
+			for(iterador = automata.begin(); iterador != automata.end(); ++iterador){
+				if(iterador->first == ind){
+					a = iterador->second;
+					automata.erase(automata.begin() + j);
+
+					if(read == "k"){
+						automata.push_back(make_pair(contador, a.kleene_closure()));
+					}
+					else if(read == "+"){
+						automata.push_back(make_pair(contador, a.plus_closure()));
+					}
+					else{
+						automata.push_back(make_pair(contador, a.zero_or_one()));
+					}
+
+					cout << "\nEl automata creado tiene por indice " << contador << "\n";
+
+					contador = contador + 1; 
+					
+				}
+				j++;
+			}
+
+			j = 0;
+		}
+
+		if(read == "n"){
+			int ind = -1;
+			string cadena = "";
+			cout << "\nIngrese el indice del automata que computara: ";
+			cin >> ind;
+			bool acpt = false;
+
+			cout << "\nIngrese la cadena a computar: ";
+			cin >> cadena;
+			
+			vector< pair<int, NFA> > :: iterator iterador;
+
+			for(iterador = automata.begin(); iterador != automata.end(); ++iterador){
+				if(iterador->first == ind){
+					acpt = iterador->second.accept(cadena);
+
+					if(acpt){
+						cout << "\nla cadena es aceptada";
+					}
+					else{
+						cout << "\nLa cadena no es aceptada";
+					}
+				}
+				
+			}
+		}
+
+		if(read == "i"){
+			int ind = 0;
+			cout << "\nIngrese el indice del automata: ";
+			cin >> ind;
+
+			vector< pair<int, NFA> >  :: iterator iterador;
+
+			for(iterador = automata.begin(); iterador != automata.end();++iterador){
+				if(iterador->first == ind){
+					NFA temp = iterador->second;
+					DFA r = temp.toDFA().minimize();
+					cout << r.stringify();
+					cout << "a";
+				}
+			}
+		}
+
+		if(read == "r"){
+			string reg = "";
+			cout << "\nIngrese una expersion regular: ";
+			cin >> reg;
+
+			automata.push_back(make_pair(contador, Regex::compile(reg)));
+
+			cout << "\nEl automata creado tiene por indice " << contador << "\n";
+
+			contador = contador + 1;
+		}
+	}
+
+	return 0;
 }

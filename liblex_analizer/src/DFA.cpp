@@ -5,33 +5,38 @@
 
 using namespace std;
 
-string DFA::stringify(){
+string DFA::stringify() {
+
+    int groupingLen = 20;
+    int numberOfGroups = (int) alphabet.size() / groupingLen;
     string out;
-	out += "     |";
-    for(const char c : alphabet)
+    out += "     |";
+
+    for (const char c : alphabet)
         out += (boost::format("  %c  |") % c).str();
     out += "\n------";
-    for(int i = 1; i <= (int)alphabet.size(); i++)
+    for (int i = 1; i <= (int) alphabet.size(); i++)
         out += "------";
     out += '\n';
 
-	for(int i=1; i<=get_size(); i++){
-		if(accepting_states.count(i) != 0)
-			out.append("*");
-		else
-			out.append(" ");
-		if(initial_state == i)
-			out.append(">");
-		else
-			out.append(" ");
+    for (int i = 1; i <= get_size(); i++) {
+        if (accepting_states.count(i) != 0)
+            out.append("*");
+        else
+            out.append(" ");
+        if (initial_state == i)
+            out.append(">");
+        else
+            out.append(" ");
 
         out += (boost::format("%2d |") % i).str();
-        for(const char c : alphabet){
+        for (const char c : alphabet) {
             out += (boost::format(" %3d |") % transitions[make_pair(i, c)]).str();
         }
-		out += '\n';
-	}
-	return out;
+        out += '\n';
+    }
+
+    return out;
 }
 
 set<int> DFA::inverse_transition(const set<int> & in_states, char c){

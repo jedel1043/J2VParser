@@ -201,7 +201,7 @@ int main(int argc, char const *argv[]){
 
 		if(read == "r"){
 			string reg = "";
-			cout << "\nIngrese una expersion regular: ";
+			cout << "\nIngrese una expresion regular: ";
 			cin >> reg;
 
 			automata.push_back(make_pair(contador, Regex::compile(reg)));

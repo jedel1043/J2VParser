@@ -5,38 +5,83 @@
 
 using namespace std;
 
-string DFA::stringify() {
+
+
+string DFA::stringify(){
 
     int groupingLen = 20;
     int numberOfGroups = (int) alphabet.size() / groupingLen;
+    set<set<char>> groups;
     string out;
+
+    for(int i = 0; i <= numberOfGroups; i++){
+        auto inicio = alphabet.begin();
+        auto fin = alphabet.begin();
+        set<char> temp;
+
+        advance(inicio, i*groupingLen);
+
+        if(i == numberOfGroups){
+            fin = alphabet.end();
+        }
+        else{
+            advance(fin, (i+1)*groupingLen);
+        }
+
+        temp.insert(inicio, fin);
+
+        out += "     |";
+
+        for(const char c : temp)
+            out += (boost::format("  %c  |") % c).str();
+        out += "\n------";
+        for (int j = 1; j <= (int) temp.size(); j++)
+            out += "------";
+        out += '\n';
+
+        for(int k=1; k <= get_size(); k++){
+            if(accepting_states.count(k) != 0)
+                out.append("*");
+            else
+                out.append(" ");
+            if(initial_state == k)
+                out.append(">");
+            else
+                out.append(" ");
+
+            out += (boost::format("%2d |") % k).str();
+            for(const char c : temp){
+                out += (boost::format(" %3d |") % transitions[make_pair(k, c)]).str();
+            }
+            out += '\n';
+        }
+
+        out += "\n\n";
+
+    }
+
+    out += "\n\n";
+
     out += "     |";
+    out += (boost::format("  %s  |") % "token").str();
+    out += "\n------------\n";
 
-    for (const char c : alphabet)
-        out += (boost::format("  %c  |") % c).str();
-    out += "\n------";
-    for (int i = 1; i <= (int) alphabet.size(); i++)
-        out += "------";
-    out += '\n';
-
-    for (int i = 1; i <= get_size(); i++) {
-        if (accepting_states.count(i) != 0)
+    for(int k : states){
+        if(accepting_states.count(k) != 0)
             out.append("*");
         else
             out.append(" ");
-        if (initial_state == i)
+        if(initial_state == k)
             out.append(">");
         else
             out.append(" ");
 
-        out += (boost::format("%2d |") % i).str();
-        for (const char c : alphabet) {
-            out += (boost::format(" %3d |") % transitions[make_pair(i, c)]).str();
-        }
+        out += (boost::format("%2d |") % k).str();
+        out += (boost::format(" %3d |") % get_token(k)).str();
         out += '\n';
     }
 
-    return out;
+	return out;
 }
 
 set<int> DFA::inverse_transition(const set<int> & in_states, char c){
@@ -178,4 +223,23 @@ bool DFA::accept(const string& str){
 
 int DFA::get_size() {
     return states.size();
+}
+
+int DFA::get_token(int state){
+    auto it = tokens.find(state);
+    return it != tokens.end() ? it->second : -1;
+}
+
+DFA::DFA(set<char> alphabet, map<pair<int, char>, int> transitions, set<int> states, int initial_state,
+         set<int> accepting_states):
+         alphabet(move(alphabet)),
+         transitions(move(transitions)),
+         states(move(states)),
+         initial_state(initial_state),
+         accepting_states(move(accepting_states)){
+    {
+        int counter=1;
+        for (int state : this->accepting_states)
+            tokens.insert(pair<int, int>(state, counter++));
+    }
 }

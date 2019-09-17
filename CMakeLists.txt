@@ -1,15 +1,25 @@
-cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-project(lexical-analyzer VERSION 0.1 LANGUAGES CXX)
+cmake_minimum_required (VERSION 2.8.11 FATAL_ERROR)
+project (Compiler)
 
-# Must use GNUInstallDirs to install libraries into correct
-# locations on all platforms.
+set (Compiler_VERSION_MAJOR 0)
+set (Compiler_VERSION_MINOR 1)
+
 include(GNUInstallDirs)
 
-set(CMAKE_CXX_STANDARD 14)
+configure_file (
+  "src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
 
-# Targets that we develop here
+include_directories(
+  src/
+        include
+)
 
-enable_testing()
-add_subdirectory(boost-cmake)
-add_subdirectory(liblex_analizer)
-add_subdirectory(app)
+file(GLOB SOURCES
+    lib/*.cpp
+    lib/*/*.cpp
+    test/*.cpp
+)
+
+add_executable(compiler main.cpp ${SOURCES})

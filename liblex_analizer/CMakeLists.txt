@@ -1,6 +1,6 @@
 PROJECT(liblex_analyzer VERSION 0.1 LANGUAGES CXX)
 
-add_library(lib src/DFA.cpp src/NFA.cpp src/Regex.cpp)
+add_library(lib src/DFA.cpp src/NFA.cpp src/Regex.cpp src/Parser.cpp)
 
 # Define headers for this library. PUBLIC headers are used for
 # compiling the library, and will be added to consumers' build

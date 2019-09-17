@@ -1,4 +1,4 @@
-#include "../../../syntax/Parser.h"
+#include "Parser.h"
 
 
 using namespace std;
@@ -7,7 +7,7 @@ bool Parser::machine(){
     if(Parser::rule()){
         TokenCode token; //Inicializar el token
 
-        if(Parser::machine() || token == EOS){
+        if(Parser::machine() || token == TokenCode::EOS){
             return true;
         }
     }
@@ -18,11 +18,11 @@ bool Parser::machine(){
 bool Parser::rule(){
     TokenCode token1; //inicializar el token
 
-    if(token1 == AT_BOL){
+    if(token1 == TokenCode::AT_BOL){
         if(Parser::expr()){
             TokenCode token2; // inicializar token
 
-            if(token2 == EOS){
+            if(token2 == TokenCode::EOS){
                 if(Parser::action()){
                     return true;
                 }
@@ -39,15 +39,15 @@ bool Parser::rule(){
     if(Parser::expr()){
         TokenCode token2; // inicializar token
 
-        if(token2 == EOS){
+        if(token2 == TokenCode::EOS){
             if(Parser::action()){
                 return true;
             }
         }
 
-        if(token2 == AT_EOL){
+        if(token2 == TokenCode::AT_EOL){
             TokenCode token3; //init token
-            if(token3 == EOS){
+            if(token3 == TokenCode::EOS){
                 if(Parser::action()){
                     return true;
                 }
@@ -87,7 +87,7 @@ bool Parser::expr(){
 bool Parser::exprp(){
     TokenCode token; //init token
 
-    if(token == OR){
+    if(token == TokenCode::OR){
         if(Parser::catExpr()){
             if(Parser::exprp()){
                 return true;
@@ -124,7 +124,7 @@ bool Parser::factor(){
     if(Parser::term()){
         TokenCode token; //init token
 
-        if(token == CLOSURE || token == PLUS_CLOSURE || token == OPTIONAL){
+        if(token == TokenCode::CLOSURE || token == TokenCode::PLUS_CLOSURE || token == TokenCode::OPTIONAL){
             return true;
         }
 
@@ -144,37 +144,34 @@ bool Parser::term(){
 
     TokenCode token1; //init token
 
-    if(token1 == CCL_START){
+    if(token1 == TokenCode::CCL_START){
         if(Parser::str()){
             TokenCode token2; //init token
 
-            if(token2 == CCL_END){
-                return true;
-            }
+            return token2 == TokenCode::CCL_END;
 
             //retroceder al lexico
 
-            return false;
         }
 
 
         TokenCode token2; //init token
 
-        if(token2 == CCL_END){
+        if(token2 == TokenCode::CCL_END){
             return true;
         }
 
-        if(token2 == AT_BOL){
+        if(token2 == TokenCode::AT_BOL){
             TokenCode token3; //init token
             if(Parser::str()){
                 
-                if(token3 == CCL_END){
+                if(token3 == TokenCode::CCL_END){
                     return true;
                 }
 
             }
 
-            if(token3 == CCL_END){
+            if(token3 == TokenCode::CCL_END){
                 return true;
             }
             //retroceder al lexico
@@ -184,15 +181,15 @@ bool Parser::term(){
         return false;
     }
 
-    if(token1 == ANY){
+    if(token1 == TokenCode::ANY){
         return true;
     }
 
-    if(token1 == OPEN_PAREN){
+    if(token1 == TokenCode::OPEN_PAREN){
         if(Parser::expr()){
             TokenCode token2;
 
-            if(token2 == CLOSE_PAREN){
+            if(token2 == TokenCode::CLOSE_PAREN){
                 return true;
             }
 
@@ -207,7 +204,7 @@ bool Parser::term(){
 bool Parser::character(){
     TokenCode token;
 
-    if(token == L){
+    if(token == TokenCode::L){
         return true;
     }
 
@@ -238,10 +235,6 @@ bool Parser::str(){
 bool Parser::whiteSpace(){
     TokenCode token;
 
-    if(token == WHITE_SPACE){
-        return true;
-    }
-
-    return false;
+    return token == TokenCode::WHITE_SPACE;
 }
 

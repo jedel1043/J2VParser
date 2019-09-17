@@ -270,7 +270,7 @@ NFA Regex::compile(const vector<int> & str_vector){
 			results.push(nfa1.nfa_union(nfa2));
 		}
 		else{
-			NFA nfa = NFA::simpleNFA((char) c);
+			NFA nfa((char)c);
 			results.push(nfa);
 		}
 	}

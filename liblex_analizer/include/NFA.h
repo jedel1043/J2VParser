@@ -14,11 +14,10 @@
 using namespace std;
 
 class NFA{
-
-    set<int> states;
+    set<int> states = {0, 1};
 	int initial_state=0;
 	map<pair<int, char>, set<int>> transitions;
-	set<int> accepting_states;
+	int accepting_state=1;
 
 	friend class boost::serialization::access;
     template<class Archive>
@@ -26,7 +25,7 @@ class NFA{
         ar & states;
         ar & initial_state;
         ar & transitions;
-        ar & accepting_states;
+        ar & accepting_state;
     }
 	set<int> next_states(int state, char symbol = '\0');
 	set<int> e_closure(int state);
@@ -35,10 +34,10 @@ class NFA{
 	void addTransition(int from, const set<int>& to, char symbol);
 
 public:
-    NFA(set<int> states, int initial_state, map<pair<int, char>, set<int>> transitions, set<int> accepting_states):
-    states(move(states)), initial_state(initial_state), transitions(move(transitions)), accepting_states(move(accepting_states)) {};
+    NFA(set<int> states, int initial_state, map<pair<int, char>, set<int>> transitions, int accepting_state):
+            states(move(states)), initial_state(initial_state), transitions(move(transitions)), accepting_state(accepting_state) {};
+    explicit NFA(char c);
     bool accept(const string & str);
-    static NFA simpleNFA(char c);
     int get_size();
     NFA nfa_concat(NFA nfa);
     NFA nfa_union(NFA nfa);

@@ -12,6 +12,10 @@ using namespace std;
 
 NFA::NFA() = default;
 
+NFA::NFA(char c){
+    addTransition(0, {1}, c);
+}
+
 NFA::~NFA() = default;
 
 int NFA::get_size(){
@@ -72,9 +76,7 @@ DFA NFA::toDFA(){
             }
         }
 
-        vector<int> intersection;
-        set_intersection(state.begin(), state.end(), accepting_states.begin(), accepting_states.end(), back_inserter(intersection));
-        if(!intersection.empty())
+        if(state.count(accepting_state))
             final_states.insert(dstate);
     }
 
@@ -141,22 +143,11 @@ set<int> NFA::compute(const set<int>& states_set, char *string){
 bool NFA::accept(const string& str){
 	set<int> configuration;
 	configuration.insert(this->initial_state);
-	char cstr[str.size() + 1];
-	strcpy(cstr, str.c_str());
-	set<int> result = this->compute(configuration, cstr);
+	char c_str[str.size() + 1];
+	strcpy(c_str, str.c_str());
+	set<int> result = this->compute(configuration, c_str);
 
-	set<int> intersection;
-	set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(), inserter(intersection, intersection.begin()));
-
-	return (!intersection.empty());
-}
-
-NFA NFA::simpleNFA(char c){
-	map<pair<int, char>, set<int>> transitions;
-
-	transitions.insert(pair<pair<int, char>, set<int>>(std::make_pair(0, c), {1}));
-
-	return NFA({0,1}, 0, transitions, {1});
+	return result.count(accepting_state);
 }
 
 void NFA::addTransition(int from, const set<int>& to, char symbol){
@@ -189,9 +180,8 @@ NFA NFA::nfa_concat(NFA nfa){
 
 	// New initial state
 	result.initial_state = initial_state;
-	// New accepting states
-    for(int state : nfa.accepting_states)
-        result.accepting_states.insert(state + get_size());
+	// New accepting state
+    result.accepting_state = nfa.accepting_state + get_size();
 	// New transition function
 
     result.transitions.insert(transitions.begin(), transitions.end());
@@ -199,9 +189,7 @@ NFA NFA::nfa_concat(NFA nfa){
     map<pair<int, char>, set<int>> new_trans = nfa.get_new_trans_function(get_size());
 	result.transitions.insert(new_trans.begin(), new_trans.end());
 
-	for(int state : accepting_states){
-		result.addTransition(state, {get_size()}, 0);
-	}
+    result.addTransition(accepting_state, {get_size()}, 0);
 
 	return result;
 }
@@ -218,7 +206,7 @@ NFA NFA::nfa_union(NFA nfa){
 	result.initial_state = 0;
 	// New accepting states
 	int new_final_state = get_size() + nfa.get_size() + 1;
-	result.accepting_states.insert(new_final_state);
+	result.accepting_state = new_final_state;
 	// Adding the new states
 	result.states.insert(0);
 	result.states.insert(new_final_state);
@@ -231,10 +219,8 @@ NFA NFA::nfa_union(NFA nfa){
     //create new initial and final states
 	result.addTransition(result.initial_state, {initial_state+1, nfa.initial_state + get_size() + 1}, 0);
 
-	for(int const state : this->accepting_states)
-		result.addTransition(state+1, {new_final_state}, 0);
-	for(int const state : nfa.accepting_states)
-		result.addTransition(state + get_size() + 1, {new_final_state}, 0);
+    result.addTransition(accepting_state+1, {new_final_state}, 0);
+    result.addTransition(nfa.accepting_state + get_size() + 1, {new_final_state}, 0);
 
 	return result;
 }
@@ -255,7 +241,7 @@ NFA NFA::plus_closure(){
 	result.initial_state = 0;
 	// New final states
 	int new_final_state = get_size() + 1;
-	result.accepting_states.insert(new_final_state);
+	result.accepting_state = new_final_state;
 	// Adding the new states
 	result.states.insert(0);
 	result.states.insert(new_final_state);
@@ -265,8 +251,7 @@ NFA NFA::plus_closure(){
 	// Creates new initial and final states
 	result.addTransition(0, {1}, 0);
 	result.addTransition(get_size(), {1}, 0);
-	for(int state : accepting_states)
-		result.addTransition(state + 1, {new_final_state}, 0);
+	result.addTransition(accepting_state + 1, {new_final_state}, 0);
 	// Returning the result
 	return result;
 }
@@ -281,7 +266,7 @@ NFA NFA::zero_or_one(){
     result.initial_state = 0;
     // New final states
     int new_final_state = get_size() + 1;
-    result.accepting_states.insert(new_final_state);
+    result.accepting_state = new_final_state;
     // Adding the new states
     result.states.insert(0);
     result.states.insert(new_final_state);
@@ -291,8 +276,8 @@ NFA NFA::zero_or_one(){
     // Creates new initial and final states
     result.addTransition(0, {1}, 0);
     result.addTransition(0, {get_size()+1}, 0);
-    for(int const state : accepting_states)
-        result.addTransition(state + 1, {get_size() + 1}, 0);
+    result.addTransition(accepting_state + 1, {get_size() + 1}, 0);
+
     // Returning the result
     return result;
 }
@@ -307,7 +292,7 @@ string NFA::stringify(){
 
     out.append( "Transition function: \n");
     map<pair<int, char>, set<int>>::iterator it;
-    for (it = this->transitions.begin(); it != this->transitions.end(); ++it){
+    for (it = transitions.begin(); it != transitions.end(); ++it){
         if(it->first.second == '\0')
             out.append( "\t(" + to_string(it->first.first) + ", ) => {");
         else
@@ -317,10 +302,8 @@ string NFA::stringify(){
         out.append( "}\n");
     }
 
-    out.append( "Initial state: " + to_string(this->initial_state) + "\n");
-    out.append( "Accepting states: ");
-    for(int const element : this->accepting_states)
-        out.append( to_string(element) + ", ");
+    out.append( "Initial state: " + to_string(initial_state) + "\n");
+    out.append( "Accepting state: " + to_string(accepting_state));
     out.append( "\n");
 
     out.append( "------------------------\n");

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-enum TokenCode{
+enum class TokenCode{
   EOS = 1,          // END OF STRING
   ANY,              // .
   WHITE_SPACE,      

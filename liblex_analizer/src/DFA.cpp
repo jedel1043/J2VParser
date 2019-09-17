@@ -167,23 +167,6 @@ DFA DFA::minimize(){
             i++;
         }
     }
-
-//	for(itt=transitions.begin(); itt!=transitions.end(); ++itt){
-//		int from_state = 1, to_state = 1;
-//		bool from_flag = true, to_flag = true;
-//		for(const set<int> & class_p : P){
-//			if(class_p.count(itt->first.first) != 0) from_flag = false;
-//			else if(from_flag) from_state++;
-//
-//			if(itt->second == -1){
-//				to_state = -1;
-//				to_flag = false;
-//			}
-//			else if(class_p.count(itt->second) != 0) to_flag = false;
-//			else if(to_flag) to_state++;
-//		}
-//		new_transitions.insert(pair<pair<int, char>, int>(make_pair(from_state, itt->first.second), to_state));
-//	}
 	int new_initial = 1;
 	for(const set<int>& class_p : P){
 		if(class_p.count(initial_state) || class_p.count(-1)) break;

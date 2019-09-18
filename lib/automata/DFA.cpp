@@ -127,13 +127,19 @@ DFA DFA::minimize(){
 	P.insert({*accepting_states.begin()});
 	for(int state : accepting_states){
 	    if(tokens[state] != tokens[*accepting_states.begin()]){
-	        for(auto it : P){
-	            if(tokens[*it.begin()] == tokens[state]){
-	                it.insert(state);
+	        set<set<int>>::iterator it = P.begin();
+	        while(it != P.end()){
+	            if(tokens[*((*it).begin())] == tokens[state]){
+                    set<int> a = *it;
+                    a.insert(state);
+                    P.insert(a);
+                    P.erase(*it);
+	                break;
 	            }
-	            else
-	                P.insert({state});
+	            it++;
 	        }
+	        if(it == P.end())
+                P.insert({state});
 	    }
 	}
 

@@ -10,30 +10,52 @@
 using namespace std;
 
 void DFA::print(){
-	printf("     |");
-	for(const char c : alphabet)
-		printf("  %c  |", c);
-	printf("\n------");
-	for(const char c : alphabet)
-		printf("------");
-	printf("\n");
+    int groupingLen = 25;
+    int numberOfGroups = (int) alphabet.size() / groupingLen;
+    set<set<char>> groups;
+    string out;
 
-	for(int i=1; i<=size; i++){
-		if(accepting_states.count(i) != 0)
-			printf("*");
-		else
-			printf(" ");
-		if(initial_state == i)
-			printf(">");
-		else
-			printf(" ");
+    for(int i = 0; i <= numberOfGroups; i++) {
+        auto inicio = alphabet.begin();
+        auto fin = alphabet.begin();
+        set<char> temp;
 
-		printf("%2d |", i);
-		for(const char c : alphabet){
-			printf(" %3d |", transitions[make_pair(i, c)]);
-		}
-		printf("\n");
-	}
+        advance(inicio, i * groupingLen);
+
+        if (i == numberOfGroups) {
+            fin = alphabet.end();
+        } else {
+            advance(fin, (i + 1) * groupingLen);
+        }
+
+        temp.insert(inicio, fin);
+
+        printf("     |");
+        for(const char c : temp)
+            printf("  %c  |", c);
+        printf("\n------");
+        for(const char c : temp)
+            printf("------");
+        printf("\n");
+
+        for(int i=1; i<=size; i++){
+            if(accepting_states.count(i) != 0)
+                printf("*");
+            else
+                printf(" ");
+            if(initial_state == i)
+                printf(">");
+            else
+                printf(" ");
+
+            printf("%2d |", i);
+            for(const char c : temp){
+                printf(" %3d |", transitions[make_pair(i, c)]);
+            }
+            printf("\n");
+        }
+        cout << "\n";
+    }
 }
 
 

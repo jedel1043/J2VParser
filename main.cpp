@@ -18,6 +18,24 @@ int main(int argc, char const *argv[]) {
   vector<NFA> machines = parser.parse();
   NFA result = NFA::lexycal_union(machines);
 
+  vector<NFA> :: iterator iterador;
+
+
+  int  i = 1;
+
+  for(iterador = machines.begin(); iterador != machines.end(); ++iterador){
+      cout  << to_string(i) << ":\n";
+      DFA temp = (*iterador).toDFA().minimize();
+      temp.print();
+      cout << "\n";
+      i = i  + 1;
+  }
+
+  cout << "\nUnion de todos: \n";
+  DFA temp  = result.toDFA().minimize();
+  temp.print();
+
+
   while(true){
     string str;
     cout << "Ingresa una cadena: ";
@@ -28,4 +46,7 @@ int main(int argc, char const *argv[]) {
     else
       cout << "Rechazada!" << endl;
   }
+
+
+
 }

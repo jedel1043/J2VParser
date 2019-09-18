@@ -1,5 +1,4 @@
 #include <set>
-#include <vector>
 #include <string>
 #include <compiler/parser.h>
 
@@ -34,7 +33,7 @@ NFA Parser::rule(){
   }
 
   scanner.get();
-  string action = "";
+  string action;
   while(scanner.getCurrentToken() != EOS){
     action += scanner.getCurrentToken().getLexeme();
     scanner.get();
@@ -150,7 +149,7 @@ void Parser::term(NFA& nfa){
 }
 
 void Parser::dash(set<char>& s){
-  char lastLexeme;
+  char lastLexeme = 0;
   for(; scanner.getCurrentToken() != EOS && scanner.getCurrentToken() != CCL_END; scanner.get()){
     if(scanner.getCurrentToken() != DASH){
       lastLexeme = scanner.getCurrentToken().getLexeme();

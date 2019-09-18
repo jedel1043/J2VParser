@@ -2,7 +2,6 @@
 #include <set>
 #include <cstdio>
 #include <iostream>
-#include <queue>
 #include <algorithm>
 #include <fstream>
 #include <automata/DFA.h>
@@ -10,7 +9,7 @@
 using namespace std;
 
 void DFA::print(){
-    int groupingLen = 25;
+    int groupingLen = 15;
     int numberOfGroups = (int) alphabet.size() / groupingLen;
     set<set<char>> groups;
     string out;
@@ -56,10 +55,25 @@ void DFA::print(){
         }
         cout << "\n";
     }
+    for(int k : states){
+        if(accepting_states.count(k) != 0)
+            cout << '*';
+        else
+            cout << " ";
+        if(initial_state == k)
+            cout << ">";
+        else
+            cout << " ";
+
+        printf("%2d |", k);
+        printf(" %3d |", tokens[k] != 0 ? tokens[k] : -1);
+        cout << '\n';
+    }
+
 }
 
 
-void DFA::toFile(string filename){
+void DFA::toFile(const string& filename){
 	ofstream file(filename);
 	file << "     |";
 	for(const char c : alphabet){
@@ -95,10 +109,10 @@ void DFA::toFile(string filename){
 	file.close();
 }
 
-set<int> DFA::inverse_transition(set<int> states, char c){
+set<int> DFA::inverse_transition(const set<int>& new_states, char c){
 	set<int> result;
 	map<pair<int, char>, int>::iterator it;
-	for(const int state : states){
+	for(const int state : new_states){
 		for(it=transitions.begin(); it!=transitions.end(); ++it){
 			if(it->second == state && it->first.second == c)
 				result.insert(it->first.first);
@@ -109,7 +123,19 @@ set<int> DFA::inverse_transition(set<int> states, char c){
 
 DFA DFA::minimize(){
 	set<set<int>> P;
-	P.insert(accepting_states);
+	map<int, int> new_tokens;
+	P.insert({*accepting_states.begin()});
+	for(int state : accepting_states){
+	    if(tokens[state] != tokens[*accepting_states.begin()]){
+	        for(auto it : P){
+	            if(tokens[*it.begin()] == tokens[state]){
+	                it.insert(state);
+	            }
+	            else
+	                P.insert({state});
+	        }
+	    }
+	}
 
 	set<int> intersection;
 	set_difference(states.begin(), states.end(), accepting_states.begin(), accepting_states.end(),
@@ -157,7 +183,7 @@ DFA DFA::minimize(){
 	for(itt=transitions.begin(); itt!=transitions.end(); ++itt){
 		int from_state = 1, to_state = 1;
 		bool from_flag = true, to_flag = true;
-		for(set<int> class_p : P){
+		for(const set<int>& class_p : P){
 			if(class_p.count(itt->first.first) != 0) from_flag = false;
 			else if(from_flag) from_state++;
 
@@ -171,22 +197,28 @@ DFA DFA::minimize(){
 		new_transitions.insert(pair<pair<int, char>, int>(make_pair(from_state, itt->first.second), to_state));
 	}
 	int new_initial = 1;
-	for(set<int> class_p : P){
+	for(const set<int>& class_p : P){
 		if(class_p.count(initial_state) != 0) break;
 		else new_initial++;
 	}
 	set<int> new_accepting;
 	int current_class = 1;
-	for(set<int> class_p : P){
+	for(const set<int>& class_p : P){
+	    int token = -1;
 		for(const int state : accepting_states){
-			if(class_p.count(state) != 0) new_accepting.insert(current_class);
+			if(class_p.count(state) != 0) {
+			    token = tokens[state];
+                new_accepting.insert(current_class);
+            }
 		}
+		if (token != -1)
+            new_tokens.insert(make_pair(current_class, token));
 		current_class++;
 	}
-	return DFA(new_size, alphabet, new_transitions, new_initial, new_accepting);
+	return DFA(new_size, alphabet, new_transitions, new_initial, new_accepting, new_tokens);
 }
 
-int DFA::compute(string str){
+int DFA::compute(const string& str){
 	int current_state = initial_state;
 	for(const char c : str){
 		current_state = transitions[make_pair(current_state, c)];
@@ -196,11 +228,7 @@ int DFA::compute(string str){
 	return current_state;
 }
 
-bool DFA::accept(string str){
+int DFA::accept(const string& str){
 	int result = this->compute(str);
-	for(const int state : accepting_states){
-		if(state == result)
-			return true;
-	}
-	return false;
+	return tokens.count(result) ? tokens[result] : -1;
 }

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <map>
 #include <cstdio>
-#include <cstring>
-#include <compiler/macros.h>
 #include <misc.h>
 #include <error.h>
 
@@ -10,14 +8,14 @@ using namespace std;
 
 static map<string, string> macros;
 
-void new_macro(string definition){
+void new_macro(const string& definition){
   char name[MACRO_NAME_MAX];
   char body[MACRO_TEXT_MAX];
   sscanf(definition.c_str(), "%s %[^\n]", name, body);
   macros.insert(make_pair(string(name), string(body)));
 }
 
-string expand_macro(string const macro){
+string expand_macro(string const& macro){
   if(macro[0] != '{' || macro[macro.length() - 1] != '}') SyntaxError(BadMacro);
   char macro_name[MACRO_NAME_MAX];
   size_t length = macro.copy(macro_name, MACRO_NAME_MAX, 1);

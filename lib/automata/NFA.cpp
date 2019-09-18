@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <stack>
 #include <cstring>
-#include <cstdio>
 #include <queue>
 
 using namespace std;
@@ -23,7 +22,7 @@ set<char> NFA::getAlphabet(){
 	map<pair<int, char>, set<int>>::iterator it;
 	set<char> alphabet;
 	for(it = transitions.begin(); it != transitions.end(); ++it){
-		char c = it->first.second;
+		char c = (char)it->first.second;
 		if(c != '\0')
 			alphabet.insert(c);
 	}
@@ -44,8 +43,9 @@ DFA NFA::toDFA(){
 	// Configuration for the equivalent DFA
 	int n = 1;
 	map<pair<int, char>, int> dfa_transition;
-	set<char> alphabet = this->getAlphabet();
+	set<char> alphabet = getAlphabet();
 	set<int> final_states;
+	map<int,int> new_tokens;
 
 	// Preparing the algorithm
 	vector<set<int>> old_states;
@@ -56,21 +56,21 @@ DFA NFA::toDFA(){
 	while(!pending_states.empty()){
 		int dstate = pending_states.front();
 		pending_states.pop();
-		set<int> state = old_states[dstate-1];
+		set<int> state_set = old_states[dstate - 1];
 		for(const char c : alphabet){
 			char str[2];
 			str[0] = c;
 			str[1] = '\0';
-			set<int> result = this->compute(state, &str[0]);
+			set<int> result = this->compute(state_set, &str[0]);
 
 			if(result.empty()){
 				dfa_transition.insert(pair<pair<int, char>, int>(make_pair(dstate, c), -1));
 				continue;
 			}
 
-			vector<set<int>>::iterator it = find(old_states.begin(), old_states.end(), result);
+			auto it = find(old_states.begin(), old_states.end(), result);
 			if(it != old_states.end()){
-				int state_index = distance(old_states.begin(), it) + 1;
+				int state_index = (int)distance(old_states.begin(), it) + 1;
 				dfa_transition.insert(pair<pair<int, char>, int>(make_pair(dstate, c), state_index));
 			}else{
 				pending_states.push(++n);
@@ -80,12 +80,18 @@ DFA NFA::toDFA(){
 		}
 
 		vector<int> intersection;
-		set_intersection(state.begin(), state.end(), accepting_states.begin(), accepting_states.end(), back_inserter(intersection));
-		if(intersection.size() > 0)
-			final_states.insert(dstate);
+		set_intersection(state_set.begin(), state_set.end(), accepting_states.begin(), accepting_states.end(), back_inserter(intersection));
+		if(!intersection.empty()) {
+            final_states.insert(dstate);
+            int token = -1;
+            for(int state : intersection)
+                token = accepting_values[state];
+            if (token != -1)
+                new_tokens.insert(make_pair(dstate, token));
+        }
 	}
 
-	return DFA(n, alphabet, dfa_transition, 1, final_states);
+	return DFA(n, alphabet, dfa_transition, 1, final_states, new_tokens);
 }
 
 NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int>& accepting_states){
@@ -189,10 +195,10 @@ int NFA::lex_accept(const string& str){
 	set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(), inserter(intersection, intersection.begin()));
 
 	if(!intersection.empty()){
-		int result;
+		int token=-1;
 		for(int last_state : intersection)
-			result = accepting_values[last_state];
-		return result;
+            token = accepting_values[last_state];
+		return token;
 	}
 	else
 		return -1;
@@ -225,7 +231,7 @@ NFA NFA::simpleNFA(char from, char to){
 	return NFA(2, 0, transitions, accepting_states);
 }
 
-NFA NFA::simpleNFA(set<char> chars){
+NFA NFA::simpleNFA(const set<char>& chars){
 	map<pair<int, char>, set<int>> transitions;
 	set<int> accepting_states;
 

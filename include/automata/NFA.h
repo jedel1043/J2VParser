@@ -42,7 +42,7 @@ public:
 
     static NFA simpleNFA(char c);
 		static NFA simpleNFA(char from, char to);
-		static NFA simpleNFA(set<char> chars);
+		static NFA simpleNFA(const set<char>& chars);
 		static NFA lexycal_union(vector<NFA> nfas);
 
     NFA nfa_concat(NFA nfa);

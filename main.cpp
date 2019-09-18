@@ -21,17 +21,16 @@ int main(int argc, char const *argv[]) {
   vector<NFA> :: iterator iterador;
 
 
-  int  i = 1;
+//  int  i = 1;
+//
+//  for(iterador = machines.begin(); iterador != machines.end(); ++iterador){
+//      cout  << to_string(i) << ":\n";
+//      DFA temp = (*iterador).toDFA().minimize();
+//      temp.print();
+//      cout << "\n";
+//      i = i  + 1;
+//  }
 
-  for(iterador = machines.begin(); iterador != machines.end(); ++iterador){
-      cout  << to_string(i) << ":\n";
-      DFA temp = (*iterador).toDFA().minimize();
-      temp.print();
-      cout << "\n";
-      i = i  + 1;
-  }
-
-  cout << "\nUnion de todos: \n";
   DFA temp  = result.toDFA().minimize();
   temp.print();
 
@@ -40,7 +39,7 @@ int main(int argc, char const *argv[]) {
     string str;
     cout << "Ingresa una cadena: ";
     cin >> str;
-    int r = result.lex_accept(str);
+    int r = temp.accept(str);
     if(r != -1)
       cout << "Aceptada!: " << r << endl;
     else

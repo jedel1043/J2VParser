@@ -1,10 +1,7 @@
 #include <cctype>
-#include <iostream>
-#include <cstdlib>
 #include <compiler/scanner.h>
 #include <misc.h>
 #include <io/buffer.h>
-#include <io/common.h>
 
 using namespace std;
 
@@ -18,7 +15,7 @@ bool Token::operator!=(TokenCode t){
 }
 
 Scanner::Scanner(TextSourceBuffer* buffer):
-sourceBuffer(move(buffer)), inQuote(false), escape(false), currentToken(EOS, '\0'), inMacro(0){
+sourceBuffer(buffer), inQuote(false), escape(false), currentToken(EOS, '\0'), inMacro(0){
   int i;
   for(i=0; i<=31; i++) charCodeMap[i] = TOKEN_ERROR;
   for(i=' '; i<='#'; i++) charCodeMap[i] = L;

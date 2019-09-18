@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <cstdio>
+#include <utility>
 
 using namespace std;
 
@@ -14,20 +15,22 @@ class DFA{
 	map<pair<int, char>, int> transitions;
 	int initial_state;
 	set<int> accepting_states;
+	map<int, int> tokens;
 
-	set<int> inverse_transition(set<int> states, char c);
-	int compute(string str);
+	set<int> inverse_transition(const set<int>& new_states, char c);
+	int compute(const string& str);
 
 public:
-	DFA(int s, set<char> a, map<pair<int, char>, int> t, int i, set<int> f): size(s),
-	alphabet(a), transitions(t), initial_state(i), accepting_states(f){
-		for(int i=1; i<=s; i++)
-			states.insert(i);
+	DFA(int s, set<char> a, map<pair<int, char>, int> t, int i, set<int> f, map<int, int> tokens): size(s),
+	alphabet(std::move(a)), transitions(std::move(t)), initial_state(i), accepting_states(std::move(f)),
+	tokens(std::move(tokens)){
+		for(int j=1; j <= s; j++)
+			states.insert(j);
 	}
 	void print();
-	void toFile(string filename);
+	void toFile(const string& filename);
 	DFA minimize();
-	bool accept(string str);
+	int accept(const string& str);
 };
 
 #endif

@@ -11,5 +11,5 @@
 
 using namespace std;
 
-int currentLineNumber   = 0;
-int inputPosition       = 0;
+int currentLineNumber = 0;
+int inputPosition = 0;

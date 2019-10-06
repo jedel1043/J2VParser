@@ -12,21 +12,22 @@ using namespace std;
 
 extern int errorCounter;
 
-enum AbortCode{
-  InvalidCommandLineArgs  = -1,
-  SourceFileOpenFailed    = -2,
-  BadRegularExpression    = -3,
-  MissingCloseParenthesis = -4,
-  MissingBracket          = -5,
-  MissingExpression       = -6,
-  MissingStartExpression  = -7,
-  InvalidNewLine          = -8,
-  BadMacro                = -9,
-  MissingMacro            = -10,
-  BadMacroExpansion       = -11,
+enum AbortCode {
+    InvalidCommandLineArgs = -1,
+    SourceFileOpenFailed = -2,
+    BadRegularExpression = -3,
+    MissingCloseParenthesis = -4,
+    MissingBracket = -5,
+    MissingExpression = -6,
+    MissingStartExpression = -7,
+    InvalidNewLine = -8,
+    BadMacro = -9,
+    MissingMacro = -10,
+    BadMacroExpansion = -11,
 };
 
 void AbortTranslation(AbortCode ac);
+
 void SyntaxError(AbortCode ac);
 
 #endif

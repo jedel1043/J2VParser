@@ -7,33 +7,41 @@
 
 using namespace std;
 
-class Token{
-  TokenCode token;
-  char lexeme;
+class Token {
+    TokenCode token;
+    char lexeme;
 public:
-  Token(TokenCode t, char v): token(t), lexeme(v){}
-  bool operator==(TokenCode t);
-  bool operator!=(TokenCode t);
-  TokenCode getToken() const { return token; }
-  char getLexeme() const { return lexeme; }
+    Token(TokenCode t, char v) : token(t), lexeme(v) {}
+
+    bool operator==(TokenCode t);
+
+    bool operator!=(TokenCode t);
+
+    TokenCode getToken() const { return token; }
+
+    char getLexeme() const { return lexeme; }
 };
 
-class Scanner{
-  TextSourceBuffer* sourceBuffer;
-  bool inQuote;
-  bool escape;
-  int inMacro;
-  Token currentToken;
-  stack<string> macros;
+class Scanner {
+    TextSourceBuffer *sourceBuffer;
+    bool inQuote;
+    bool escape;
+    int inMacro;
+    Token currentToken;
+    stack<string> macros;
 
-  char escapeChar(char c);
+    char escapeChar(char c);
 
 public:
-  Scanner(TextSourceBuffer* buffer);
-  Token getCurrentToken(){ return currentToken; }
-  void skipWhiteSpace();
-  Token get();
-  void pushBack(){ sourceBuffer->putBackChar(); }
+    explicit Scanner(TextSourceBuffer *buffer);
+
+    Token getCurrentToken() { return currentToken; }
+
+    void skipWhiteSpace();
+
+    Token get();
+
+    void pushBack() { sourceBuffer->putBackChar(); }
 };
 
 extern TokenCode charCodeMap[128];

@@ -31,101 +31,104 @@ extern bool listFlag; /*!< Global buffer listing for debugging purposes. */
 *          character by character until it reaches the end of the file. It has the option of putting
 *          back a character on the buffer.
 */
-class InputBaseBuffer{
+class InputBaseBuffer {
 protected:
-  string fileName;              /*!< File name of the input stream. */
-  fstream file;                 /*!< Input stream. */
-  char *currentChar;            /*!< The current character that was read from the input stream. */
-  char text[MAX_BUFFER_SIZE];   /*!< Last line that was read from the input stream. */
+    string fileName;              /*!< File name of the input stream. */
+    fstream file;                 /*!< Input stream. */
+    char *currentChar;            /*!< The current character that was read from the input stream. */
+    char text[MAX_BUFFER_SIZE];   /*!< Last line that was read from the input stream. */
 
-  /*!
-  * @brief   Abstract method that reads a line of the buffer.
-  */
-  virtual char getLine() = 0;
+    /*!
+    * @brief   Abstract method that reads a line of the buffer.
+    */
+    virtual char getLine() = 0;
 
 public:
-  /*!
-  * @brief    Constructor for InputBaseBuffer.
-  * @param    fname File name of the input stream.
-  * @param    ac Abort code in case there is an error opening the file.
-  */
-  InputBaseBuffer(const string fname, AbortCode ac);
+    /*!
+    * @brief    Constructor for InputBaseBuffer.
+    * @param    fname File name of the input stream.
+    * @param    ac Abort code in case there is an error opening the file.
+    */
+    InputBaseBuffer(const string &fname, AbortCode ac);
 
-  /*!
-  * @brief   Destructor for InputBaseBuffer. Close the input stream.
-  */
-  virtual ~InputBaseBuffer(){ file.close(); }
+    /*!
+    * @brief   Destructor for InputBaseBuffer. Close the input stream.
+    */
+    virtual ~InputBaseBuffer() { file.close(); }
 
-  /*!
-  * @brief   Returns the current character from the text buffer.
-  * @return  The current caracter.
-  */
-  char getChar() const { return *currentChar; }
+    /*!
+    * @brief   Returns the current character from the text buffer.
+    * @return  The current caracter.
+    */
+    char getChar() const { return *currentChar; }
 
-  /*!
-  * @brief   Gets a new character from the text buffer.
-  * @detail  If the next character of text buffer is the null character, it reads a new line and
-  *          update the value of the text buffer.
-  * @see     getLine()
-  * @return  The current caracter on the text buffer.
-  */
-  char fetchChar();
+    /*!
+    * @brief   Gets a new character from the text buffer.
+    * @detail  If the next character of text buffer is the null character, it reads a new line and
+    *          update the value of the text buffer.
+    * @see     getLine()
+    * @return  The current caracter on the text buffer.
+    */
+    char fetchChar();
 
-  /*!
-  * @brief   Gets a new character from the text buffer.
-  * @detail  If the next character of text buffer is the null character, it reads a new line and
-  *          update the value of the text buffer.
-  * @warning If we call putBackChar() after fetchChar() we will get a trash buffer.
-  * @see     getLine()
-  * @return  The previous character on text buffer.
-  */
-  char putBackChar();
+    /*!
+    * @brief   Gets a new character from the text buffer.
+    * @detail  If the next character of text buffer is the null character, it reads a new line and
+    *          update the value of the text buffer.
+    * @warning If we call putBackChar() after fetchChar() we will get a trash buffer.
+    * @see     getLine()
+    * @return  The previous character on text buffer.
+    */
+    char putBackChar();
 
 };
 
 
-
-class OutputBaseBuffer{
+class OutputBaseBuffer {
 
 protected:
-  char text[MAX_BUFFER_SIZE + 16];
-  virtual void putLine() = 0;
-  void putLine(const char *textOutput){
-    strcpy(text, textOutput);
-    putLine();
-  }
+    char text[MAX_BUFFER_SIZE + 16];
+
+    virtual void putLine() = 0;
+
+    virtual void putLine(const char *textOutput) {
+        strcpy(text, textOutput);
+        putLine();
+    }
 
 };
 
 
+class TextSourceBuffer : public InputBaseBuffer {
+    char getLine() override;
 
-class TextSourceBuffer : public InputBaseBuffer{
-  virtual char getLine();
 public:
-  TextSourceBuffer(const string fname);
+    explicit TextSourceBuffer(string fname);
 };
 
 
+class ListPrinterBuffer : public OutputBaseBuffer {
+    string sourceFileName;
+    char date[26];
+    int pageNumber;
+    int lineCounter;
 
-class ListPrinterBuffer : public OutputBaseBuffer{
-  string sourceFileName;
-  char date[26];
-  int pageNumber;
-  int lineCounter;
-
-  void printPageHeader();
+    void printPageHeader();
 
 protected:
-  virtual void putLine();
+    void putLine() override;
+
 public:
-  void init(const string fname);
-  void putLine(const char *textOutput){
-    OutputBaseBuffer::putLine(textOutput);
-  }
-  void putLine(const char *textOutput, int lineNumber){
-    sprintf(text, "%4d : %s", lineNumber, textOutput);
-    putLine();
-  }
+    void init(string fname);
+
+    void putLine(const char *textOutput) override {
+        OutputBaseBuffer::putLine(textOutput);
+    }
+
+    void putLine(const char *textOutput, int lineNumber) {
+        sprintf(text, "%4d : %s", lineNumber, textOutput);
+        putLine();
+    }
 };
 
 extern ListPrinterBuffer list;

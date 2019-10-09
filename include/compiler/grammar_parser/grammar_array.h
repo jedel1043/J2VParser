@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class grammar_array {
+class Grammar_Array {
     map<pair<int, string>, string> collection;
     map<string, vector<pair<int, string>>> right_sides;
     vector<string> variables;

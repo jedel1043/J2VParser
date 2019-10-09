@@ -41,7 +41,11 @@ public:
 
     Token get();
 
+    TextSourceBuffer* get_pos();
+
     void pushBack() { sourceBuffer->putBackChar(); }
+
+    void set_pos(TextSourceBuffer *new_pos);
 };
 
 extern TokenCode charCodeMap[128];

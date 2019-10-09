@@ -29,6 +29,8 @@ enum TokenCode {
     OPTIONAL,         // ?
     OR,               // |
     PLUS_CLOSURE,     // +
+    SEMICOLON,        // +
+    COLON,            // +
     TOKEN_ERROR       // Error
 };
 

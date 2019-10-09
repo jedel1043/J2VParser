@@ -3,13 +3,10 @@
 #include <compiler/parser.h>
 
 void Parser::machine() {
-    NFA start;
     scanner.get();
-    start = rule();
-    machines.push_back(start);
+    machines.push_back(rule());
     while (scanner.getCurrentToken() != END_OF_INPUT && scanner.getCurrentToken() != EOS) {
-        start = rule();
-        machines.push_back(start);
+        machines.push_back(rule());
     }
 }
 

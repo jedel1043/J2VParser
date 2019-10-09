@@ -40,6 +40,8 @@ Scanner::Scanner(TextSourceBuffer *buffer) :
     charCodeMap['{'] = OPEN_CURLY;
     charCodeMap['|'] = OR;
     charCodeMap['}'] = CLOSE_CURLY;
+    charCodeMap[';'] = SEMICOLON;
+    charCodeMap[':'] = COLON;
     charCodeMap[127] = TOKEN_ERROR;
 }
 
@@ -105,4 +107,12 @@ Token Scanner::get() {
     currentToken = Token(newToken, lexeme);
     sourceBuffer->fetchChar();
     return currentToken;
+}
+
+void Scanner::set_pos(TextSourceBuffer* new_pos){
+    sourceBuffer = new_pos;
+}
+
+TextSourceBuffer *Scanner::get_pos() {
+    return sourceBuffer;
 }

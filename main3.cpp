@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 
-    grammar_array test;
+    Grammar_Array test;
 
     test.insert("R", "aaBRac");
     test.insert("M", "aaMRc");

@@ -9,13 +9,13 @@
 
 // retorna una lista que contiene las llaves a los lados derechos donde aparece
 // la variable (para usarse en el atributo collection.
-vector<pair<int, string>> grammar_array::get_right_sides(const string &variable) {
+vector<pair<int, string>> Grammar_Array::get_right_sides(const string &variable) {
     return right_sides[variable];
 }
 
 // retorna una lista que contiene las llaves a los lados derechos donde aparece
 // la variable y donde la variable no es la regla (para usarse en el atributo collection.
-vector<pair<int, string>> grammar_array::get_right_sides_e(const string &variable) {
+vector<pair<int, string>> Grammar_Array::get_right_sides_e(const string &variable) {
     vector<pair<int, string>> t = right_sides[variable];
     vector<pair<int, string>> ret;
 
@@ -29,7 +29,7 @@ vector<pair<int, string>> grammar_array::get_right_sides_e(const string &variabl
 }
 
 //insercion a la coleccion de reglas.
-void grammar_array::insert(const string &variable, const string &r_side) {
+void Grammar_Array::insert(const string &variable, const string &r_side) {
     bool isn_in_variables = true;
 
     for (const string &t : variables) {
@@ -51,7 +51,7 @@ void grammar_array::insert(const string &variable, const string &r_side) {
     collection[key] = r_side;
 }
 
-void grammar_array::get_missing_rules(const string &variable) {
+void Grammar_Array::get_missing_rules(const string &variable) {
     map<pair<int, string>, string>::iterator it;
 
     for (it = collection.begin(); it != collection.end(); ++it) {
@@ -67,15 +67,15 @@ void grammar_array::get_missing_rules(const string &variable) {
     }
 }
 
-map<string, vector<int>> grammar_array::get_collection_index() {
+map<string, vector<int>> Grammar_Array::get_collection_index() {
     return collection_index;
 }
 
-vector<string> grammar_array::get_variables() {
+vector<string> Grammar_Array::get_variables() {
     return variables;
 }
 
-void grammar_array::print_collection_index(const string &variable) {
+void Grammar_Array::print_collection_index(const string &variable) {
     vector<int> indexes = collection_index[variable];
     cout << variable;
     cout << " : ";
@@ -85,7 +85,7 @@ void grammar_array::print_collection_index(const string &variable) {
     }
 }
 
-void grammar_array::print_collection() {
+void Grammar_Array::print_collection() {
     map<pair<int, string>, string>::iterator it;
 
     for (it = collection.begin(); it != collection.end(); ++it) {
@@ -96,7 +96,7 @@ void grammar_array::print_collection() {
     }
 }
 
-void grammar_array::print_right_sides(const string &variable) {
+void Grammar_Array::print_right_sides(const string &variable) {
     cout << variable << " : ";
     auto r_sides = right_sides[variable];
 

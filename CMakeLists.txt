@@ -23,3 +23,4 @@ file(GLOB SOURCES
 
 add_executable(compiler main.cpp ${SOURCES})
 add_executable(test_grammar main3.cpp ${SOURCES})
+add_executable(test_parser main4.cpp ${SOURCES})

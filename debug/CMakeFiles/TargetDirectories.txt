@@ -1,0 +1,3 @@
+/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/debug/CMakeFiles/rebuild_cache.dir
+/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/debug/CMakeFiles/test_parser.dir
+/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/debug/CMakeFiles/edit_cache.dir

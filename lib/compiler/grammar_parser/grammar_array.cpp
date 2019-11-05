@@ -10,73 +10,91 @@
 
 // retorna una lista que contiene las llaves a los lados derechos donde aparece
 // la variable (para usarse en el atributo collection.
-vector<pair<int, string>> VariableArray::get_right_sides(const string &variable) {
+set<pair<int, string>> Grammar_Array::get_right_sides(const string &variable) {
     return right_sides[variable];
 }
 
 // retorna una lista que contiene las llaves a los lados derechos donde aparece
 // la variable y donde la variable no es la regla (para usarse en el atributo collection.
-vector<pair<int, string>> VariableArray::get_right_sides_e(const string &variable) {
-    vector<pair<int, string>> t = right_sides[variable];
-    vector<pair<int, string>> ret;
+set<pair<int, string>> Grammar_Array::get_right_sides_e(const string &variable) {
+    set<pair<int, string>> t = right_sides[variable];
+    set<pair<int, string>> ret;
 
     for(const pair<int, string>& temp : t){
         if(temp.second != variable){
-            ret.push_back(temp);
+            ret.insert(temp);
         }
     }
 
     return ret;
 }
 
+map<int, string> Grammar_Array::operator[](string index){
+  map<int, string> result;
+  set<int> n_rules = collection_index.at(index);
+  for(int n_rule : n_rules)
+    result.insert(make_pair(n_rule, collection.at(make_pair(n_rule, index))));
+  return result;
+}
+
 //insercion a la coleccion de reglas.
-void VariableArray::insert(const string &variable, const string &r_side) {
+void Grammar_Array::insert(const string &variable, const string &r_side) {
+    if(initial_variable == "")
+      initial_variable = variable;
     bool isn_in_variables = true;
 
-    for(string t : variables){
+    for(string t : nonterminals){
         if(t == variable)
             isn_in_variables = false;
     }
 
-    if(isn_in_variables)
-        variables.push_back(variable);
+    if(isn_in_variables){
+        nonterminals.insert(variable);
+        set<string>::iterator it = find(terminals.begin(), terminals.end(), variable);
+        if(it != terminals.end())
+          terminals.erase(it);
+    }
 
-    for(string t : variables){
+    for(string t : nonterminals){
         if(r_side.find(t) != string::npos){
-            right_sides[t].push_back(make_pair(collection.size(), variable));
+            right_sides[t].insert(make_pair(collection.size(), variable));
         }
     }
+    for(char c : r_side){
+      if(c == '#') continue;
+      string t = string(1, c);
+      set<string>::iterator it = find(terminals.begin(), terminals.end(), t);
+      set<string>::iterator it2 = find(nonterminals.begin(), nonterminals.end(), t);
+      if(it == terminals.end() && it2 == nonterminals.end())
+        terminals.insert(t);
+    }
     get_missing_rules(variable);
-    collection_index[variable].push_back(collection.size());
+    collection_index[variable].insert(collection.size());
     pair<int, string> key(collection.size(), variable);
     collection[key] = r_side;
 }
 
-void VariableArray::get_missing_rules(const string &variable) {
+void Grammar_Array::get_missing_rules(const string &variable) {
     map<pair<int, string>, string>::iterator it;
 
     for(it = collection.begin(); it != collection.end(); ++it){
         pair<int, string> key = it->first;
         string r_side = it->second;
 
-        vector<pair<int, string>> r_sides_variable = right_sides[variable];
+        set<pair<int, string>> r_sides_variable = right_sides[variable];
 
         if( (r_side.find(variable) != string::npos) && (find(r_sides_variable.begin(), r_sides_variable.end(), key) == r_sides_variable.end())){
-            right_sides[variable].push_back(key);
+            right_sides[variable].insert(key);
         }
     }
 }
 
-map<string, vector<int>> VariableArray::get_collection_index() {
+map<string, set<int>> Grammar_Array::get_collection_index() {
     return collection_index;
 }
 
-vector<string> VariableArray::get_variables() {
-    return variables;
-}
-
-void VariableArray::print_collection_index(const string &variable) {
-    vector<int> indexes = collection_index[variable];
+void Grammar_Array::print_collection_index(const string &variable) {
+    set<int> indexes = collection_index[variable];
     cout << variable;
     cout << " : ";
     for(int t : indexes){
@@ -85,7 +103,7 @@ void VariableArray::print_collection_index(const string &variable) {
     }
 }
 
-void VariableArray::print_collection() {
+void Grammar_Array::print_collection() {
     map<pair<int, string>, string>::iterator it;
 
     for(it = collection.begin(); it != collection.end(); ++it){
@@ -96,7 +114,7 @@ void VariableArray::print_collection() {
     }
 }
 
-void VariableArray::print_right_sides(const string &variable) {
+void Grammar_Array::print_right_sides(const string &variable) {
     cout << variable << " : ";
     auto r_sides = right_sides[variable];
 
@@ -107,7 +125,7 @@ void VariableArray::print_right_sides(const string &variable) {
 
 
 
-bool VariableArray::is_nullable(const string& variable){
+bool Grammar_Array::is_nullable(const string& variable){
   for(auto rule : collection){
     if(rule.first.second == variable){
       if(rule.second.length() == 1 && rule.second[0] == '#')
@@ -117,9 +135,9 @@ bool VariableArray::is_nullable(const string& variable){
   return false;
 }
 
-set<string> VariableArray::first(const string& expression){
+set<string> Grammar_Array::first(const string& expression){
     set<string> first_result;
-    if(count(variables.begin(), variables.end(), expression) == 0){
+    if(count(nonterminals.begin(), nonterminals.end(), expression) == 0){
         first_result.insert(expression);
     }else{
         for(const auto& rule : collection){
@@ -128,7 +146,7 @@ set<string> VariableArray::first(const string& expression){
                 for(char c : rule.second){
                   string first_symbol(1, c);
                   if(!is_nullable(first_symbol)){
-                    if(count(variables.begin(), variables.end(), first_symbol) == 0){
+                    if(count(nonterminals.begin(), nonterminals.end(), first_symbol) == 0){
                         first_result.insert(first_symbol);
                     }else{
                         set<string> first_return = first(first_symbol);
@@ -145,22 +163,28 @@ set<string> VariableArray::first(const string& expression){
     return first_result;
 }
 
-set<string> VariableArray::follow(const string& expression){
+set<string> Grammar_Array::follow(const string& expression, set<string>& calculated){
     set<string> follow_result;
-    if(expression == "E"){
+
+    if(calculated.find(expression) != calculated.end())
+      return follow_result;
+    else
+      calculated.insert(expression);
+
+    if(expression == initial_variable){
         follow_result.insert("$");
     }
-    vector<pair<int, string>> right_result = get_right_sides(expression);
-    for(const auto& rule_f : right_result){
+    set<pair<int, string>> right_result = get_right_sides(expression);
+    for(auto rule_f : right_result){
       string rule = collection[rule_f];
 
       for(int i=0; i<rule.length(); i++){
         if(string(1, rule[i]) == expression){
-          vector<pair<int, string>> e_result;
+          set<pair<int, string>> e_result;
           if(i != (rule.length()-1)){
             set<string> first_result;
             first_result = first(string(1, rule[i+1]));
-            for(const string& first_elem : first_result){
+            for(string first_elem : first_result){
               if(first_elem != "#"){
                 follow_result.insert(first_elem);
               }else{
@@ -171,8 +195,8 @@ set<string> VariableArray::follow(const string& expression){
             e_result = get_right_sides_e(expression);
           }
 
-          for(const auto& e_result_elem : e_result){
-            set<string> follow_e = follow(e_result_elem.second);
+          for(auto e_result_elem : e_result){
+            set<string> follow_e = follow(e_result_elem.second, calculated);
             for(string e_r : follow_e)
               follow_result.insert(e_r);
           }

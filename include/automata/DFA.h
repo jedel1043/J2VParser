@@ -16,14 +16,14 @@ class DFA {
     map<pair<int, char>, int> transitions;
     int initial_state;
     set<int> accepting_states;
-    map<int, int> tokens;
+    map<int, string> tokens;
 
     set<int> inverse_transition(const set<int> &new_states, char c);
 
     int compute(const string &str);
 
 public:
-    DFA(int s, set<char> a, map<pair<int, char>, int> t, int i, set<int> f, map<int, int> tokens) : size(s),
+    DFA(int s, set<char> a, map<pair<int, char>, int> t, int i, set<int> f, map<int, string> tokens) : size(s),
                                                                                                     alphabet(std::move(
                                                                                                             a)),
                                                                                                     transitions(
@@ -45,7 +45,7 @@ public:
 
     DFA minimize();
 
-    int accept(const string &str);
+    string accept(const string &str);
 
     void printMap(vector<string> maping);
 };

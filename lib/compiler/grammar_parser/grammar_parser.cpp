@@ -7,7 +7,7 @@ bool Grammar_Parser::grammar() {
 
 bool Grammar_Parser::rule_list(){
     if(rule()){
-        if(scanner.get() == SEMICOLON){
+        if(scanner.yylex() == SEMICOLON){
             return rule_list_p();
         }
     }
@@ -18,7 +18,7 @@ bool Grammar_Parser::rule_list_p(){
     TextSourceBuffer* saver = scanner.get_pos();
 
     if(rule()){
-        if(scanner.get() == SEMICOLON){
+        if(scanner.yylex() == SEMICOLON){
             return rule_list_p();
         }
         return false;
@@ -30,7 +30,7 @@ bool Grammar_Parser::rule_list_p(){
 bool Grammar_Parser::rule(){
     string left_symbol;
     if(left(left_symbol)){
-        if(scanner.get() == COLON){
+        if(scanner.yylex() == COLON){
             return right_sides(left_symbol);
         }
     }
@@ -38,7 +38,7 @@ bool Grammar_Parser::rule(){
 }
 
 bool Grammar_Parser::left(string &left_symbol) {
-    Token t = scanner.get();
+    Token t = scanner.yylex();
     if(t == L) {
         left_symbol += t.getLexeme();
         return true;
@@ -57,7 +57,7 @@ bool Grammar_Parser::right_sides(string &left_symbol){
 
 bool Grammar_Parser::right_sides_p(string &left_symbol){
     string right;
-    if(scanner.get() == OR){
+    if(scanner.yylex() == OR){
         if(symbols(right)){
             parsed_grammar.insert(left_symbol, right);
             return right_sides_p(left_symbol);
@@ -69,7 +69,7 @@ bool Grammar_Parser::right_sides_p(string &left_symbol){
 }
 
 bool Grammar_Parser::symbols(string &right){
-    Token t = scanner.get();
+    Token t = scanner.yylex();
     if(t == L){
         right += t.getLexeme();
         return symbols_p(right);
@@ -78,7 +78,7 @@ bool Grammar_Parser::symbols(string &right){
 }
 
 bool Grammar_Parser::symbols_p(string &right) {
-    Token t = scanner.get();
+    Token t = scanner.yylex();
     if(t == L){
         right += t.getLexeme();
         return symbols_p(right);

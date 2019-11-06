@@ -29,14 +29,13 @@ set<char> NFA::getAlphabet() {
     return alphabet;
 }
 
-void NFA::addAcceptingValue(int value) {
-    for (int accepting_state : accepting_states) {
+void NFA::addAcceptingValue(const string& value) {
+    for (int accepting_state : accepting_states)
         accepting_values.insert(make_pair(accepting_state, value));
-    }
 }
 
-int NFA::getAcceptValue(int state) {
-    return accepting_values[state];
+string NFA::getAcceptValue(int state) {
+    return accepting_values.count(state) ? accepting_values[state] : "";
 }
 
 DFA NFA::toDFA() {
@@ -45,7 +44,7 @@ DFA NFA::toDFA() {
     map<pair<int, char>, int> dfa_transition;
     set<char> alphabet = getAlphabet();
     set<int> final_states;
-    map<int, int> new_tokens;
+    map<int, string> new_tokens;
 
     // Preparing the algorithm
     vector<set<int>> old_states;
@@ -84,10 +83,10 @@ DFA NFA::toDFA() {
                          back_inserter(intersection));
         if (!intersection.empty()) {
             final_states.insert(dstate);
-            int token = -1;
+            string token;
             for (int state : intersection)
                 token = accepting_values[state];
-            if (token != -1)
+            if (!token.empty())
                 new_tokens.insert(make_pair(dstate, token));
         }
     }
@@ -187,7 +186,7 @@ bool NFA::accept(const string &str) {
     return (!intersection.empty());
 }
 
-int NFA::lex_accept(const string &str) {
+string NFA::lex_accept(const string &str) {
     set<int> configuration;
     configuration.insert(this->initial_state);
     char cstr[str.size() + 1];
@@ -199,12 +198,12 @@ int NFA::lex_accept(const string &str) {
                      inserter(intersection, intersection.begin()));
 
     if (!intersection.empty()) {
-        int token = -1;
+        string token;
         for (int last_state : intersection)
-            token = accepting_values[last_state];
+            token = getAcceptValue(last_state);
         return token;
     } else
-        return -1;
+        return "";
 }
 
 NFA NFA::simpleNFA(char c) {

@@ -14,10 +14,10 @@ Grammar_Scanner::Grammar_Scanner(TextSourceBuffer *buffer) : Scanner(buffer) {
     charCodeMap[127] = TOKEN_ERROR;
 }
 
-Token Grammar_Scanner::get(){
+Token Grammar_Scanner::yylex(){
     Scanner::skipWhiteSpace();
-    Token t = Scanner::get();
+    Token t = Scanner::yylex();
     if(t == EOS)
-        return Scanner::get();
+        return Scanner::yylex();
     return t;
 }

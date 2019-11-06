@@ -38,17 +38,16 @@ int main(int argc, char const *argv[]) {
     }
 
     cout << "\nUnion de todos: \n";
-    DFA temp = result.toDFA().minimize();
-    temp.print();
-
+    NFA temp = result;//.toDFA().minimize();
+    cout << temp << endl;
 
     while (true) {
         string str;
         cout << "Ingresa una cadena: ";
         cin >> str;
-        int r = result.lex_accept(str);
-        if (r != -1)
-            cout << "Aceptada!: " << "(" << str << ", " << to_string(r) << ")";
+        string r = result.lex_accept(str);
+        if (r != "")
+            cout << "Aceptada!: " << "(" << str << ", " << r << ")";
         else
             cout << "Rechazada!" << endl;
     }

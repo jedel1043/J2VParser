@@ -63,7 +63,7 @@ char Scanner::escapeChar(char c) {
     }
 }
 
-Token Scanner::get() {
+Token Scanner::yylex() {
     char lexeme;
 
     if (currentToken == EOS) {

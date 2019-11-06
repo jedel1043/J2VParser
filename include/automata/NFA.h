@@ -25,7 +25,7 @@ class NFA {
     map<pair<int, char>, set<int>> transitions;
     set<int> accepting_states;
     int number_of_states;
-    map<int, int> accepting_values;
+    map<int, string> accepting_values;
 
     set<int> next_states(int state, char symbol = '\0');
 
@@ -37,14 +37,12 @@ class NFA {
 
     void addTransition(int from, const set<int> &to, char symbol);
 
-    friend std::ostream &operator<<(std::ostream &ostream1, const NFA &obj);
-
 public:
     NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int> &accepting_states);
 
     bool accept(const string &str);
 
-    int lex_accept(const string &str);
+    string lex_accept(const string &str);
 
     set<char> getAlphabet();
 
@@ -72,11 +70,11 @@ public:
 
     friend std::ostream &operator<<(std::ostream &ostream1, const NFA &obj);
 
-    void addAcceptingValue(int value);
+    void addAcceptingValue(const string& value);
 
     NFA();
 
-    int getAcceptValue(int state);
+    string getAcceptValue(int state);
 };
 
 std::ostream &operator<<(std::ostream &ostream1, const NFA &obj);

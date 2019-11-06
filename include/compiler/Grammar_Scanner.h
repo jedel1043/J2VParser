@@ -11,7 +11,7 @@ class Grammar_Scanner : public Scanner {
 public:
     explicit Grammar_Scanner(TextSourceBuffer *buffer);
 
-    Token get();
+    Token yylex();
 };
 
 

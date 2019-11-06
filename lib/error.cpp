@@ -15,7 +15,7 @@ static string abortMsg[] = {
         "Missing [ in character class",
         "+ ? or * must follow an expression or subexpression",
         "^ must be at start of expression or after [",
-        "Newline in quoted string, use \\n to get newline into expression",
+        "Newline in quoted string, use \\n to yylex newline into expression",
         "Missing } in macro expansion",
         "Macro doesn't exist",
         "Macro expansions nested too deeply"

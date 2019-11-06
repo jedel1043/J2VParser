@@ -39,7 +39,7 @@ public:
 
     void skipWhiteSpace();
 
-    Token get();
+    Token yylex();
 
     TextSourceBuffer* get_pos();
 

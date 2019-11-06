@@ -22,3 +22,4 @@ file(GLOB SOURCES
         )
 
 add_executable(test_parser main4.cpp ${SOURCES})
+add_executable(test_lexical main.cpp ${SOURCES})

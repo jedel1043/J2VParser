@@ -163,7 +163,7 @@ set<int> DFA::inverse_transition(const set<int> &new_states, char c) {
 
 DFA DFA::minimize() {
     set<set<int>> P;
-    map<int, int> new_tokens;
+    map<int, string> new_tokens;
     P.insert({*accepting_states.begin()});
     for (int state : accepting_states) {
         if (tokens[state] != tokens[*accepting_states.begin()]) {
@@ -249,14 +249,14 @@ DFA DFA::minimize() {
     set<int> new_accepting;
     int current_class = 1;
     for (const set<int> &class_p : P) {
-        int token = -1;
+        string token;
         for (const int state : accepting_states) {
             if (class_p.count(state) != 0) {
                 token = tokens[state];
                 new_accepting.insert(current_class);
             }
         }
-        if (token != -1)
+        if (!token.empty())
             new_tokens.insert(make_pair(current_class, token));
         current_class++;
     }
@@ -273,7 +273,7 @@ int DFA::compute(const string &str) {
     return current_state;
 }
 
-int DFA::accept(const string &str) {
+string DFA::accept(const string &str) {
     int result = this->compute(str);
-    return tokens.count(result) ? tokens[result] : -1;
+    return tokens.count(result) ? tokens[result] : "";
 }

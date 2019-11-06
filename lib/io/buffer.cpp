@@ -1,9 +1,7 @@
 #include <cstring>
-#include <cstdio>
 #include <ctime>
 #include <iostream>
 #include <io/buffer.h>
-#include <io/common.h>
 #include <misc.h>
 
 using namespace std;

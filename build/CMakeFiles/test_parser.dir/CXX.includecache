@@ -114,7 +114,7 @@ cstring
 
 ../include/misc.h
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/automata/DFA.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/automata/DFA.cpp
 map
 -
 set
@@ -132,7 +132,7 @@ automata/DFA.h
 vector
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/automata/NFA.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/automata/NFA.cpp
 automata/NFA.h
 -
 automata/DFA.h
@@ -154,11 +154,11 @@ cstring
 queue
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/Grammar_Scanner.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/Grammar_Scanner.cpp
 compiler/Grammar_Scanner.h
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/compiler/Grammar_Scanner.h
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/compiler/Grammar_Scanner.h
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/LL1.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/LL1.cpp
 set
 -
 iostream
@@ -174,7 +174,7 @@ compiler/LL1.h
 compiler/grammar_parser/grammar_array.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/grammar_parser/grammar_array.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/grammar_parser/grammar_array.cpp
 algorithm
 -
 iostream
@@ -182,15 +182,15 @@ iostream
 set
 -
 compiler/grammar_parser/grammar_array.h
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/grammar_parser/compiler/grammar_parser/grammar_array.h
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/grammar_parser/compiler/grammar_parser/grammar_array.h
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/grammar_parser/grammar_parser.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/grammar_parser/grammar_parser.cpp
 iostream
 -
 compiler/grammar_parser/grammar_parser.h
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/grammar_parser/compiler/grammar_parser/grammar_parser.h
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/grammar_parser/compiler/grammar_parser/grammar_parser.h
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/macros.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/macros.cpp
 iostream
 -
 map
@@ -202,7 +202,7 @@ misc.h
 error.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/parser.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/parser.cpp
 set
 -
 string
@@ -210,7 +210,7 @@ string
 compiler/parser.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/compiler/scanner.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/scanner.cpp
 cctype
 -
 compiler/scanner.h
@@ -220,7 +220,7 @@ misc.h
 io/buffer.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/error.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/error.cpp
 cstdlib
 -
 iostream
@@ -228,7 +228,7 @@ iostream
 error.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/io/buffer.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/io/buffer.cpp
 cstring
 -
 cstdio
@@ -244,11 +244,11 @@ io/common.h
 misc.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/lib/io/common.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/io/common.cpp
 io/common.h
 -
 
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/main4.cpp
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/main4.cpp
 iostream
 -
 vector

@@ -1,3 +1,4 @@
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/build/CMakeFiles/rebuild_cache.dir
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/build/CMakeFiles/test_parser.dir
-/home/jose-luis/Documentos/ESCOM/5to Semestre/Compiladores/lexical-analyzer/build/CMakeFiles/edit_cache.dir
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/build/CMakeFiles/rebuild_cache.dir
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/build/CMakeFiles/edit_cache.dir
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/build/CMakeFiles/test_parser.dir
+C:/Coding/Programones/Cpprogramones/lexical-analyzer/build/CMakeFiles/test_lexical.dir

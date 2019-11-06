@@ -35,7 +35,6 @@ NFA Parser::rule() {
         action += scanner.getCurrentToken().getLexeme();
         scanner.yylex();
     }
-    cout << "token: " << action << endl;
     nfa.addAcceptingValue(action);
     scanner.yylex();
     return nfa;

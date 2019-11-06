@@ -38,8 +38,8 @@ int main(int argc, char const *argv[]) {
     }
 
     cout << "\nUnion de todos: \n";
-    NFA temp = result;//.toDFA().minimize();
-    cout << temp << endl;
+    DFA temp = result.toDFA().minimize();
+    temp.print();
 
     while (true) {
         string str;

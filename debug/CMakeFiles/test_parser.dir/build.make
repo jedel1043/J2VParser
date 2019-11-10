@@ -98,24 +98,10 @@ CMakeFiles/test_parser.dir/lib/automata/NFA.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/automata/NFA.cpp.s"
 	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\automata\NFA.cpp -o CMakeFiles\test_parser.dir\lib\automata\NFA.cpp.s
 
-CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj: CMakeFiles/test_parser.dir/flags.make
-CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
-CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj: ../lib/compiler/Grammar_Scanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj"
-	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\Grammar_Scanner.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Grammar_Scanner.cpp
-
-CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.i"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Grammar_Scanner.cpp > CMakeFiles\test_parser.dir\lib\compiler\Grammar_Scanner.cpp.i
-
-CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.s"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Grammar_Scanner.cpp -o CMakeFiles\test_parser.dir\lib\compiler\Grammar_Scanner.cpp.s
-
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: ../lib/compiler/LL1.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj"
 	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\LL1.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\LL1.cpp
 
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.i: cmake_force
@@ -125,6 +111,20 @@ CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.i: cmake_force
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.s"
 	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\LL1.cpp -o CMakeFiles\test_parser.dir\lib\compiler\LL1.cpp.s
+
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj: ../lib/compiler/Lexical_analyzer_s.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\Lexical_analyzer_s.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Lexical_analyzer_s.cpp
+
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Lexical_analyzer_s.cpp > CMakeFiles\test_parser.dir\lib\compiler\Lexical_analyzer_s.cpp.i
+
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\Lexical_analyzer_s.cpp -o CMakeFiles\test_parser.dir\lib\compiler\Lexical_analyzer_s.cpp.s
 
 CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
@@ -154,10 +154,52 @@ CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.s: cma
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.s"
 	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\grammar_parser\grammar_parser.cpp -o CMakeFiles\test_parser.dir\lib\compiler\grammar_parser\grammar_parser.cpp.s
 
+CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj: ../lib/compiler/grammar_scanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\grammar_scanner.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\grammar_scanner.cpp
+
+CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\grammar_scanner.cpp > CMakeFiles\test_parser.dir\lib\compiler\grammar_scanner.cpp.i
+
+CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\grammar_scanner.cpp -o CMakeFiles\test_parser.dir\lib\compiler\grammar_scanner.cpp.s
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj: ../lib/compiler/lexical_analyzer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer.cpp
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer.cpp > CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer.cpp.i
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer.cpp -o CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer.cpp.s
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj: ../lib/compiler/lexical_analyzer_f.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer_f.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer_f.cpp
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer_f.cpp > CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer_f.cpp.i
+
+CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\lexical_analyzer_f.cpp -o CMakeFiles\test_parser.dir\lib\compiler\lexical_analyzer_f.cpp.s
+
 CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
 CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj: ../lib/compiler/macros.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj"
 	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\macros.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\macros.cpp
 
 CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.i: cmake_force
@@ -168,38 +210,38 @@ CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.s"
 	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\macros.cpp -o CMakeFiles\test_parser.dir\lib\compiler\macros.cpp.s
 
-CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj: CMakeFiles/test_parser.dir/flags.make
-CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
-CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj: ../lib/compiler/parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj"
-	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\parser.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\parser.cpp
+CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj: ../lib/compiler/regex_parser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\regex_parser.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_parser.cpp
 
-CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.i"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\parser.cpp > CMakeFiles\test_parser.dir\lib\compiler\parser.cpp.i
+CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_parser.cpp > CMakeFiles\test_parser.dir\lib\compiler\regex_parser.cpp.i
 
-CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.s"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\parser.cpp -o CMakeFiles\test_parser.dir\lib\compiler\parser.cpp.s
+CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_parser.cpp -o CMakeFiles\test_parser.dir\lib\compiler\regex_parser.cpp.s
 
-CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj: CMakeFiles/test_parser.dir/flags.make
-CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
-CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj: ../lib/compiler/scanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj"
-	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\scanner.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\scanner.cpp
+CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj: CMakeFiles/test_parser.dir/flags.make
+CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
+CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj: ../lib/compiler/regex_scanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj"
+	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\compiler\regex_scanner.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_scanner.cpp
 
-CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.i"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\scanner.cpp > CMakeFiles\test_parser.dir\lib\compiler\scanner.cpp.i
+CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.i"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_scanner.cpp > CMakeFiles\test_parser.dir\lib\compiler\regex_scanner.cpp.i
 
-CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.s"
-	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\scanner.cpp -o CMakeFiles\test_parser.dir\lib\compiler\scanner.cpp.s
+CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.s"
+	C:\msys64\mingw64\bin\clang++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\compiler\regex_scanner.cpp -o CMakeFiles\test_parser.dir\lib\compiler\regex_scanner.cpp.s
 
 CMakeFiles/test_parser.dir/lib/error.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/error.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
 CMakeFiles/test_parser.dir/lib/error.cpp.obj: ../lib/error.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test_parser.dir/lib/error.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/test_parser.dir/lib/error.cpp.obj"
 	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\error.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\error.cpp
 
 CMakeFiles/test_parser.dir/lib/error.cpp.i: cmake_force
@@ -213,7 +255,7 @@ CMakeFiles/test_parser.dir/lib/error.cpp.s: cmake_force
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../lib/io/buffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj"
 	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\io\buffer.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\io\buffer.cpp
 
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.i: cmake_force
@@ -227,7 +269,7 @@ CMakeFiles/test_parser.dir/lib/io/buffer.cpp.s: cmake_force
 CMakeFiles/test_parser.dir/lib/io/common.cpp.obj: CMakeFiles/test_parser.dir/flags.make
 CMakeFiles/test_parser.dir/lib/io/common.cpp.obj: CMakeFiles/test_parser.dir/includes_CXX.rsp
 CMakeFiles/test_parser.dir/lib/io/common.cpp.obj: ../lib/io/common.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/test_parser.dir/lib/io/common.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/test_parser.dir/lib/io/common.cpp.obj"
 	C:\msys64\mingw64\bin\clang++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\test_parser.dir\lib\io\common.cpp.obj -c C:\Coding\Programones\Cpprogramones\lexical-analyzer\lib\io\common.cpp
 
 CMakeFiles/test_parser.dir/lib/io/common.cpp.i: cmake_force
@@ -243,13 +285,16 @@ test_parser_OBJECTS = \
 "CMakeFiles/test_parser.dir/main4.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/automata/DFA.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/automata/NFA.cpp.obj" \
-"CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj" \
-"CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj" \
-"CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj" \
+"CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/error.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj" \
 "CMakeFiles/test_parser.dir/lib/io/common.cpp.obj"
@@ -260,13 +305,16 @@ test_parser_EXTERNAL_OBJECTS =
 test_parser.exe: CMakeFiles/test_parser.dir/main4.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/automata/DFA.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/automata/NFA.cpp.obj
-test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/Grammar_Scanner.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer_s.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/grammar_scanner.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/lexical_analyzer_f.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/macros.cpp.obj
-test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/parser.cpp.obj
-test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/scanner.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/regex_parser.cpp.obj
+test_parser.exe: CMakeFiles/test_parser.dir/lib/compiler/regex_scanner.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/error.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj
 test_parser.exe: CMakeFiles/test_parser.dir/lib/io/common.cpp.obj
@@ -274,7 +322,7 @@ test_parser.exe: CMakeFiles/test_parser.dir/build.make
 test_parser.exe: CMakeFiles/test_parser.dir/linklibs.rsp
 test_parser.exe: CMakeFiles/test_parser.dir/objects1.rsp
 test_parser.exe: CMakeFiles/test_parser.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable test_parser.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable test_parser.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\test_parser.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

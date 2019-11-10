@@ -1,20 +1,20 @@
 #include <set>
 #include <string>
-#include <compiler/parser.h>
+#include <compiler/regex_parser.h>
 
-void Parser::machine() {
-    scanner.yylex();
+void Regex_Parser::machine() {
+    scanner.getToken();
     machines.push_back(rule());
     while (scanner.getCurrentToken() != END_OF_INPUT && scanner.getCurrentToken() != EOS) {
         machines.push_back(rule());
     }
 }
 
-NFA Parser::rule() {
+NFA Regex_Parser::rule() {
     NFA nfa;
 
     if (scanner.getCurrentToken() == AT_BOL) {
-        scanner.yylex();
+        scanner.getToken();
         nfa = NFA::simpleNFA('\n');
         expr(nfa);
     } else {
@@ -22,35 +22,35 @@ NFA Parser::rule() {
     }
 
     if (scanner.getCurrentToken() == AT_EOL) {
-        scanner.yylex();
+        scanner.getToken();
         set<char> labels;
         labels.insert('\n');
         labels.insert('\r');
         nfa.nfa_concat(NFA::simpleNFA(labels));
     }
 
-    scanner.yylex();
+    scanner.getToken();
     string action;
     while (scanner.getCurrentToken() != EOS) {
         action += scanner.getCurrentToken().getLexeme();
-        scanner.yylex();
+        scanner.getToken();
     }
     nfa.addAcceptingValue(action);
-    scanner.yylex();
+    scanner.getToken();
     return nfa;
 }
 
-void Parser::expr(NFA &nfa) {
+void Regex_Parser::expr(NFA &nfa) {
     NFA nfa2;
     cat_expr(nfa);
     while (scanner.getCurrentToken() == OR) {
-        scanner.yylex();
+        scanner.getToken();
         cat_expr(nfa2);
         nfa = nfa.nfa_union(nfa2);
     }
 }
 
-void Parser::cat_expr(NFA &nfa) {
+void Regex_Parser::cat_expr(NFA &nfa) {
     NFA nfa2;
 
     if (isConcatenable(scanner.getCurrentToken()))
@@ -61,7 +61,7 @@ void Parser::cat_expr(NFA &nfa) {
     }
 }
 
-bool Parser::isConcatenable(Token token) {
+bool Regex_Parser::isConcatenable(Regex_Token token) {
     switch (token.getToken()) {
         case CLOSE_PAREN:
         case AT_EOL:
@@ -85,40 +85,40 @@ bool Parser::isConcatenable(Token token) {
 
 }
 
-void Parser::factor(NFA &nfa) {
+void Regex_Parser::factor(NFA &nfa) {
     term(nfa);
     if (scanner.getCurrentToken() == CLOSURE) {
         nfa = nfa.kleene_closure();
-        scanner.yylex();
+        scanner.getToken();
     } else if (scanner.getCurrentToken() == PLUS_CLOSURE) {
         nfa = nfa.plus_closure();
-        scanner.yylex();
+        scanner.getToken();
     } else if (scanner.getCurrentToken() == OPTIONAL) {
         nfa = nfa.zero_or_one();
-        scanner.yylex();
+        scanner.getToken();
     }
 }
 
-void Parser::term(NFA &nfa) {
+void Regex_Parser::term(NFA &nfa) {
     bool complement = false;
     if (scanner.getCurrentToken() == OPEN_PAREN) {
-        scanner.yylex();
+        scanner.getToken();
         expr(nfa);
         if (scanner.getCurrentToken() == CLOSE_PAREN)
-            scanner.yylex();
+            scanner.getToken();
         else
             SyntaxError(MissingCloseParenthesis);
     } else {
         if (scanner.getCurrentToken() != ANY && scanner.getCurrentToken() != CCL_START) {
             nfa = NFA::simpleNFA(scanner.getCurrentToken().getLexeme());
-            scanner.yylex();
+            scanner.getToken();
         } else {
             if (scanner.getCurrentToken() == ANY) {
                 nfa = NFA::simpleNFA(any);
             } else {
                 set<char> cs;
-                if (scanner.yylex() == AT_BOL) {
-                    scanner.yylex();
+                if (scanner.getToken() == AT_BOL) {
+                    scanner.getToken();
                     complement = true;
                 }
                 if (scanner.getCurrentToken() != CCL_END) {
@@ -138,19 +138,19 @@ void Parser::term(NFA &nfa) {
                     nfa = NFA::simpleNFA(cs);
                 }
             }
-            scanner.yylex();
+            scanner.getToken();
         }
     }
 }
 
-void Parser::dash(set<char> &s) {
+void Regex_Parser::dash(set<char> &s) {
     char lastLexeme = 0;
-    for (; scanner.getCurrentToken() != EOS && scanner.getCurrentToken() != CCL_END; scanner.yylex()) {
+    for (; scanner.getCurrentToken() != EOS && scanner.getCurrentToken() != CCL_END; scanner.getToken()) {
         if (scanner.getCurrentToken() != DASH) {
             lastLexeme = scanner.getCurrentToken().getLexeme();
             s.insert(lastLexeme);
         } else {
-            scanner.yylex();
+            scanner.getToken();
             for (; lastLexeme <= scanner.getCurrentToken().getLexeme(); ++lastLexeme)
                 s.insert(lastLexeme);
         }

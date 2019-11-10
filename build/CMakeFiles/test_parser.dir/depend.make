@@ -25,6 +25,10 @@ CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: ../include/io/buffer.h
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: ../include/misc.h
 CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj: ../lib/compiler/LL1.cpp
 
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer.cpp.obj: ../include/automata/DFA.h
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer.cpp.obj: ../include/compiler/Lexical_analyzer.h
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer.cpp.obj: ../lib/compiler/Lexical_analyzer.cpp
+
 CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj: ../include/compiler/grammar_parser/grammar_array.h
 CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj: ../lib/compiler/grammar_parser/grammar_array.cpp
 
@@ -61,7 +65,6 @@ CMakeFiles/test_parser.dir/lib/error.cpp.obj: ../lib/error.cpp
 
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../include/error.h
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../include/io/buffer.h
-CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../include/io/common.h
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../include/misc.h
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj: ../lib/io/buffer.cpp
 
@@ -72,9 +75,11 @@ CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/automata/DFA.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/automata/NFA.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/Grammar_Scanner.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/LL1.h
+CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/Lexical_analyzer.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/grammar_parser/grammar_array.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/grammar_parser/grammar_parser.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/macros.h
+CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/parser.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/compiler/scanner.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/error.h
 CMakeFiles/test_parser.dir/main4.cpp.obj: ../include/io/buffer.h

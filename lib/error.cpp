@@ -15,10 +15,16 @@ static string abortMsg[] = {
         "Missing [ in character class",
         "+ ? or * must follow an expression or subexpression",
         "^ must be at start of expression or after [",
-        "Newline in quoted string, use \\n to yylex newline into expression",
+        "Newline in quoted string, use \\n to getToken newline into expression",
         "Missing } in macro expansion",
         "Macro doesn't exist",
-        "Macro expansions nested too deeply"
+        "Macro expansions nested too deeply",
+        "Missing apostrophe in terminal symbol",
+        "Missing semicolon in end of rules",
+        "Missing colon in beginning of rules",
+        "Found unknown expression when parsing symbol",
+        "Missing symbol between apostrophes",
+        "Missing rule name"
 };
 
 void AbortTranslation(AbortCode ac) {

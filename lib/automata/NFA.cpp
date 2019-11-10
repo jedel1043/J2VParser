@@ -95,7 +95,6 @@ DFA NFA::toDFA() {
 }
 
 NFA::NFA(int size, int initial_state, map<pair<int, char>, set<int>> transitions, const set<int> &accepting_states) {
-    this->number_of_states = size;
     map<int, int> tmp_dic;
     for (int i = 0; i < size; i++) {
         this->states.insert(NFA::StateCounter);
@@ -184,26 +183,6 @@ bool NFA::accept(const string &str) {
                      inserter(intersection, intersection.begin()));
 
     return (!intersection.empty());
-}
-
-string NFA::lex_accept(const string &str) {
-    set<int> configuration;
-    configuration.insert(this->initial_state);
-    char cstr[str.size() + 1];
-    strcpy(cstr, str.c_str());
-    set<int> result = this->compute(configuration, cstr);
-
-    set<int> intersection;
-    set_intersection(result.begin(), result.end(), this->accepting_states.begin(), this->accepting_states.end(),
-                     inserter(intersection, intersection.begin()));
-
-    if (!intersection.empty()) {
-        string token;
-        for (int last_state : intersection)
-            token = getAcceptValue(last_state);
-        return token;
-    } else
-        return "";
 }
 
 NFA NFA::simpleNFA(char c) {
@@ -400,6 +379,45 @@ NFA NFA::zero_or_one() {
         result.addTransition(state, new_final_states, '\0');
     // Returning the result
     return result;
+}
+
+string NFA::lex_accept(char* str, string& token, string& lexeme, string& str_result){
+    set<int> configuration;
+    configuration.insert(this->initial_state);
+//	char* text = str;
+    int input_pos = string(str).size()-1, last_input_pos = 0;
+    bool flagLexeme = false;
+    set<int> intersection;
+    char text[string(str).size()];
+    strcpy(text, str);
+
+    if(*text == '\0')
+        return "";
+    while(*text != '\0'){
+        set<int> result = compute(configuration, text);
+        if(!result.empty()){
+            configuration = result;
+            intersection.clear();
+            set_intersection(result.begin(), result.end(), accepting_states.begin(),
+                             accepting_states.end(), inserter(intersection, intersection.begin()));
+            if(!intersection.empty()){
+                for(int last_state : intersection)
+                    token = accepting_values[last_state];
+                for(int i=0; i<=input_pos; i++, str++);
+                lexeme = string(text);
+                str_result = string(str);
+                //cout << str << ": (" << token << ", " << lexeme << ")" << endl;
+                return token;
+            }
+        }else{
+            text[input_pos] = '\0';
+            input_pos--;
+        }
+    }
+    //cout << "(" << -1 << ", " << "" << ")" << endl;
+    token = "";
+    lexeme = "";
+    return "";
 }
 
 ostream &operator<<(ostream &ostream1, const NFA &obj) {

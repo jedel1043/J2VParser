@@ -24,6 +24,12 @@ enum AbortCode {
     BadMacro = -9,
     MissingMacro = -10,
     BadMacroExpansion = -11,
+    MissingApostrophe = -12,
+    MissingSemicolon = -13,
+    MissingColon = -14,
+    UnknownSymbol = -15,
+    MissingSymbol = -16,
+    MissingRuleName = -17
 };
 
 void AbortTranslation(AbortCode ac);

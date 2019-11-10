@@ -5,11 +5,11 @@
 #include <vector>
 #include <automata/NFA.h>
 #include <error.h>
-#include <compiler/scanner.h>
+#include <compiler/regex_scanner.h>
 
-class Parser {
+class Regex_Parser {
     set<char> any;
-    Scanner scanner;
+    Regex_Scanner scanner;
     vector<NFA> machines;
 
     void machine();
@@ -20,7 +20,7 @@ class Parser {
 
     void cat_expr(NFA &);
 
-    static bool isConcatenable(Token);
+    static bool isConcatenable(Regex_Token);
 
     void factor(NFA &);
 
@@ -31,7 +31,7 @@ class Parser {
     void dash(set<char> &);
 
 public:
-    explicit Parser(Scanner scanner) : scanner(std::move(scanner)) {
+    explicit Regex_Parser(Regex_Scanner scanner) : scanner(std::move(scanner)) {
         for (int i = ' '; i <= '}'; i++) any.insert(i);
     }
 

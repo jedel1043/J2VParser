@@ -7,39 +7,39 @@
 
 using namespace std;
 
-class Token {
-    TokenCode token;
+class Regex_Token {
+    TokenCodeRegex token;
     char lexeme;
 public:
-    Token(TokenCode t, char v) : token(t), lexeme(v) {}
+    Regex_Token(TokenCodeRegex t, char v) : token(t), lexeme(v) {}
 
-    bool operator==(TokenCode t);
+    bool operator==(TokenCodeRegex t);
 
-    bool operator!=(TokenCode t);
+    bool operator!=(TokenCodeRegex t);
 
-    TokenCode getToken() const { return token; }
+    TokenCodeRegex getToken() const { return token; }
 
     char getLexeme() const { return lexeme; }
 };
 
-class Scanner {
+class Regex_Scanner {
     TextSourceBuffer *sourceBuffer;
     bool inQuote;
     bool escape;
     int inMacro;
-    Token currentToken;
+    Regex_Token currentToken;
     stack<string> macros;
 
     char escapeChar(char c);
 
 public:
-    explicit Scanner(TextSourceBuffer *buffer);
+    explicit Regex_Scanner(TextSourceBuffer *buffer);
 
-    Token getCurrentToken() { return currentToken; }
+    Regex_Token getCurrentToken() { return currentToken; }
 
     void skipWhiteSpace();
 
-    Token yylex();
+    virtual Regex_Token getToken();
 
     TextSourceBuffer* get_pos();
 
@@ -48,6 +48,6 @@ public:
     void set_pos(TextSourceBuffer *new_pos);
 };
 
-extern TokenCode charCodeMap[128];
+extern TokenCodeRegex charCodeMap[128];
 
 #endif

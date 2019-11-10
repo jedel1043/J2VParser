@@ -1,7 +1,3 @@
-//
-// Created by asusi7 on 9/18/2019.
-//
-
 #include <automata/NFA.h>
 #include <automata/DFA.h>
 #include <iostream>

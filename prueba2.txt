@@ -1,8 +1,10 @@
-e : f
-    | g;
-f : g
-    | x;
-g : abc
-    | cde
-    | ed;
-x : 000000;
+E   :   T Ep;
+Ep  :   '+'T Ep
+    |   '-'T Ep
+    |   ;
+T   :   F Tp;
+Tp  :   '*'F Tp
+    |   '/'F Tp
+    |   ;
+F   :   '('E')'
+    |   NUM;

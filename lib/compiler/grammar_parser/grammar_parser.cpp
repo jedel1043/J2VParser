@@ -1,88 +1,60 @@
-#include <iostream>
 #include "compiler/grammar_parser/grammar_parser.h"
 
-bool Grammar_Parser::grammar() {
-    return rule_list();
+void grammar_parser::grammar() {
+    while(scanner.get_current_token() != "$"){
+        rule();
+    }
 }
 
-bool Grammar_Parser::rule_list(){
-    if(rule()){
-        if(scanner.yylex() == SEMICOLON){
-            return rule_list_p();
+void grammar_parser::rule(){
+    string left_s;
+    if(scanner.yylex() == "VAR"){
+        left_s = scanner.get_current_token().get_lexeme();
+        if(scanner.yylex() == "COLON"){
+            while(scanner.get_current_token() != "SEMICOLON")
+                right_side(left_s);
+        } else SyntaxError(MissingColon);
+    }
+    else if (scanner.get_current_token() == "$");
+    else SyntaxError(MissingRuleName);
+}
+
+void grammar_parser::right_side(const string& left_s){
+    std::vector<std::string> right_s;
+    Token saver = scanner.get_current_token();
+    while(scanner.yylex() != "OR" && scanner.get_current_token() != "SEMICOLON"){
+        if(scanner.get_current_token() == "$" || scanner.get_current_token() == "COLON")
+            SyntaxError(MissingSemicolon);
+        right_s.push_back(symbol());
+        saver = scanner.get_current_token();
+    }
+
+    if(saver == "COLON" && scanner.get_current_token() == "OR")
+        right_s.emplace_back("#");
+    else if(saver == "OR" && scanner.get_current_token() == "OR")
+        right_s.emplace_back("#");
+    else if(saver == "OR" && scanner.get_current_token() == "SEMICOLON")
+        right_s.emplace_back("#");
+    parsed_grammar.insert(left_s, right_s);
+}
+
+string grammar_parser::symbol() {
+    Token actual_token = scanner.get_current_token();
+    if(actual_token == "VAR")
+        return actual_token.get_lexeme();
+    else if(actual_token == "APOS"){
+        if(scanner.yylex() == "ANY"){
+            string saver = scanner.get_current_token().get_lexeme();
+            if(scanner.yylex() == "APOS")
+                return saver;
+            else
+                SyntaxError(MissingApostrophe);
         }
+        else
+            SyntaxError(MissingSymbol);
     }
-    return false;
+    SyntaxError(UnknownSymbol);
+    return "ERROR";
 }
 
-bool Grammar_Parser::rule_list_p(){
-    TextSourceBuffer* saver = scanner.get_pos();
 
-    if(rule()){
-        if(scanner.yylex() == SEMICOLON){
-            return rule_list_p();
-        }
-        return false;
-    }
-    scanner.set_pos(saver);
-    return true;
-}
-
-bool Grammar_Parser::rule(){
-    string left_symbol;
-    if(left(left_symbol)){
-        if(scanner.yylex() == COLON){
-            return right_sides(left_symbol);
-        }
-    }
-    return false;
-}
-
-bool Grammar_Parser::left(string &left_symbol) {
-    Token t = scanner.yylex();
-    if(t == L) {
-        left_symbol += t.getLexeme();
-        return true;
-    }
-    return false;
-}
-
-bool Grammar_Parser::right_sides(string &left_symbol){
-    string right;
-    if(symbols(right)){
-        parsed_grammar.insert(left_symbol, right);
-        return right_sides_p(left_symbol);
-    }
-    return false;
-}
-
-bool Grammar_Parser::right_sides_p(string &left_symbol){
-    string right;
-    if(scanner.yylex() == OR){
-        if(symbols(right)){
-            parsed_grammar.insert(left_symbol, right);
-            return right_sides_p(left_symbol);
-        }
-        return false;
-    }
-    scanner.pushBack();
-    return true;
-}
-
-bool Grammar_Parser::symbols(string &right){
-    Token t = scanner.yylex();
-    if(t == L){
-        right += t.getLexeme();
-        return symbols_p(right);
-    }
-    return false;
-}
-
-bool Grammar_Parser::symbols_p(string &right) {
-    Token t = scanner.yylex();
-    if(t == L){
-        right += t.getLexeme();
-        return symbols_p(right);
-    }
-    scanner.pushBack();
-    return true;
-}

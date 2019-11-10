@@ -1,46 +1,52 @@
-//
-// Created by asusi7 on 10/5/2019.
-//
-
 #ifndef STRUCT_VARIABLEARRAY_H
 #define STRUCT_VARIABLEARRAY_H
 
 #include <string>
 #include <map>
 #include <set>
-#include <utility>
-#include <set>
+#include <iostream>
+#include <vector>
+#include <unordered_map>
 
-using namespace std;
 
-class Grammar_Array {
-    string initial_variable;
-    map<pair<int, string>, string> collection;
-    map<string, set<pair<int, string>>> right_sides;
-    set<string> nonterminals;
-    set<string> terminals;
-    map<string, set<int>> collection_index;
-    void get_missing_rules(const string& variable);
-    bool is_nullable(const string& variable);
+class grammar_array {
+private:
+    std::string axiom;
+    std::map<std::string, std::set< std::vector<std::string> > > rules_array;
+    std::set<std::string> non_terminals;
+    std::set<std::string> terminals;
+
+    std::map<std::pair<std::string, std::vector<std::string>>, int> rules_index;
+
+    std::set<std::string> follow(const std::string& expression, std::set<std::string>& calculated);
+    bool can_derive_epsilon(const std::string &variable);
+    void update_terminals();
+    std::set<std::pair<std::string, std::vector<std::string>>> get_right_sides(const std::string &variable);
 
 public:
-    Grammar_Array(): initial_variable(""){}
-    set<pair<int, string>> get_right_sides(const string& variable);
-    void insert(const string& variable, const string& r_side);
-    set<pair<int, string>> get_right_sides_e(const string &variable);
-    map<string, set<int>> get_collection_index();
-    set<string> get_nonterminals(){ return nonterminals; }
-    set<string> get_terminals(){ return terminals; }
-    void print_collection_index(const string& variable);
-    void print_collection();
-    void print_right_sides(const string& variable);
-    string operator[](pair<int, string> index){ return collection.at(index); }
-    map<int, string> operator[](string index);
-    string initial(){ return initial_variable; }
 
-    set<string> first(const string& expression);
-    set<string> follow(const string& expression, set<string>& calculated);
+    grammar_array();
+
+    void insert(const std::string &variable, const std::vector<std::string> &rule);
+
+    std::set<std::string> first(const std::vector<std::string>& expression_vector);
+    std::set<std::string> first(const std::string &expression);
+
+    std::set<std::string> follow(const std::string& expression);
+
+    std::set<std::vector<std::string>> get_rules(const std::string &variable);
+
+    int get_rule_index(const std::string &variable, const std::vector<std::string> &rule);
+
+    [[nodiscard]] const std::string &get_axiom() const;
+    [[nodiscard]] const std::set<std::string> &get_non_terminals() const;
+    [[nodiscard]] const std::set<std::string> &get_terminals() const;
+
+    friend std::ostream &operator<<(std::ostream &ostream1, const grammar_array &obj);
+    std::set<std::vector<std::string>> operator[](const std::string& index);
+
 };
 
+std::ostream &operator<<(std::ostream &ostream, const grammar_array &obj);
 
 #endif //STRUCT_VARIABLEARRAY_H

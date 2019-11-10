@@ -25,6 +25,10 @@ CMakeFiles/test_parser.dir/lib/compiler/LL1.cpp.obj
  ../include/io/buffer.h
  ../include/misc.h
  C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/LL1.cpp
+CMakeFiles/test_parser.dir/lib/compiler/Lexical_analyzer.cpp.obj
+ ../include/automata/DFA.h
+ ../include/compiler/Lexical_analyzer.h
+ C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/Lexical_analyzer.cpp
 CMakeFiles/test_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj
  ../include/compiler/grammar_parser/grammar_array.h
  C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/compiler/grammar_parser/grammar_array.cpp
@@ -62,7 +66,6 @@ CMakeFiles/test_parser.dir/lib/error.cpp.obj
 CMakeFiles/test_parser.dir/lib/io/buffer.cpp.obj
  ../include/error.h
  ../include/io/buffer.h
- ../include/io/common.h
  ../include/misc.h
  C:/Coding/Programones/Cpprogramones/lexical-analyzer/lib/io/buffer.cpp
 CMakeFiles/test_parser.dir/lib/io/common.cpp.obj
@@ -73,9 +76,11 @@ CMakeFiles/test_parser.dir/main4.cpp.obj
  ../include/automata/NFA.h
  ../include/compiler/Grammar_Scanner.h
  ../include/compiler/LL1.h
+ ../include/compiler/Lexical_analyzer.h
  ../include/compiler/grammar_parser/grammar_array.h
  ../include/compiler/grammar_parser/grammar_parser.h
  ../include/compiler/macros.h
+ ../include/compiler/parser.h
  ../include/compiler/scanner.h
  ../include/error.h
  ../include/io/buffer.h

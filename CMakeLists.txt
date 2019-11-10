@@ -3,6 +3,7 @@ project(Compiler)
 
 set(Compiler_VERSION_MAJOR 0)
 set(Compiler_VERSION_MINOR 1)
+set (CMAKE_CXX_STANDARD 17)
 
 include(GNUInstallDirs)
 
@@ -21,5 +22,6 @@ file(GLOB SOURCES
         lib/*/*/*.cpp
         )
 
-add_executable(test_parser main4.cpp ${SOURCES})
-add_executable(test_lexical main.cpp ${SOURCES})
+add_executable(test_lexical test/main.cpp ${SOURCES})
+add_executable(test_grammar_array test/main3.cpp ${SOURCES})
+add_executable(LL1_parser app/src/LL1_parser.cpp ${SOURCES})

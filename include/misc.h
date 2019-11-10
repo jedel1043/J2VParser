@@ -11,7 +11,7 @@
 #define NCOLS       10
 #define YY_TYPE     "YY_TYPE"
 
-enum TokenCode {
+enum TokenCodeRegex {
     EOS = 1,          // END OF STRING
     ANY,              // .
     AT_BOL,           // ^

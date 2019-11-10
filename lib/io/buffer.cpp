@@ -7,7 +7,7 @@
 using namespace std;
 
 char EOFChar = 0x7F;
-bool listFlag = true;
+bool listFlag = false;
 
 InputBaseBuffer::InputBaseBuffer(const string &fname, AbortCode ac) {
     this->fileName = fname;

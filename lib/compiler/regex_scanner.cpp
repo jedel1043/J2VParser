@@ -1,21 +1,21 @@
 #include <cctype>
-#include <compiler/scanner.h>
+#include <compiler/regex_scanner.h>
 #include <misc.h>
 #include <io/buffer.h>
 
 using namespace std;
 
-TokenCode charCodeMap[128];
+TokenCodeRegex charCodeMap[128];
 
-bool Token::operator==(TokenCode t) {
+bool Regex_Token::operator==(TokenCodeRegex t) {
     return token == t;
 }
 
-bool Token::operator!=(TokenCode t) {
+bool Regex_Token::operator!=(TokenCodeRegex t) {
     return token != t;
 }
 
-Scanner::Scanner(TextSourceBuffer *buffer) :
+Regex_Scanner::Regex_Scanner(TextSourceBuffer *buffer) :
         sourceBuffer(buffer), inQuote(false), escape(false), currentToken(EOS, '\0'), inMacro(0) {
     int i;
     for (i = 0; i <= 31; i++) charCodeMap[i] = TOKEN_ERROR;
@@ -45,13 +45,13 @@ Scanner::Scanner(TextSourceBuffer *buffer) :
     charCodeMap[127] = TOKEN_ERROR;
 }
 
-void Scanner::skipWhiteSpace() {
+void Regex_Scanner::skipWhiteSpace() {
     char c = sourceBuffer->getChar();
     while (isspace(c) && c != EOFChar)
         c = sourceBuffer->fetchChar();
 }
 
-char Scanner::escapeChar(char c) {
+char Regex_Scanner::escapeChar(char c) {
     if (!escape) return c;
     switch (c) {
         case 'n':
@@ -63,20 +63,20 @@ char Scanner::escapeChar(char c) {
     }
 }
 
-Token Scanner::yylex() {
+Regex_Token Regex_Scanner::getToken() {
     char lexeme;
 
     if (currentToken == EOS) {
         if (inQuote) SyntaxError(InvalidNewLine);
         skipWhiteSpace();
         if (sourceBuffer->getChar() == EOFChar) {
-            currentToken = Token(END_OF_INPUT, EOFChar);
+            currentToken = Regex_Token(END_OF_INPUT, EOFChar);
             return currentToken;
         }
     }
 
     if (sourceBuffer->getChar() == '\0') {
-        currentToken = Token(EOS, '\0');
+        currentToken = Regex_Token(EOS, '\0');
         sourceBuffer->fetchChar();
         return currentToken;
     }
@@ -84,7 +84,7 @@ Token Scanner::yylex() {
     if (sourceBuffer->getChar() == '"') {
         inQuote = !inQuote;
         if (sourceBuffer->fetchChar() == EOFChar || sourceBuffer->getChar() == '\0') {
-            currentToken = Token(EOS, '\0');
+            currentToken = Regex_Token(EOS, '\0');
             return currentToken;
         }
     }
@@ -96,23 +96,27 @@ Token Scanner::yylex() {
 
     if (!inQuote) {
         if (isspace(sourceBuffer->getChar())) {
-            currentToken = Token(EOS, '\0');
+            currentToken = Regex_Token(EOS, '\0');
             return currentToken;
         }
         lexeme = sourceBuffer->getChar();
     } else {
         lexeme = sourceBuffer->getChar();
     }
-    TokenCode newToken = (inQuote || escape) ? L : charCodeMap[lexeme];
-    currentToken = Token(newToken, lexeme);
+    TokenCodeRegex newToken = (inQuote || escape) ? L : charCodeMap[lexeme];
+    if((!inQuote || !escape) && isspace(sourceBuffer->getChar())) {
+        skipWhiteSpace();
+        return getToken();
+    }
+    currentToken = Regex_Token(newToken, lexeme);
     sourceBuffer->fetchChar();
     return currentToken;
 }
 
-void Scanner::set_pos(TextSourceBuffer* new_pos){
+void Regex_Scanner::set_pos(TextSourceBuffer* new_pos){
     sourceBuffer = new_pos;
 }
 
-TextSourceBuffer *Scanner::get_pos() {
+TextSourceBuffer *Regex_Scanner::get_pos() {
     return sourceBuffer;
 }

@@ -1,43 +1,37 @@
 //
-// Created by Jedel on 06/10/2019.
+// Created by Jedel on 08/11/2019.
 //
 
 #ifndef COMPILER_GRAMMAR_PARSER_H
 #define COMPILER_GRAMMAR_PARSER_H
 
-#include <set>
+
+#include <utility>
+#include<error.h>
+
+#include "grammar_analyzer.h"
 #include "grammar_array.h"
-#include "compiler/Grammar_Scanner.h"
 
-
-class Grammar_Parser {
+class grammar_parser {
 private:
-    std::set<char> any;
-    Grammar_Scanner scanner;
-    Grammar_Array parsed_grammar;
+    grammar_analyzer scanner;
+    grammar_array parsed_grammar;
 
-    bool grammar();
-    bool rule_list();
-    bool rule();
-    bool left(string & left_symbol);
-    bool right_sides(string & left_symbol);
-    bool symbols(string & right);
-    bool symbols_p(string & right);
+    void grammar();
+    void rule();
+    void right_side(const string& left_s);
+    string symbol();
 
 public:
-    explicit Grammar_Parser(Grammar_Scanner scanner) : scanner(std::move(scanner)) {
-        for (int i = ' '; i <= '}'; i++) any.insert(i);
-    }
+    explicit grammar_parser(grammar_analyzer scanner) : scanner(std::move(scanner)) {};
+    explicit grammar_parser(TextSourceBuffer *input_file) : scanner(input_file) {};
 
-    Grammar_Array parse() {
+    grammar_array parse_grammar() {
+        parsed_grammar = grammar_array();
         grammar();
         return parsed_grammar;
     }
 
-
-    bool rule_list_p();
-
-    bool right_sides_p(string &left_symbol);
 };
 
 

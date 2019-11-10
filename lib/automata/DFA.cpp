@@ -6,68 +6,20 @@
 #include <fstream>
 #include <automata/DFA.h>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
-void DFA::printMap(vector<string> maping) {
-    int groupingLen = 25;
-    int numberOfGroups = (int) alphabet.size() / groupingLen;
-    set<set<char>> groups;
-    string out;
-
-    for (int i = 0; i <= numberOfGroups; i++) {
-        int j = 0;
-        auto inicio = alphabet.begin();
-        auto fin = alphabet.begin();
-        set<char> temp;
-
-        advance(inicio, i * groupingLen);
-
-        if (i == numberOfGroups) {
-            fin = alphabet.end();
-        } else {
-            advance(fin, (i + 1) * groupingLen);
-        }
-
-        temp.insert(inicio, fin);
-
-        printf("     |");
-        for (const char c : temp) {
-            string t = maping[j];
-            cout << " " << t << " |";
-            j = j + 1;
-        }
-
-        printf("\n------");
-        for (const char c : temp)
-            printf("------");
-        printf("\n");
-
-        for (int i = 1; i <= size; i++) {
-            if (accepting_states.count(i) != 0)
-                printf("*");
-            else
-                printf(" ");
-            if (initial_state == i)
-                printf(">");
-            else
-                printf(" ");
-
-            printf("%2d |", i);
-            for (const char c : temp) {
-                printf(" %3d |", transitions[make_pair(i, c)]);
-            }
-            printf("\n");
-        }
-        cout << "\n";
-    }
-}
-
 void DFA::print() {
+    cout << "Tokens:" << endl;
+    for(const auto& token : tokens)
+        cout << "{" << token.first << ", " << token.second << "}, ";
+    cout << endl;
     int groupingLen = 25;
     int numberOfGroups = (int) alphabet.size() / groupingLen;
     set<set<char>> groups;
     string out;
+
 
     for (int i = 0; i <= numberOfGroups; i++) {
         auto inicio = alphabet.begin();
@@ -182,15 +134,14 @@ DFA DFA::minimize() {
                 P.insert({state});
         }
     }
+    set<set<int>> W;
+    W.insert(P.begin(), P.end());
 
     set<int> intersection;
     set_difference(states.begin(), states.end(), accepting_states.begin(), accepting_states.end(),
                    inserter(intersection, intersection.end()));
     if (!intersection.empty())
         P.insert(intersection);
-
-    set<set<int>> W;
-    W.insert(accepting_states);
 
     while (!W.empty()) {
         set<set<int>>::iterator it;
@@ -199,13 +150,16 @@ DFA DFA::minimize() {
         W.erase(it);
         for (const char c : alphabet) {
             set<int> X = this->inverse_transition(A, c);
-            for (it = P.begin(); it != P.end(); ++it) {
+            for (it = P.begin(); it != P.end();) {
                 set<int> Y = *it;
                 set<int> XY;
                 set<int> Y_X;
                 set_intersection(X.begin(), X.end(), Y.begin(), Y.end(), inserter(XY, XY.end()));
                 set_difference(Y.begin(), Y.end(), X.begin(), X.end(), inserter(Y_X, Y_X.end()));
-                if (XY.empty() || Y_X.empty()) continue;
+                if (XY.empty() || Y_X.empty()){
+                    it++;
+                    continue;
+                }
                 P.erase(it);
                 P.insert(XY);
                 P.insert(Y_X);
@@ -219,6 +173,7 @@ DFA DFA::minimize() {
                     else
                         W.insert(Y_X);
                 }
+                it = P.begin();
             }
         }
     }
@@ -227,17 +182,22 @@ DFA DFA::minimize() {
     map<pair<int, char>, int> new_transitions;
     map<pair<int, char>, int>::iterator itt;
     for (itt = transitions.begin(); itt != transitions.end(); ++itt) {
-        int from_state = 1, to_state = 1;
-        bool from_flag = true, to_flag = true;
-        for (const set<int> &class_p : P) {
-            if (class_p.count(itt->first.first) != 0) from_flag = false;
-            else if (from_flag) from_state++;
-
-            if (itt->second == -1) {
-                to_state = -1;
-                to_flag = false;
-            } else if (class_p.count(itt->second) != 0) to_flag = false;
-            else if (to_flag) to_state++;
+        int from_state, to_state, current_class=1;
+        bool got_from=false, got_to=false;
+        if (itt->second == -1) {
+            to_state = -1;
+            got_to = true;
+        }
+        for(auto it = P.begin(); !(got_from && got_to) ; it++){
+            if(!got_from && (*it).count(itt->first.first)) {
+                from_state = current_class;
+                got_from = true;
+            }
+            if(!got_to && (*it).count(itt->second)){
+                to_state = current_class;
+                got_to = true;
+            }
+            current_class++;
         }
         new_transitions.insert(pair<pair<int, char>, int>(make_pair(from_state, itt->first.second), to_state));
     }
@@ -271,6 +231,22 @@ int DFA::compute(const string &str) {
     }
     cout << endl;
     return current_state;
+}
+
+int DFA::compute(int state, char c) {
+    return transitions[make_pair(state, c)];
+}
+
+int DFA::getInitialState(){
+    return initial_state;
+}
+
+const set<int> &DFA::getAcceptingStates(){
+    return accepting_states;
+}
+
+const map<int, string> &DFA::getTokens(){
+    return tokens;
 }
 
 string DFA::accept(const string &str) {

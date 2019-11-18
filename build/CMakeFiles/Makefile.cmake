@@ -58,7 +58,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/test_lexical.dir/DependInfo.cmake"
-  "CMakeFiles/test_grammar_array.dir/DependInfo.cmake"
   "CMakeFiles/LL1_parser.dir/DependInfo.cmake"
+  "CMakeFiles/LR0_parser.dir/DependInfo.cmake"
   )

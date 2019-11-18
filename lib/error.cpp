@@ -1,45 +1,24 @@
-#include <cstdlib>
+#include "error.h"
+
 #include <iostream>
-#include <error.h>
 
-using namespace std;
+#include "common.h"
 
-int errorCounter = 0;
+namespace compiler::error {
 
-static string abortMsg[] = {
-        "",
-        "Invalid command line arguments",
-        "Failed to open source file",
-        "Malformed regular expression",
-        "Missing close parenthesis",
-        "Missing [ in character class",
-        "+ ? or * must follow an expression or subexpression",
-        "^ must be at start of expression or after [",
-        "Newline in quoted string, use \\n to getToken newline into expression",
-        "Missing } in macro expansion",
-        "Macro doesn't exist",
-        "Macro expansions nested too deeply",
-        "Missing apostrophe in terminal symbol",
-        "Missing semicolon in end of rules",
-        "Missing colon in beginning of rules",
-        "Found unknown expression when parsing symbol",
-        "Missing symbol between apostrophes",
-        "Missing rule name"
-};
+    void AbortTranslation(AbortCode error_code) {
+        std::cerr << "Fatal translation error: " << abort_msg[-error_code] << std::endl;
+        exit(error_code);
+    }
 
-void AbortTranslation(AbortCode ac) {
-    cerr << "Fatal translation error: " << abortMsg[-ac] << endl;
-    exit(ac);
-}
-
-void SyntaxError(AbortCode ac) {
-    extern int currentLineNumber, inputPosition;
-    extern string errorDetails;
-    cerr << "       ";
-    for (int i = 0; i < inputPosition; i++)
-        cerr << " ";
-    cerr << "^~~~" << endl;
-    cerr << "Fatal syntax error (line " << currentLineNumber << " col " << inputPosition << "): " << abortMsg[-ac]
-         << endl;
-    exit(ac);
-}
+    void SyntaxError(AbortCode syntax_error_code) {
+        std::cerr << "       ";
+        for (int i = 0; i < input_position; i++)
+            std::cerr << " ";
+        std::cerr << "^~~~" << std::endl;
+        std::cerr << "Fatal syntax error (line " << current_line_number << " col " << input_position << "): "
+                  << abort_msg[-syntax_error_code]
+                  << std::endl;
+        exit(syntax_error_code);
+    }
+} //namespace compiler::error

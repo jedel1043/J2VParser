@@ -21,7 +21,7 @@ file(GLOB SOURCES
         lib/*/*.cpp
         lib/*/*/*.cpp
         )
+enable_testing()
 
-add_executable(test_lexical test/main.cpp ${SOURCES})
-add_executable(test_grammar_array test/main3.cpp ${SOURCES})
 add_executable(LL1_parser app/src/LL1_parser.cpp ${SOURCES})
+add_executable(LR0_parser app/src/LR0_parser.cpp ${SOURCES})

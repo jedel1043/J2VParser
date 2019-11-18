@@ -64,80 +64,6 @@ CMAKE_SOURCE_DIR = C:\Coding\Programones\Cpprogramones\lexical-analyzer
 CMAKE_BINARY_DIR = C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug
 
 #=============================================================================
-# Target rules for target CMakeFiles/test_lexical.dir
-
-# All Build rule for target.
-CMakeFiles/test_lexical.dir/all:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/depend
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48 "Built target test_lexical"
-.PHONY : CMakeFiles/test_lexical.dir/all
-
-# Include target in all.
-all: CMakeFiles/test_lexical.dir/all
-
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_lexical.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 16
-	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/test_lexical.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 0
-.PHONY : CMakeFiles/test_lexical.dir/rule
-
-# Convenience name for target.
-test_lexical: CMakeFiles/test_lexical.dir/rule
-
-.PHONY : test_lexical
-
-# clean rule for target.
-CMakeFiles/test_lexical.dir/clean:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/clean
-.PHONY : CMakeFiles/test_lexical.dir/clean
-
-# clean rule for target.
-clean: CMakeFiles/test_lexical.dir/clean
-
-.PHONY : clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_grammar_array.dir
-
-# All Build rule for target.
-CMakeFiles/test_grammar_array.dir/all:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/depend
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32 "Built target test_grammar_array"
-.PHONY : CMakeFiles/test_grammar_array.dir/all
-
-# Include target in all.
-all: CMakeFiles/test_grammar_array.dir/all
-
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_grammar_array.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 16
-	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/test_grammar_array.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 0
-.PHONY : CMakeFiles/test_grammar_array.dir/rule
-
-# Convenience name for target.
-test_grammar_array: CMakeFiles/test_grammar_array.dir/rule
-
-.PHONY : test_grammar_array
-
-# clean rule for target.
-CMakeFiles/test_grammar_array.dir/clean:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/clean
-.PHONY : CMakeFiles/test_grammar_array.dir/clean
-
-# clean rule for target.
-clean: CMakeFiles/test_grammar_array.dir/clean
-
-.PHONY : clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/LL1_parser.dir
 
 # All Build rule for target.
@@ -171,6 +97,43 @@ CMakeFiles/LL1_parser.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/LL1_parser.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/LR0_parser.dir
+
+# All Build rule for target.
+CMakeFiles/LR0_parser.dir/all:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/depend
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles --progress-num=17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32 "Built target LR0_parser"
+.PHONY : CMakeFiles/LR0_parser.dir/all
+
+# Include target in all.
+all: CMakeFiles/LR0_parser.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/LR0_parser.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 16
+	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/LR0_parser.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Coding\Programones\Cpprogramones\lexical-analyzer\debug\CMakeFiles 0
+.PHONY : CMakeFiles/LR0_parser.dir/rule
+
+# Convenience name for target.
+LR0_parser: CMakeFiles/LR0_parser.dir/rule
+
+.PHONY : LR0_parser
+
+# clean rule for target.
+CMakeFiles/LR0_parser.dir/clean:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/clean
+.PHONY : CMakeFiles/LR0_parser.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/LR0_parser.dir/clean
 
 .PHONY : clean
 

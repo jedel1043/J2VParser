@@ -66,6 +66,17 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	C:\Users\Jedel\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\192.5728.100\bin\cmake\win\bin\ctest.exe --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -110,32 +121,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_lexical
-
-# Build rule for target.
-test_lexical: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 test_lexical
-.PHONY : test_lexical
-
-# fast build rule for target.
-test_lexical/fast:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/build
-.PHONY : test_lexical/fast
-
-#=============================================================================
-# Target rules for targets named test_grammar_array
-
-# Build rule for target.
-test_grammar_array: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 test_grammar_array
-.PHONY : test_grammar_array
-
-# fast build rule for target.
-test_grammar_array/fast:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/build
-.PHONY : test_grammar_array/fast
-
-#=============================================================================
 # Target rules for targets named LL1_parser
 
 # Build rule for target.
@@ -147,6 +132,19 @@ LL1_parser: cmake_check_build_system
 LL1_parser/fast:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/build
 .PHONY : LL1_parser/fast
+
+#=============================================================================
+# Target rules for targets named LR0_parser
+
+# Build rule for target.
+LR0_parser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 LR0_parser
+.PHONY : LR0_parser
+
+# fast build rule for target.
+LR0_parser/fast:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/build
+.PHONY : LR0_parser/fast
 
 app/src/LL1_parser.obj: app/src/LL1_parser.cpp.obj
 
@@ -175,368 +173,212 @@ app/src/LL1_parser.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/app/src/LL1_parser.cpp.s
 .PHONY : app/src/LL1_parser.cpp.s
 
-lib/automata/DFA.obj: lib/automata/DFA.cpp.obj
+app/src/LR0_parser.obj: app/src/LR0_parser.cpp.obj
 
-.PHONY : lib/automata/DFA.obj
-
-# target to build an object file
-lib/automata/DFA.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/DFA.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/DFA.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/DFA.cpp.obj
-.PHONY : lib/automata/DFA.cpp.obj
-
-lib/automata/DFA.i: lib/automata/DFA.cpp.i
-
-.PHONY : lib/automata/DFA.i
-
-# target to preprocess a source file
-lib/automata/DFA.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/DFA.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/DFA.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/DFA.cpp.i
-.PHONY : lib/automata/DFA.cpp.i
-
-lib/automata/DFA.s: lib/automata/DFA.cpp.s
-
-.PHONY : lib/automata/DFA.s
-
-# target to generate assembly for a file
-lib/automata/DFA.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/DFA.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/DFA.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/DFA.cpp.s
-.PHONY : lib/automata/DFA.cpp.s
-
-lib/automata/NFA.obj: lib/automata/NFA.cpp.obj
-
-.PHONY : lib/automata/NFA.obj
+.PHONY : app/src/LR0_parser.obj
 
 # target to build an object file
-lib/automata/NFA.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/NFA.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/NFA.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/NFA.cpp.obj
-.PHONY : lib/automata/NFA.cpp.obj
+app/src/LR0_parser.cpp.obj:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/app/src/LR0_parser.cpp.obj
+.PHONY : app/src/LR0_parser.cpp.obj
 
-lib/automata/NFA.i: lib/automata/NFA.cpp.i
+app/src/LR0_parser.i: app/src/LR0_parser.cpp.i
 
-.PHONY : lib/automata/NFA.i
+.PHONY : app/src/LR0_parser.i
 
 # target to preprocess a source file
-lib/automata/NFA.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/NFA.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/NFA.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/NFA.cpp.i
-.PHONY : lib/automata/NFA.cpp.i
+app/src/LR0_parser.cpp.i:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/app/src/LR0_parser.cpp.i
+.PHONY : app/src/LR0_parser.cpp.i
 
-lib/automata/NFA.s: lib/automata/NFA.cpp.s
+app/src/LR0_parser.s: app/src/LR0_parser.cpp.s
 
-.PHONY : lib/automata/NFA.s
+.PHONY : app/src/LR0_parser.s
 
 # target to generate assembly for a file
-lib/automata/NFA.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/automata/NFA.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/automata/NFA.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/NFA.cpp.s
-.PHONY : lib/automata/NFA.cpp.s
+app/src/LR0_parser.cpp.s:
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/app/src/LR0_parser.cpp.s
+.PHONY : app/src/LR0_parser.cpp.s
 
-lib/compiler/grammar_parser/grammar_analyzer.obj: lib/compiler/grammar_parser/grammar_analyzer.cpp.obj
+lib/analyzers/lexical_analyzer_f.obj: lib/analyzers/lexical_analyzer_f.cpp.obj
 
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.obj
+.PHONY : lib/analyzers/lexical_analyzer_f.obj
 
 # target to build an object file
-lib/compiler/grammar_parser/grammar_analyzer.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.obj
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.cpp.obj
+lib/analyzers/lexical_analyzer_f.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.obj
+.PHONY : lib/analyzers/lexical_analyzer_f.cpp.obj
 
-lib/compiler/grammar_parser/grammar_analyzer.i: lib/compiler/grammar_parser/grammar_analyzer.cpp.i
+lib/analyzers/lexical_analyzer_f.i: lib/analyzers/lexical_analyzer_f.cpp.i
 
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.i
+.PHONY : lib/analyzers/lexical_analyzer_f.i
 
 # target to preprocess a source file
-lib/compiler/grammar_parser/grammar_analyzer.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.i
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.cpp.i
+lib/analyzers/lexical_analyzer_f.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.i
+.PHONY : lib/analyzers/lexical_analyzer_f.cpp.i
 
-lib/compiler/grammar_parser/grammar_analyzer.s: lib/compiler/grammar_parser/grammar_analyzer.cpp.s
+lib/analyzers/lexical_analyzer_f.s: lib/analyzers/lexical_analyzer_f.cpp.s
 
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.s
+.PHONY : lib/analyzers/lexical_analyzer_f.s
 
 # target to generate assembly for a file
-lib/compiler/grammar_parser/grammar_analyzer.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_analyzer.cpp.s
-.PHONY : lib/compiler/grammar_parser/grammar_analyzer.cpp.s
+lib/analyzers/lexical_analyzer_f.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.s
+.PHONY : lib/analyzers/lexical_analyzer_f.cpp.s
 
-lib/compiler/grammar_parser/grammar_array.obj: lib/compiler/grammar_parser/grammar_array.cpp.obj
+lib/analyzers/lexical_analyzer_s.obj: lib/analyzers/lexical_analyzer_s.cpp.obj
 
-.PHONY : lib/compiler/grammar_parser/grammar_array.obj
+.PHONY : lib/analyzers/lexical_analyzer_s.obj
 
 # target to build an object file
-lib/compiler/grammar_parser/grammar_array.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.obj
-.PHONY : lib/compiler/grammar_parser/grammar_array.cpp.obj
+lib/analyzers/lexical_analyzer_s.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.obj
+.PHONY : lib/analyzers/lexical_analyzer_s.cpp.obj
 
-lib/compiler/grammar_parser/grammar_array.i: lib/compiler/grammar_parser/grammar_array.cpp.i
+lib/analyzers/lexical_analyzer_s.i: lib/analyzers/lexical_analyzer_s.cpp.i
 
-.PHONY : lib/compiler/grammar_parser/grammar_array.i
+.PHONY : lib/analyzers/lexical_analyzer_s.i
 
 # target to preprocess a source file
-lib/compiler/grammar_parser/grammar_array.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_array.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_array.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.i
-.PHONY : lib/compiler/grammar_parser/grammar_array.cpp.i
+lib/analyzers/lexical_analyzer_s.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.i
+.PHONY : lib/analyzers/lexical_analyzer_s.cpp.i
 
-lib/compiler/grammar_parser/grammar_array.s: lib/compiler/grammar_parser/grammar_array.cpp.s
+lib/analyzers/lexical_analyzer_s.s: lib/analyzers/lexical_analyzer_s.cpp.s
 
-.PHONY : lib/compiler/grammar_parser/grammar_array.s
+.PHONY : lib/analyzers/lexical_analyzer_s.s
 
 # target to generate assembly for a file
-lib/compiler/grammar_parser/grammar_array.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_array.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_array.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_array.cpp.s
-.PHONY : lib/compiler/grammar_parser/grammar_array.cpp.s
+lib/analyzers/lexical_analyzer_s.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.s
+.PHONY : lib/analyzers/lexical_analyzer_s.cpp.s
 
-lib/compiler/grammar_parser/grammar_parser.obj: lib/compiler/grammar_parser/grammar_parser.cpp.obj
+lib/automata/dfa.obj: lib/automata/dfa.cpp.obj
 
-.PHONY : lib/compiler/grammar_parser/grammar_parser.obj
+.PHONY : lib/automata/dfa.obj
 
 # target to build an object file
-lib/compiler/grammar_parser/grammar_parser.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_parser.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_parser.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.obj
-.PHONY : lib/compiler/grammar_parser/grammar_parser.cpp.obj
+lib/automata/dfa.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.obj
+.PHONY : lib/automata/dfa.cpp.obj
 
-lib/compiler/grammar_parser/grammar_parser.i: lib/compiler/grammar_parser/grammar_parser.cpp.i
+lib/automata/dfa.i: lib/automata/dfa.cpp.i
 
-.PHONY : lib/compiler/grammar_parser/grammar_parser.i
+.PHONY : lib/automata/dfa.i
 
 # target to preprocess a source file
-lib/compiler/grammar_parser/grammar_parser.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_parser.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_parser.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.i
-.PHONY : lib/compiler/grammar_parser/grammar_parser.cpp.i
+lib/automata/dfa.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.i
+.PHONY : lib/automata/dfa.cpp.i
 
-lib/compiler/grammar_parser/grammar_parser.s: lib/compiler/grammar_parser/grammar_parser.cpp.s
+lib/automata/dfa.s: lib/automata/dfa.cpp.s
 
-.PHONY : lib/compiler/grammar_parser/grammar_parser.s
+.PHONY : lib/automata/dfa.s
 
 # target to generate assembly for a file
-lib/compiler/grammar_parser/grammar_parser.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/grammar_parser/grammar_parser.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/grammar_parser/grammar_parser.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/grammar_parser/grammar_parser.cpp.s
-.PHONY : lib/compiler/grammar_parser/grammar_parser.cpp.s
+lib/automata/dfa.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.s
+.PHONY : lib/automata/dfa.cpp.s
 
-lib/compiler/lexical_analyzer/lexical_analyzer_f.obj: lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj
+lib/automata/nfa.obj: lib/automata/nfa.cpp.obj
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.obj
+.PHONY : lib/automata/nfa.obj
 
 # target to build an object file
-lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.obj
+lib/automata/nfa.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.obj
+.PHONY : lib/automata/nfa.cpp.obj
 
-lib/compiler/lexical_analyzer/lexical_analyzer_f.i: lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i
+lib/automata/nfa.i: lib/automata/nfa.cpp.i
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.i
+.PHONY : lib/automata/nfa.i
 
 # target to preprocess a source file
-lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.i
+lib/automata/nfa.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.i
+.PHONY : lib/automata/nfa.cpp.i
 
-lib/compiler/lexical_analyzer/lexical_analyzer_f.s: lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s
+lib/automata/nfa.s: lib/automata/nfa.cpp.s
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.s
+.PHONY : lib/automata/nfa.s
 
 # target to generate assembly for a file
-lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_f.cpp.s
+lib/automata/nfa.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.s
+.PHONY : lib/automata/nfa.cpp.s
 
-lib/compiler/lexical_analyzer/lexical_analyzer_s.obj: lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj
+lib/buffer.obj: lib/buffer.cpp.obj
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.obj
+.PHONY : lib/buffer.obj
 
 # target to build an object file
-lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.obj
+lib/buffer.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.obj
+.PHONY : lib/buffer.cpp.obj
 
-lib/compiler/lexical_analyzer/lexical_analyzer_s.i: lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i
+lib/buffer.i: lib/buffer.cpp.i
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.i
+.PHONY : lib/buffer.i
 
 # target to preprocess a source file
-lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.i
+lib/buffer.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.i
+.PHONY : lib/buffer.cpp.i
 
-lib/compiler/lexical_analyzer/lexical_analyzer_s.s: lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s
+lib/buffer.s: lib/buffer.cpp.s
 
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.s
+.PHONY : lib/buffer.s
 
 # target to generate assembly for a file
-lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s
-.PHONY : lib/compiler/lexical_analyzer/lexical_analyzer_s.cpp.s
+lib/buffer.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.s
+.PHONY : lib/buffer.cpp.s
 
-lib/compiler/macros.obj: lib/compiler/macros.cpp.obj
+lib/common.obj: lib/common.cpp.obj
 
-.PHONY : lib/compiler/macros.obj
+.PHONY : lib/common.obj
 
 # target to build an object file
-lib/compiler/macros.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/macros.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/macros.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/macros.cpp.obj
-.PHONY : lib/compiler/macros.cpp.obj
+lib/common.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.obj
+.PHONY : lib/common.cpp.obj
 
-lib/compiler/macros.i: lib/compiler/macros.cpp.i
+lib/common.i: lib/common.cpp.i
 
-.PHONY : lib/compiler/macros.i
-
-# target to preprocess a source file
-lib/compiler/macros.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/macros.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/macros.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/macros.cpp.i
-.PHONY : lib/compiler/macros.cpp.i
-
-lib/compiler/macros.s: lib/compiler/macros.cpp.s
-
-.PHONY : lib/compiler/macros.s
-
-# target to generate assembly for a file
-lib/compiler/macros.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/macros.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/macros.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/macros.cpp.s
-.PHONY : lib/compiler/macros.cpp.s
-
-lib/compiler/parser_algorithms/LL1.obj: lib/compiler/parser_algorithms/LL1.cpp.obj
-
-.PHONY : lib/compiler/parser_algorithms/LL1.obj
-
-# target to build an object file
-lib/compiler/parser_algorithms/LL1.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/parser_algorithms/LL1.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/parser_algorithms/LL1.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/parser_algorithms/LL1.cpp.obj
-.PHONY : lib/compiler/parser_algorithms/LL1.cpp.obj
-
-lib/compiler/parser_algorithms/LL1.i: lib/compiler/parser_algorithms/LL1.cpp.i
-
-.PHONY : lib/compiler/parser_algorithms/LL1.i
+.PHONY : lib/common.i
 
 # target to preprocess a source file
-lib/compiler/parser_algorithms/LL1.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/parser_algorithms/LL1.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/parser_algorithms/LL1.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/parser_algorithms/LL1.cpp.i
-.PHONY : lib/compiler/parser_algorithms/LL1.cpp.i
+lib/common.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.i
+.PHONY : lib/common.cpp.i
 
-lib/compiler/parser_algorithms/LL1.s: lib/compiler/parser_algorithms/LL1.cpp.s
+lib/common.s: lib/common.cpp.s
 
-.PHONY : lib/compiler/parser_algorithms/LL1.s
-
-# target to generate assembly for a file
-lib/compiler/parser_algorithms/LL1.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/parser_algorithms/LL1.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/parser_algorithms/LL1.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/parser_algorithms/LL1.cpp.s
-.PHONY : lib/compiler/parser_algorithms/LL1.cpp.s
-
-lib/compiler/regex_parser.obj: lib/compiler/regex_parser.cpp.obj
-
-.PHONY : lib/compiler/regex_parser.obj
-
-# target to build an object file
-lib/compiler/regex_parser.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_parser.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_parser.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_parser.cpp.obj
-.PHONY : lib/compiler/regex_parser.cpp.obj
-
-lib/compiler/regex_parser.i: lib/compiler/regex_parser.cpp.i
-
-.PHONY : lib/compiler/regex_parser.i
-
-# target to preprocess a source file
-lib/compiler/regex_parser.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_parser.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_parser.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_parser.cpp.i
-.PHONY : lib/compiler/regex_parser.cpp.i
-
-lib/compiler/regex_parser.s: lib/compiler/regex_parser.cpp.s
-
-.PHONY : lib/compiler/regex_parser.s
+.PHONY : lib/common.s
 
 # target to generate assembly for a file
-lib/compiler/regex_parser.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_parser.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_parser.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_parser.cpp.s
-.PHONY : lib/compiler/regex_parser.cpp.s
-
-lib/compiler/regex_scanner.obj: lib/compiler/regex_scanner.cpp.obj
-
-.PHONY : lib/compiler/regex_scanner.obj
-
-# target to build an object file
-lib/compiler/regex_scanner.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_scanner.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_scanner.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_scanner.cpp.obj
-.PHONY : lib/compiler/regex_scanner.cpp.obj
-
-lib/compiler/regex_scanner.i: lib/compiler/regex_scanner.cpp.i
-
-.PHONY : lib/compiler/regex_scanner.i
-
-# target to preprocess a source file
-lib/compiler/regex_scanner.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_scanner.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_scanner.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_scanner.cpp.i
-.PHONY : lib/compiler/regex_scanner.cpp.i
-
-lib/compiler/regex_scanner.s: lib/compiler/regex_scanner.cpp.s
-
-.PHONY : lib/compiler/regex_scanner.s
-
-# target to generate assembly for a file
-lib/compiler/regex_scanner.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/compiler/regex_scanner.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/compiler/regex_scanner.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/compiler/regex_scanner.cpp.s
-.PHONY : lib/compiler/regex_scanner.cpp.s
+lib/common.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.s
+.PHONY : lib/common.cpp.s
 
 lib/error.obj: lib/error.cpp.obj
 
@@ -544,9 +386,8 @@ lib/error.obj: lib/error.cpp.obj
 
 # target to build an object file
 lib/error.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/error.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/error.cpp.obj
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.obj
 .PHONY : lib/error.cpp.obj
 
 lib/error.i: lib/error.cpp.i
@@ -555,9 +396,8 @@ lib/error.i: lib/error.cpp.i
 
 # target to preprocess a source file
 lib/error.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/error.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/error.cpp.i
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.i
 .PHONY : lib/error.cpp.i
 
 lib/error.s: lib/error.cpp.s
@@ -566,130 +406,219 @@ lib/error.s: lib/error.cpp.s
 
 # target to generate assembly for a file
 lib/error.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/error.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/error.cpp.s
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.s
 .PHONY : lib/error.cpp.s
 
-lib/io/buffer.obj: lib/io/buffer.cpp.obj
+lib/parsers/grammar_utils/grammar_analyzer.obj: lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
 
-.PHONY : lib/io/buffer.obj
-
-# target to build an object file
-lib/io/buffer.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/buffer.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/buffer.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/buffer.cpp.obj
-.PHONY : lib/io/buffer.cpp.obj
-
-lib/io/buffer.i: lib/io/buffer.cpp.i
-
-.PHONY : lib/io/buffer.i
-
-# target to preprocess a source file
-lib/io/buffer.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/buffer.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/buffer.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/buffer.cpp.i
-.PHONY : lib/io/buffer.cpp.i
-
-lib/io/buffer.s: lib/io/buffer.cpp.s
-
-.PHONY : lib/io/buffer.s
-
-# target to generate assembly for a file
-lib/io/buffer.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/buffer.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/buffer.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/buffer.cpp.s
-.PHONY : lib/io/buffer.cpp.s
-
-lib/io/common.obj: lib/io/common.cpp.obj
-
-.PHONY : lib/io/common.obj
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.obj
 
 # target to build an object file
-lib/io/common.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/common.cpp.obj
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/common.cpp.obj
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/common.cpp.obj
-.PHONY : lib/io/common.cpp.obj
+lib/parsers/grammar_utils/grammar_analyzer.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
 
-lib/io/common.i: lib/io/common.cpp.i
+lib/parsers/grammar_utils/grammar_analyzer.i: lib/parsers/grammar_utils/grammar_analyzer.cpp.i
 
-.PHONY : lib/io/common.i
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.i
 
 # target to preprocess a source file
-lib/io/common.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/common.cpp.i
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/common.cpp.i
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/common.cpp.i
-.PHONY : lib/io/common.cpp.i
+lib/parsers/grammar_utils/grammar_analyzer.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.i
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.i
 
-lib/io/common.s: lib/io/common.cpp.s
+lib/parsers/grammar_utils/grammar_analyzer.s: lib/parsers/grammar_utils/grammar_analyzer.cpp.s
 
-.PHONY : lib/io/common.s
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.s
 
 # target to generate assembly for a file
-lib/io/common.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/lib/io/common.cpp.s
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/lib/io/common.cpp.s
-	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/io/common.cpp.s
-.PHONY : lib/io/common.cpp.s
+lib/parsers/grammar_utils/grammar_analyzer.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.s
+.PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.s
 
-test/main.obj: test/main.cpp.obj
+lib/parsers/grammar_utils/grammar_array.obj: lib/parsers/grammar_utils/grammar_array.cpp.obj
 
-.PHONY : test/main.obj
+.PHONY : lib/parsers/grammar_utils/grammar_array.obj
 
 # target to build an object file
-test/main.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/test/main.cpp.obj
-.PHONY : test/main.cpp.obj
+lib/parsers/grammar_utils/grammar_array.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.obj
+.PHONY : lib/parsers/grammar_utils/grammar_array.cpp.obj
 
-test/main.i: test/main.cpp.i
+lib/parsers/grammar_utils/grammar_array.i: lib/parsers/grammar_utils/grammar_array.cpp.i
 
-.PHONY : test/main.i
+.PHONY : lib/parsers/grammar_utils/grammar_array.i
 
 # target to preprocess a source file
-test/main.cpp.i:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/test/main.cpp.i
-.PHONY : test/main.cpp.i
+lib/parsers/grammar_utils/grammar_array.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.i
+.PHONY : lib/parsers/grammar_utils/grammar_array.cpp.i
 
-test/main.s: test/main.cpp.s
+lib/parsers/grammar_utils/grammar_array.s: lib/parsers/grammar_utils/grammar_array.cpp.s
 
-.PHONY : test/main.s
+.PHONY : lib/parsers/grammar_utils/grammar_array.s
 
 # target to generate assembly for a file
-test/main.cpp.s:
-	$(MAKE) -f CMakeFiles\test_lexical.dir\build.make CMakeFiles/test_lexical.dir/test/main.cpp.s
-.PHONY : test/main.cpp.s
+lib/parsers/grammar_utils/grammar_array.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.s
+.PHONY : lib/parsers/grammar_utils/grammar_array.cpp.s
 
-test/main3.obj: test/main3.cpp.obj
+lib/parsers/grammar_utils/grammar_parser.obj: lib/parsers/grammar_utils/grammar_parser.cpp.obj
 
-.PHONY : test/main3.obj
+.PHONY : lib/parsers/grammar_utils/grammar_parser.obj
 
 # target to build an object file
-test/main3.cpp.obj:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/test/main3.cpp.obj
-.PHONY : test/main3.cpp.obj
+lib/parsers/grammar_utils/grammar_parser.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.obj
+.PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.obj
 
-test/main3.i: test/main3.cpp.i
+lib/parsers/grammar_utils/grammar_parser.i: lib/parsers/grammar_utils/grammar_parser.cpp.i
 
-.PHONY : test/main3.i
+.PHONY : lib/parsers/grammar_utils/grammar_parser.i
 
 # target to preprocess a source file
-test/main3.cpp.i:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/test/main3.cpp.i
-.PHONY : test/main3.cpp.i
+lib/parsers/grammar_utils/grammar_parser.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.i
+.PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.i
 
-test/main3.s: test/main3.cpp.s
+lib/parsers/grammar_utils/grammar_parser.s: lib/parsers/grammar_utils/grammar_parser.cpp.s
 
-.PHONY : test/main3.s
+.PHONY : lib/parsers/grammar_utils/grammar_parser.s
 
 # target to generate assembly for a file
-test/main3.cpp.s:
-	$(MAKE) -f CMakeFiles\test_grammar_array.dir\build.make CMakeFiles/test_grammar_array.dir/test/main3.cpp.s
-.PHONY : test/main3.cpp.s
+lib/parsers/grammar_utils/grammar_parser.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.s
+.PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.s
+
+lib/parsers/parser_algorithms/LL1.obj: lib/parsers/parser_algorithms/LL1.cpp.obj
+
+.PHONY : lib/parsers/parser_algorithms/LL1.obj
+
+# target to build an object file
+lib/parsers/parser_algorithms/LL1.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.obj
+.PHONY : lib/parsers/parser_algorithms/LL1.cpp.obj
+
+lib/parsers/parser_algorithms/LL1.i: lib/parsers/parser_algorithms/LL1.cpp.i
+
+.PHONY : lib/parsers/parser_algorithms/LL1.i
+
+# target to preprocess a source file
+lib/parsers/parser_algorithms/LL1.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.i
+.PHONY : lib/parsers/parser_algorithms/LL1.cpp.i
+
+lib/parsers/parser_algorithms/LL1.s: lib/parsers/parser_algorithms/LL1.cpp.s
+
+.PHONY : lib/parsers/parser_algorithms/LL1.s
+
+# target to generate assembly for a file
+lib/parsers/parser_algorithms/LL1.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.s
+.PHONY : lib/parsers/parser_algorithms/LL1.cpp.s
+
+lib/parsers/parser_algorithms/LR0.obj: lib/parsers/parser_algorithms/LR0.cpp.obj
+
+.PHONY : lib/parsers/parser_algorithms/LR0.obj
+
+# target to build an object file
+lib/parsers/parser_algorithms/LR0.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.obj
+.PHONY : lib/parsers/parser_algorithms/LR0.cpp.obj
+
+lib/parsers/parser_algorithms/LR0.i: lib/parsers/parser_algorithms/LR0.cpp.i
+
+.PHONY : lib/parsers/parser_algorithms/LR0.i
+
+# target to preprocess a source file
+lib/parsers/parser_algorithms/LR0.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.i
+.PHONY : lib/parsers/parser_algorithms/LR0.cpp.i
+
+lib/parsers/parser_algorithms/LR0.s: lib/parsers/parser_algorithms/LR0.cpp.s
+
+.PHONY : lib/parsers/parser_algorithms/LR0.s
+
+# target to generate assembly for a file
+lib/parsers/parser_algorithms/LR0.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.s
+.PHONY : lib/parsers/parser_algorithms/LR0.cpp.s
+
+lib/parsers/regex_utils/regex_parser.obj: lib/parsers/regex_utils/regex_parser.cpp.obj
+
+.PHONY : lib/parsers/regex_utils/regex_parser.obj
+
+# target to build an object file
+lib/parsers/regex_utils/regex_parser.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.obj
+.PHONY : lib/parsers/regex_utils/regex_parser.cpp.obj
+
+lib/parsers/regex_utils/regex_parser.i: lib/parsers/regex_utils/regex_parser.cpp.i
+
+.PHONY : lib/parsers/regex_utils/regex_parser.i
+
+# target to preprocess a source file
+lib/parsers/regex_utils/regex_parser.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.i
+.PHONY : lib/parsers/regex_utils/regex_parser.cpp.i
+
+lib/parsers/regex_utils/regex_parser.s: lib/parsers/regex_utils/regex_parser.cpp.s
+
+.PHONY : lib/parsers/regex_utils/regex_parser.s
+
+# target to generate assembly for a file
+lib/parsers/regex_utils/regex_parser.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.s
+.PHONY : lib/parsers/regex_utils/regex_parser.cpp.s
+
+lib/parsers/regex_utils/regex_scanner.obj: lib/parsers/regex_utils/regex_scanner.cpp.obj
+
+.PHONY : lib/parsers/regex_utils/regex_scanner.obj
+
+# target to build an object file
+lib/parsers/regex_utils/regex_scanner.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.obj
+.PHONY : lib/parsers/regex_utils/regex_scanner.cpp.obj
+
+lib/parsers/regex_utils/regex_scanner.i: lib/parsers/regex_utils/regex_scanner.cpp.i
+
+.PHONY : lib/parsers/regex_utils/regex_scanner.i
+
+# target to preprocess a source file
+lib/parsers/regex_utils/regex_scanner.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.i
+.PHONY : lib/parsers/regex_utils/regex_scanner.cpp.i
+
+lib/parsers/regex_utils/regex_scanner.s: lib/parsers/regex_utils/regex_scanner.cpp.s
+
+.PHONY : lib/parsers/regex_utils/regex_scanner.s
+
+# target to generate assembly for a file
+lib/parsers/regex_utils/regex_scanner.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.s
+.PHONY : lib/parsers/regex_utils/regex_scanner.cpp.s
 
 # Help Target
 help:
@@ -697,62 +626,59 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... test_lexical
-	@echo ... rebuild_cache
-	@echo ... test_grammar_array
 	@echo ... LL1_parser
+	@echo ... rebuild_cache
+	@echo ... test
+	@echo ... LR0_parser
 	@echo ... edit_cache
 	@echo ... app/src/LL1_parser.obj
 	@echo ... app/src/LL1_parser.i
 	@echo ... app/src/LL1_parser.s
-	@echo ... lib/automata/DFA.obj
-	@echo ... lib/automata/DFA.i
-	@echo ... lib/automata/DFA.s
-	@echo ... lib/automata/NFA.obj
-	@echo ... lib/automata/NFA.i
-	@echo ... lib/automata/NFA.s
-	@echo ... lib/compiler/grammar_parser/grammar_analyzer.obj
-	@echo ... lib/compiler/grammar_parser/grammar_analyzer.i
-	@echo ... lib/compiler/grammar_parser/grammar_analyzer.s
-	@echo ... lib/compiler/grammar_parser/grammar_array.obj
-	@echo ... lib/compiler/grammar_parser/grammar_array.i
-	@echo ... lib/compiler/grammar_parser/grammar_array.s
-	@echo ... lib/compiler/grammar_parser/grammar_parser.obj
-	@echo ... lib/compiler/grammar_parser/grammar_parser.i
-	@echo ... lib/compiler/grammar_parser/grammar_parser.s
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_f.obj
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_f.i
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_f.s
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_s.obj
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_s.i
-	@echo ... lib/compiler/lexical_analyzer/lexical_analyzer_s.s
-	@echo ... lib/compiler/macros.obj
-	@echo ... lib/compiler/macros.i
-	@echo ... lib/compiler/macros.s
-	@echo ... lib/compiler/parser_algorithms/LL1.obj
-	@echo ... lib/compiler/parser_algorithms/LL1.i
-	@echo ... lib/compiler/parser_algorithms/LL1.s
-	@echo ... lib/compiler/regex_parser.obj
-	@echo ... lib/compiler/regex_parser.i
-	@echo ... lib/compiler/regex_parser.s
-	@echo ... lib/compiler/regex_scanner.obj
-	@echo ... lib/compiler/regex_scanner.i
-	@echo ... lib/compiler/regex_scanner.s
+	@echo ... app/src/LR0_parser.obj
+	@echo ... app/src/LR0_parser.i
+	@echo ... app/src/LR0_parser.s
+	@echo ... lib/analyzers/lexical_analyzer_f.obj
+	@echo ... lib/analyzers/lexical_analyzer_f.i
+	@echo ... lib/analyzers/lexical_analyzer_f.s
+	@echo ... lib/analyzers/lexical_analyzer_s.obj
+	@echo ... lib/analyzers/lexical_analyzer_s.i
+	@echo ... lib/analyzers/lexical_analyzer_s.s
+	@echo ... lib/automata/dfa.obj
+	@echo ... lib/automata/dfa.i
+	@echo ... lib/automata/dfa.s
+	@echo ... lib/automata/nfa.obj
+	@echo ... lib/automata/nfa.i
+	@echo ... lib/automata/nfa.s
+	@echo ... lib/buffer.obj
+	@echo ... lib/buffer.i
+	@echo ... lib/buffer.s
+	@echo ... lib/common.obj
+	@echo ... lib/common.i
+	@echo ... lib/common.s
 	@echo ... lib/error.obj
 	@echo ... lib/error.i
 	@echo ... lib/error.s
-	@echo ... lib/io/buffer.obj
-	@echo ... lib/io/buffer.i
-	@echo ... lib/io/buffer.s
-	@echo ... lib/io/common.obj
-	@echo ... lib/io/common.i
-	@echo ... lib/io/common.s
-	@echo ... test/main.obj
-	@echo ... test/main.i
-	@echo ... test/main.s
-	@echo ... test/main3.obj
-	@echo ... test/main3.i
-	@echo ... test/main3.s
+	@echo ... lib/parsers/grammar_utils/grammar_analyzer.obj
+	@echo ... lib/parsers/grammar_utils/grammar_analyzer.i
+	@echo ... lib/parsers/grammar_utils/grammar_analyzer.s
+	@echo ... lib/parsers/grammar_utils/grammar_array.obj
+	@echo ... lib/parsers/grammar_utils/grammar_array.i
+	@echo ... lib/parsers/grammar_utils/grammar_array.s
+	@echo ... lib/parsers/grammar_utils/grammar_parser.obj
+	@echo ... lib/parsers/grammar_utils/grammar_parser.i
+	@echo ... lib/parsers/grammar_utils/grammar_parser.s
+	@echo ... lib/parsers/parser_algorithms/LL1.obj
+	@echo ... lib/parsers/parser_algorithms/LL1.i
+	@echo ... lib/parsers/parser_algorithms/LL1.s
+	@echo ... lib/parsers/parser_algorithms/LR0.obj
+	@echo ... lib/parsers/parser_algorithms/LR0.i
+	@echo ... lib/parsers/parser_algorithms/LR0.s
+	@echo ... lib/parsers/regex_utils/regex_parser.obj
+	@echo ... lib/parsers/regex_utils/regex_parser.i
+	@echo ... lib/parsers/regex_utils/regex_parser.s
+	@echo ... lib/parsers/regex_utils/regex_scanner.obj
+	@echo ... lib/parsers/regex_utils/regex_scanner.i
+	@echo ... lib/parsers/regex_utils/regex_scanner.s
 .PHONY : help
 
 

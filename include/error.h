@@ -36,10 +36,11 @@ namespace compiler::error {
         MissingColon = -14,
         UnknownSymbol = -15,
         MissingSymbol = -16,
-        MissingRuleName = -17
+        MissingRuleName = -17,
+        MissingQuotationMark = -18
     };
 
-    static const std::string abort_msg[18] = {
+    static const std::string abort_msg[19] = {
             "",
             "Invalid command line arguments",
             "Failed to open source file",
@@ -57,7 +58,8 @@ namespace compiler::error {
             "Missing colon in beginning of rules",
             "Found unknown expression when parsing symbol",
             "Missing symbol between apostrophes",
-            "Missing rule name"
+            "Missing rule name",
+            "Missing quotation mark in terminal Symbol"
     };; /*!< Stores the extended description for every code in AbortCode*/
 
 /*!

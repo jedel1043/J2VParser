@@ -239,6 +239,8 @@ namespace compiler::automata {
     }
 
     int DFA::Compute(int state, char c) {
+        if(!transitions_.count(std::make_pair(state, c)))
+            return -1;
         return transitions_[std::make_pair(state, c)];
     }
 

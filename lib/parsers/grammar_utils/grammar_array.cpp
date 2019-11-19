@@ -61,6 +61,10 @@ namespace compiler::grammar {
         terminals_.erase("#");
     }
 
+    void GrammarArray::InsertTerminal(const std::string &new_symbol){
+        terminals_.insert(new_symbol);
+    }
+
     std::set<std::pair<std::string, std::vector<std::string>>>
     GrammarArray::GetRightSides(const std::string &variable) {
         std::set<std::pair<std::string, std::vector<std::string>>> left_vars;
@@ -189,7 +193,8 @@ namespace compiler::grammar {
 
         while (terminals_.count(new_axiom))
             new_axiom += "_";
-        InsertRule(new_axiom, {axiom_, "$"});
+        terminals_.insert("$");
+        InsertRule(new_axiom, {axiom_});
         axiom_ = new_axiom;
     }
 
@@ -200,8 +205,9 @@ namespace compiler::grammar {
 
         while (terminals_.count(new_axiom))
             new_axiom += "_";
-        new_grammar.InsertRule(new_axiom, {axiom_, "$"});
+        new_grammar.InsertRule(new_axiom, {axiom_});
         new_grammar.set_axiom(new_axiom);
+        new_grammar.terminals_.insert("$");
 
         return new_grammar;
     }

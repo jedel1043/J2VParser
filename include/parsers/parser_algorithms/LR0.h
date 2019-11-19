@@ -11,7 +11,7 @@
 
 namespace compiler::parsers {
     class LR0 {
-    private:
+    public:
         struct Item {
             std::string variable;
             std::vector<std::string> rule = {};
@@ -21,7 +21,7 @@ namespace compiler::parsers {
 
             Item(std::string variable, std::vector<std::string> rule,
                  int point):
-                 variable(std::move(variable)), rule(std::move(rule)), point(point) {}
+                    variable(std::move(variable)), rule(std::move(rule)), point(point) {}
 
             Item(std::string var_input, std::vector<std::string> rule_input):
                     variable(std::move(var_input)), rule(std::move(rule_input)), point(0){
@@ -48,6 +48,13 @@ namespace compiler::parsers {
 
         };
 
+        LR0(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true) :
+                LR0(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
+
+        LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true);
+        bool Parse(bool verbose = false);
+
+    private:
         using ItemSet = std::set<Item>;
         using cell = std::pair<char, int>;
 
@@ -65,13 +72,10 @@ namespace compiler::parsers {
         ItemSet goTo(const ItemSet &input_items, const std::string &input_symbol);
 
         void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
-    public:
-        LR0(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true) :
-                LR0(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
-
-        LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true);
-        bool Parse(bool verbose = false);
     };
+
+    std::ostream &operator<<(std::ostream &stream_in, const LR0::Item& obj);
+
 } // namespace compiler::parsers
 
 #endif //COMPILER_LR0_H

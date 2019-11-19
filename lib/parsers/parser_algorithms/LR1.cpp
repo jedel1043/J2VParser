@@ -1,30 +1,36 @@
-#include "parsers/parser_algorithms/LR0.h"
-
-#include <algorithm>
 #include <stack>
-#include <iterator>
-
+#include <algorithm>
+#include "parsers/parser_algorithms/LR1.h"
 
 namespace compiler::parsers {
 
-    LR0::ItemSet LR0::ItemsClosure(const Item &item_input, ItemSet &calculated) {
+    LR1::ItemSet LR1::ItemsClosure(const Item &item_input, ItemSet &calculated) {
         if (calculated.count(item_input))
             return {};
         calculated.insert(item_input);
         ItemSet closure_result = {item_input};
-        if (item_input.point < item_input.rule.size() && grammar_.non_terminals().count(item_input.PointSymbol())) {
-            auto rules = grammar_[item_input.PointSymbol()];
+        if (item_input.lr0_item.point < item_input.lr0_item.rule.size() &&
+            grammar_.non_terminals().count(item_input.lr0_item.PointSymbol())) {
+            auto rules = grammar_[item_input.lr0_item.PointSymbol()];
             for (const auto &rule : rules) {
-                Item item_saver(item_input.PointSymbol(), rule);
-                auto closure_saver = ItemsClosure(item_saver, calculated);
-                if (!closure_saver.empty())
-                    closure_result.insert(closure_saver.begin(), closure_saver.end());
+
+                std::vector<std::string> saver;
+                saver.insert(saver.end(), item_input.lr0_item.rule.begin() + item_input.lr0_item.point + 1,
+                             item_input.lr0_item.rule.end());
+                saver.push_back(item_input.token);
+
+                for(const auto& token : grammar_.First(saver)) {
+                    Item item_saver = {{item_input.lr0_item.PointSymbol(), rule, 0}, token};
+                    auto closure_saver = ItemsClosure(item_saver, calculated);
+                    if (!closure_saver.empty())
+                        closure_result.insert(closure_saver.begin(), closure_saver.end());
+                }
             }
         }
         return closure_result;
     }
 
-    LR0::ItemSet LR0::ItemsClosure(const ItemSet &input_items) {
+    LR1::ItemSet LR1::ItemsClosure(const ItemSet &input_items) {
         ItemSet closure_result = {}, calculated = {};
         for (const auto &item : input_items) {
             auto closure_saver = ItemsClosure(item, calculated);
@@ -34,19 +40,19 @@ namespace compiler::parsers {
         return closure_result;
     }
 
-    LR0::ItemSet LR0::goTo(const ItemSet &input_items, const std::string &input_symbol) {
+    LR1::ItemSet LR1::goTo(const ItemSet &input_items, const std::string &input_symbol) {
         if (input_symbol == "$")
             return {};
         ItemSet goto_result = {};
         for (const Item &item : input_items) {
-            if (item.point < item.rule.size() && item.PointSymbol() == input_symbol)
-                goto_result.insert(Item(item.variable, item.rule, item.point + 1));
+            if (item.lr0_item.point < item.lr0_item.rule.size() && item.lr0_item.PointSymbol() == input_symbol)
+                goto_result.insert({{item.lr0_item.variable, item.lr0_item.rule, item.lr0_item.point + 1}, item.token});
         }
         goto_result = ItemsClosure(goto_result);
         return goto_result;
     }
 
-    LR0::LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar) :
+    LR1::LR1(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar) :
             tokenizer_(tokenizer),
             grammar_(augment_grammar? parser.ParseGrammar().GetAugmentedGrammar() : parser.ParseGrammar()) {
         grammar_.InsertTerminal("$");
@@ -55,7 +61,7 @@ namespace compiler::parsers {
         std::string ax_saver = grammar_.axiom();
         auto rule_saver = *grammar_[ax_saver].begin();
 
-        Item axiom(ax_saver, rule_saver);
+        Item axiom = {{ax_saver, rule_saver, 0}, "$"};
 
         auto first_state = ItemsClosure({axiom});
         std::stack<ItemSet> pending;
@@ -68,8 +74,8 @@ namespace compiler::parsers {
 
             std::set<std::string> symbol_set;
             for (const auto &item : actual_state) {
-                if (item.point < item.rule.size())
-                    symbol_set.insert(item.PointSymbol());
+                if (item.lr0_item.point < item.lr0_item.rule.size())
+                    symbol_set.insert(item.lr0_item.PointSymbol());
             }
 
             for (const auto &symbol : symbol_set) {
@@ -86,11 +92,11 @@ namespace compiler::parsers {
         CreateParsingTable(states_function);
     }
 
-    void LR0::CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function) {
+    void LR1::CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function) {
         std::map<ItemSet, int> states_index;
 
         std::vector<std::string> axiom_rule = *grammar_[grammar_.axiom()].begin();
-        auto accept_item = Item(grammar_.axiom(), axiom_rule, 1);
+        Item accept_item = {{grammar_.axiom(), axiom_rule, 1}, "$"};
 
         for (const auto &action : states_function) {
             const auto&[symbol, initial_state, next_state] = action;
@@ -108,26 +114,25 @@ namespace compiler::parsers {
                 function_[{states_index[initial_state], symbol}] = {'g', states_index[next_state]};
             if (next_state.count(accept_item)) {
                 function_[{states_index[next_state], "$"}] = {'a', -1};
-
                 continue;
             }
             for (const auto &item : next_state) {
-                if (item.point == item.rule.size()) {
-                    for (const auto &terminal : grammar_.terminals())
-                        function_[{states_index[next_state], terminal}] =
-                                {'r', grammar_.GetRuleIndex(item.variable, item.rule)};
+                if (item.lr0_item.point == item.lr0_item.rule.size()) {
+                    function_[{states_index[next_state], item.token}] =
+                            {'r', grammar_.GetRuleIndex(item.lr0_item.variable, item.lr0_item.rule)};
                 }
             }
         }
     }
 
-    void LR0::PrintParsingTable() {
+    void LR1::PrintParsingTable() {
         std::vector<std::string> symbol_set;
         std::set<std::string> terminals = grammar_.terminals();
         std::set<std::string> non_terminals = grammar_.non_terminals();
         symbol_set.insert(symbol_set.end(), terminals.rbegin(), terminals.rend());
+
         std::copy_if(non_terminals.begin(), non_terminals.end(),
-                     std::back_inserter(symbol_set), [this](auto val){return val != grammar_.axiom();});
+                std::back_inserter(symbol_set), [this](auto val){return val != grammar_.axiom();});
 
         std::cout << std::endl << grammar_ << std::endl << std::endl;
 
@@ -168,7 +173,8 @@ namespace compiler::parsers {
         std::cout << std::endl;
     }
 
-    bool LR0::Parse(bool verbose) {
+
+    bool LR1::Parse(bool verbose) {
         bool accept = false;
         std::vector <std::string> stack = {"0"};
         std::string input;
@@ -280,22 +286,5 @@ namespace compiler::parsers {
         }
         return accept;
     }
-
-    std::ostream &operator<<(std::ostream &stream_in, const LR0::Item& obj){
-        std::cout << obj.variable << " -> ";
-        int i=0;
-        std::string out;
-        for(const auto& str : obj.rule){
-            if(obj.point == i)
-                out += ". ";
-            out += str + " ";
-            i++;
-        }
-        out.pop_back();
-        if(obj.point == obj.rule.size())
-            out += ".";
-        std::cout << out;
-        return stream_in;
-    };
 } // namespace compiler::parsers
 

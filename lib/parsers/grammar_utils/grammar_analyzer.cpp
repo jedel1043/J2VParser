@@ -19,13 +19,13 @@ namespace compiler::grammar {
     io_buffer::TextSourceBuffer *GrammarAnalyzer::CreateFileBuffer() {
         std::string regex_file = "grammar_regex.txt";
         std::ofstream file_out(regex_file);
-        file_out << ".                             ANY" << std::endl;
         file_out << "[a-zA-Z_][a-zA-Z0-9_]*        VAR" << std::endl;
-        file_out << "\":\"                           COLON" << std::endl;
-        file_out << "\";\"                           SEMICOLON" << std::endl;
-        file_out << "\"#\"                           EPSILON" << std::endl;
-        file_out << "\"|\"                           OR" << std::endl;
-        file_out << "\"'\"                          APOS" << std::endl;
+        file_out << R"(":"                           COLON)" << std::endl;
+        file_out << R"(";"                           SEMICOLON)" << std::endl;
+        file_out << R"("#"                           EPSILON)" << std::endl;
+        file_out << R"("|"                           OR)" << std::endl;
+        file_out << R"("'"                          APOS)" << std::endl;
+        file_out << R"("""                          QM)" << std::endl;
         static io_buffer::TextSourceBuffer regex_grammar_file(regex_file);
         return &regex_grammar_file;
     }

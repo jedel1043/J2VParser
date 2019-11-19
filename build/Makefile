@@ -146,6 +146,19 @@ LR0_parser/fast:
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/build
 .PHONY : LR0_parser/fast
 
+#=============================================================================
+# Target rules for targets named LR1_parser
+
+# Build rule for target.
+LR1_parser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 LR1_parser
+.PHONY : LR1_parser
+
+# fast build rule for target.
+LR1_parser/fast:
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/build
+.PHONY : LR1_parser/fast
+
 app/src/LL1_parser.obj: app/src/LL1_parser.cpp.obj
 
 .PHONY : app/src/LL1_parser.obj
@@ -200,6 +213,33 @@ app/src/LR0_parser.cpp.s:
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/app/src/LR0_parser.cpp.s
 .PHONY : app/src/LR0_parser.cpp.s
 
+app/src/LR1_parser.obj: app/src/LR1_parser.cpp.obj
+
+.PHONY : app/src/LR1_parser.obj
+
+# target to build an object file
+app/src/LR1_parser.cpp.obj:
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/app/src/LR1_parser.cpp.obj
+.PHONY : app/src/LR1_parser.cpp.obj
+
+app/src/LR1_parser.i: app/src/LR1_parser.cpp.i
+
+.PHONY : app/src/LR1_parser.i
+
+# target to preprocess a source file
+app/src/LR1_parser.cpp.i:
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/app/src/LR1_parser.cpp.i
+.PHONY : app/src/LR1_parser.cpp.i
+
+app/src/LR1_parser.s: app/src/LR1_parser.cpp.s
+
+.PHONY : app/src/LR1_parser.s
+
+# target to generate assembly for a file
+app/src/LR1_parser.cpp.s:
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/app/src/LR1_parser.cpp.s
+.PHONY : app/src/LR1_parser.cpp.s
+
 lib/analyzers/lexical_analyzer_f.obj: lib/analyzers/lexical_analyzer_f.cpp.obj
 
 .PHONY : lib/analyzers/lexical_analyzer_f.obj
@@ -208,6 +248,7 @@ lib/analyzers/lexical_analyzer_f.obj: lib/analyzers/lexical_analyzer_f.cpp.obj
 lib/analyzers/lexical_analyzer_f.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.obj
 .PHONY : lib/analyzers/lexical_analyzer_f.cpp.obj
 
 lib/analyzers/lexical_analyzer_f.i: lib/analyzers/lexical_analyzer_f.cpp.i
@@ -218,6 +259,7 @@ lib/analyzers/lexical_analyzer_f.i: lib/analyzers/lexical_analyzer_f.cpp.i
 lib/analyzers/lexical_analyzer_f.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.i
 .PHONY : lib/analyzers/lexical_analyzer_f.cpp.i
 
 lib/analyzers/lexical_analyzer_f.s: lib/analyzers/lexical_analyzer_f.cpp.s
@@ -228,6 +270,7 @@ lib/analyzers/lexical_analyzer_f.s: lib/analyzers/lexical_analyzer_f.cpp.s
 lib/analyzers/lexical_analyzer_f.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_f.cpp.s
 .PHONY : lib/analyzers/lexical_analyzer_f.cpp.s
 
 lib/analyzers/lexical_analyzer_s.obj: lib/analyzers/lexical_analyzer_s.cpp.obj
@@ -238,6 +281,7 @@ lib/analyzers/lexical_analyzer_s.obj: lib/analyzers/lexical_analyzer_s.cpp.obj
 lib/analyzers/lexical_analyzer_s.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.obj
 .PHONY : lib/analyzers/lexical_analyzer_s.cpp.obj
 
 lib/analyzers/lexical_analyzer_s.i: lib/analyzers/lexical_analyzer_s.cpp.i
@@ -248,6 +292,7 @@ lib/analyzers/lexical_analyzer_s.i: lib/analyzers/lexical_analyzer_s.cpp.i
 lib/analyzers/lexical_analyzer_s.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.i
 .PHONY : lib/analyzers/lexical_analyzer_s.cpp.i
 
 lib/analyzers/lexical_analyzer_s.s: lib/analyzers/lexical_analyzer_s.cpp.s
@@ -258,6 +303,7 @@ lib/analyzers/lexical_analyzer_s.s: lib/analyzers/lexical_analyzer_s.cpp.s
 lib/analyzers/lexical_analyzer_s.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/analyzers/lexical_analyzer_s.cpp.s
 .PHONY : lib/analyzers/lexical_analyzer_s.cpp.s
 
 lib/automata/dfa.obj: lib/automata/dfa.cpp.obj
@@ -268,6 +314,7 @@ lib/automata/dfa.obj: lib/automata/dfa.cpp.obj
 lib/automata/dfa.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/dfa.cpp.obj
 .PHONY : lib/automata/dfa.cpp.obj
 
 lib/automata/dfa.i: lib/automata/dfa.cpp.i
@@ -278,6 +325,7 @@ lib/automata/dfa.i: lib/automata/dfa.cpp.i
 lib/automata/dfa.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/dfa.cpp.i
 .PHONY : lib/automata/dfa.cpp.i
 
 lib/automata/dfa.s: lib/automata/dfa.cpp.s
@@ -288,6 +336,7 @@ lib/automata/dfa.s: lib/automata/dfa.cpp.s
 lib/automata/dfa.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/dfa.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/dfa.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/dfa.cpp.s
 .PHONY : lib/automata/dfa.cpp.s
 
 lib/automata/nfa.obj: lib/automata/nfa.cpp.obj
@@ -298,6 +347,7 @@ lib/automata/nfa.obj: lib/automata/nfa.cpp.obj
 lib/automata/nfa.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/nfa.cpp.obj
 .PHONY : lib/automata/nfa.cpp.obj
 
 lib/automata/nfa.i: lib/automata/nfa.cpp.i
@@ -308,6 +358,7 @@ lib/automata/nfa.i: lib/automata/nfa.cpp.i
 lib/automata/nfa.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/nfa.cpp.i
 .PHONY : lib/automata/nfa.cpp.i
 
 lib/automata/nfa.s: lib/automata/nfa.cpp.s
@@ -318,6 +369,7 @@ lib/automata/nfa.s: lib/automata/nfa.cpp.s
 lib/automata/nfa.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/automata/nfa.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/automata/nfa.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/automata/nfa.cpp.s
 .PHONY : lib/automata/nfa.cpp.s
 
 lib/buffer.obj: lib/buffer.cpp.obj
@@ -328,6 +380,7 @@ lib/buffer.obj: lib/buffer.cpp.obj
 lib/buffer.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/buffer.cpp.obj
 .PHONY : lib/buffer.cpp.obj
 
 lib/buffer.i: lib/buffer.cpp.i
@@ -338,6 +391,7 @@ lib/buffer.i: lib/buffer.cpp.i
 lib/buffer.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/buffer.cpp.i
 .PHONY : lib/buffer.cpp.i
 
 lib/buffer.s: lib/buffer.cpp.s
@@ -348,6 +402,7 @@ lib/buffer.s: lib/buffer.cpp.s
 lib/buffer.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/buffer.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/buffer.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/buffer.cpp.s
 .PHONY : lib/buffer.cpp.s
 
 lib/common.obj: lib/common.cpp.obj
@@ -358,6 +413,7 @@ lib/common.obj: lib/common.cpp.obj
 lib/common.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/common.cpp.obj
 .PHONY : lib/common.cpp.obj
 
 lib/common.i: lib/common.cpp.i
@@ -368,6 +424,7 @@ lib/common.i: lib/common.cpp.i
 lib/common.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/common.cpp.i
 .PHONY : lib/common.cpp.i
 
 lib/common.s: lib/common.cpp.s
@@ -378,6 +435,7 @@ lib/common.s: lib/common.cpp.s
 lib/common.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/common.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/common.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/common.cpp.s
 .PHONY : lib/common.cpp.s
 
 lib/error.obj: lib/error.cpp.obj
@@ -388,6 +446,7 @@ lib/error.obj: lib/error.cpp.obj
 lib/error.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/error.cpp.obj
 .PHONY : lib/error.cpp.obj
 
 lib/error.i: lib/error.cpp.i
@@ -398,6 +457,7 @@ lib/error.i: lib/error.cpp.i
 lib/error.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/error.cpp.i
 .PHONY : lib/error.cpp.i
 
 lib/error.s: lib/error.cpp.s
@@ -408,6 +468,7 @@ lib/error.s: lib/error.cpp.s
 lib/error.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/error.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/error.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/error.cpp.s
 .PHONY : lib/error.cpp.s
 
 lib/parsers/grammar_utils/grammar_analyzer.obj: lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
@@ -418,6 +479,7 @@ lib/parsers/grammar_utils/grammar_analyzer.obj: lib/parsers/grammar_utils/gramma
 lib/parsers/grammar_utils/grammar_analyzer.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
 .PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.obj
 
 lib/parsers/grammar_utils/grammar_analyzer.i: lib/parsers/grammar_utils/grammar_analyzer.cpp.i
@@ -428,6 +490,7 @@ lib/parsers/grammar_utils/grammar_analyzer.i: lib/parsers/grammar_utils/grammar_
 lib/parsers/grammar_utils/grammar_analyzer.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.i
 .PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.i
 
 lib/parsers/grammar_utils/grammar_analyzer.s: lib/parsers/grammar_utils/grammar_analyzer.cpp.s
@@ -438,6 +501,7 @@ lib/parsers/grammar_utils/grammar_analyzer.s: lib/parsers/grammar_utils/grammar_
 lib/parsers/grammar_utils/grammar_analyzer.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_analyzer.cpp.s
 .PHONY : lib/parsers/grammar_utils/grammar_analyzer.cpp.s
 
 lib/parsers/grammar_utils/grammar_array.obj: lib/parsers/grammar_utils/grammar_array.cpp.obj
@@ -448,6 +512,7 @@ lib/parsers/grammar_utils/grammar_array.obj: lib/parsers/grammar_utils/grammar_a
 lib/parsers/grammar_utils/grammar_array.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.obj
 .PHONY : lib/parsers/grammar_utils/grammar_array.cpp.obj
 
 lib/parsers/grammar_utils/grammar_array.i: lib/parsers/grammar_utils/grammar_array.cpp.i
@@ -458,6 +523,7 @@ lib/parsers/grammar_utils/grammar_array.i: lib/parsers/grammar_utils/grammar_arr
 lib/parsers/grammar_utils/grammar_array.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.i
 .PHONY : lib/parsers/grammar_utils/grammar_array.cpp.i
 
 lib/parsers/grammar_utils/grammar_array.s: lib/parsers/grammar_utils/grammar_array.cpp.s
@@ -468,6 +534,7 @@ lib/parsers/grammar_utils/grammar_array.s: lib/parsers/grammar_utils/grammar_arr
 lib/parsers/grammar_utils/grammar_array.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_array.cpp.s
 .PHONY : lib/parsers/grammar_utils/grammar_array.cpp.s
 
 lib/parsers/grammar_utils/grammar_parser.obj: lib/parsers/grammar_utils/grammar_parser.cpp.obj
@@ -478,6 +545,7 @@ lib/parsers/grammar_utils/grammar_parser.obj: lib/parsers/grammar_utils/grammar_
 lib/parsers/grammar_utils/grammar_parser.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.obj
 .PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.obj
 
 lib/parsers/grammar_utils/grammar_parser.i: lib/parsers/grammar_utils/grammar_parser.cpp.i
@@ -488,6 +556,7 @@ lib/parsers/grammar_utils/grammar_parser.i: lib/parsers/grammar_utils/grammar_pa
 lib/parsers/grammar_utils/grammar_parser.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.i
 .PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.i
 
 lib/parsers/grammar_utils/grammar_parser.s: lib/parsers/grammar_utils/grammar_parser.cpp.s
@@ -498,6 +567,7 @@ lib/parsers/grammar_utils/grammar_parser.s: lib/parsers/grammar_utils/grammar_pa
 lib/parsers/grammar_utils/grammar_parser.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/grammar_utils/grammar_parser.cpp.s
 .PHONY : lib/parsers/grammar_utils/grammar_parser.cpp.s
 
 lib/parsers/parser_algorithms/LL1.obj: lib/parsers/parser_algorithms/LL1.cpp.obj
@@ -508,6 +578,7 @@ lib/parsers/parser_algorithms/LL1.obj: lib/parsers/parser_algorithms/LL1.cpp.obj
 lib/parsers/parser_algorithms/LL1.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.obj
 .PHONY : lib/parsers/parser_algorithms/LL1.cpp.obj
 
 lib/parsers/parser_algorithms/LL1.i: lib/parsers/parser_algorithms/LL1.cpp.i
@@ -518,6 +589,7 @@ lib/parsers/parser_algorithms/LL1.i: lib/parsers/parser_algorithms/LL1.cpp.i
 lib/parsers/parser_algorithms/LL1.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.i
 .PHONY : lib/parsers/parser_algorithms/LL1.cpp.i
 
 lib/parsers/parser_algorithms/LL1.s: lib/parsers/parser_algorithms/LL1.cpp.s
@@ -528,6 +600,7 @@ lib/parsers/parser_algorithms/LL1.s: lib/parsers/parser_algorithms/LL1.cpp.s
 lib/parsers/parser_algorithms/LL1.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LL1.cpp.s
 .PHONY : lib/parsers/parser_algorithms/LL1.cpp.s
 
 lib/parsers/parser_algorithms/LR0.obj: lib/parsers/parser_algorithms/LR0.cpp.obj
@@ -538,6 +611,7 @@ lib/parsers/parser_algorithms/LR0.obj: lib/parsers/parser_algorithms/LR0.cpp.obj
 lib/parsers/parser_algorithms/LR0.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.obj
 .PHONY : lib/parsers/parser_algorithms/LR0.cpp.obj
 
 lib/parsers/parser_algorithms/LR0.i: lib/parsers/parser_algorithms/LR0.cpp.i
@@ -548,6 +622,7 @@ lib/parsers/parser_algorithms/LR0.i: lib/parsers/parser_algorithms/LR0.cpp.i
 lib/parsers/parser_algorithms/LR0.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.i
 .PHONY : lib/parsers/parser_algorithms/LR0.cpp.i
 
 lib/parsers/parser_algorithms/LR0.s: lib/parsers/parser_algorithms/LR0.cpp.s
@@ -558,7 +633,41 @@ lib/parsers/parser_algorithms/LR0.s: lib/parsers/parser_algorithms/LR0.cpp.s
 lib/parsers/parser_algorithms/LR0.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR0.cpp.s
 .PHONY : lib/parsers/parser_algorithms/LR0.cpp.s
+
+lib/parsers/parser_algorithms/LR1.obj: lib/parsers/parser_algorithms/LR1.cpp.obj
+
+.PHONY : lib/parsers/parser_algorithms/LR1.obj
+
+# target to build an object file
+lib/parsers/parser_algorithms/LR1.cpp.obj:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.obj
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.obj
+.PHONY : lib/parsers/parser_algorithms/LR1.cpp.obj
+
+lib/parsers/parser_algorithms/LR1.i: lib/parsers/parser_algorithms/LR1.cpp.i
+
+.PHONY : lib/parsers/parser_algorithms/LR1.i
+
+# target to preprocess a source file
+lib/parsers/parser_algorithms/LR1.cpp.i:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.i
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.i
+.PHONY : lib/parsers/parser_algorithms/LR1.cpp.i
+
+lib/parsers/parser_algorithms/LR1.s: lib/parsers/parser_algorithms/LR1.cpp.s
+
+.PHONY : lib/parsers/parser_algorithms/LR1.s
+
+# target to generate assembly for a file
+lib/parsers/parser_algorithms/LR1.cpp.s:
+	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.s
+	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/parser_algorithms/LR1.cpp.s
+.PHONY : lib/parsers/parser_algorithms/LR1.cpp.s
 
 lib/parsers/regex_utils/regex_parser.obj: lib/parsers/regex_utils/regex_parser.cpp.obj
 
@@ -568,6 +677,7 @@ lib/parsers/regex_utils/regex_parser.obj: lib/parsers/regex_utils/regex_parser.c
 lib/parsers/regex_utils/regex_parser.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.obj
 .PHONY : lib/parsers/regex_utils/regex_parser.cpp.obj
 
 lib/parsers/regex_utils/regex_parser.i: lib/parsers/regex_utils/regex_parser.cpp.i
@@ -578,6 +688,7 @@ lib/parsers/regex_utils/regex_parser.i: lib/parsers/regex_utils/regex_parser.cpp
 lib/parsers/regex_utils/regex_parser.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.i
 .PHONY : lib/parsers/regex_utils/regex_parser.cpp.i
 
 lib/parsers/regex_utils/regex_parser.s: lib/parsers/regex_utils/regex_parser.cpp.s
@@ -588,6 +699,7 @@ lib/parsers/regex_utils/regex_parser.s: lib/parsers/regex_utils/regex_parser.cpp
 lib/parsers/regex_utils/regex_parser.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_parser.cpp.s
 .PHONY : lib/parsers/regex_utils/regex_parser.cpp.s
 
 lib/parsers/regex_utils/regex_scanner.obj: lib/parsers/regex_utils/regex_scanner.cpp.obj
@@ -598,6 +710,7 @@ lib/parsers/regex_utils/regex_scanner.obj: lib/parsers/regex_utils/regex_scanner
 lib/parsers/regex_utils/regex_scanner.cpp.obj:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.obj
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.obj
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.obj
 .PHONY : lib/parsers/regex_utils/regex_scanner.cpp.obj
 
 lib/parsers/regex_utils/regex_scanner.i: lib/parsers/regex_utils/regex_scanner.cpp.i
@@ -608,6 +721,7 @@ lib/parsers/regex_utils/regex_scanner.i: lib/parsers/regex_utils/regex_scanner.c
 lib/parsers/regex_utils/regex_scanner.cpp.i:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.i
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.i
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.i
 .PHONY : lib/parsers/regex_utils/regex_scanner.cpp.i
 
 lib/parsers/regex_utils/regex_scanner.s: lib/parsers/regex_utils/regex_scanner.cpp.s
@@ -618,6 +732,7 @@ lib/parsers/regex_utils/regex_scanner.s: lib/parsers/regex_utils/regex_scanner.c
 lib/parsers/regex_utils/regex_scanner.cpp.s:
 	$(MAKE) -f CMakeFiles\LL1_parser.dir\build.make CMakeFiles/LL1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.s
 	$(MAKE) -f CMakeFiles\LR0_parser.dir\build.make CMakeFiles/LR0_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.s
+	$(MAKE) -f CMakeFiles\LR1_parser.dir\build.make CMakeFiles/LR1_parser.dir/lib/parsers/regex_utils/regex_scanner.cpp.s
 .PHONY : lib/parsers/regex_utils/regex_scanner.cpp.s
 
 # Help Target
@@ -630,6 +745,7 @@ help:
 	@echo ... rebuild_cache
 	@echo ... test
 	@echo ... LR0_parser
+	@echo ... LR1_parser
 	@echo ... edit_cache
 	@echo ... app/src/LL1_parser.obj
 	@echo ... app/src/LL1_parser.i
@@ -637,6 +753,9 @@ help:
 	@echo ... app/src/LR0_parser.obj
 	@echo ... app/src/LR0_parser.i
 	@echo ... app/src/LR0_parser.s
+	@echo ... app/src/LR1_parser.obj
+	@echo ... app/src/LR1_parser.i
+	@echo ... app/src/LR1_parser.s
 	@echo ... lib/analyzers/lexical_analyzer_f.obj
 	@echo ... lib/analyzers/lexical_analyzer_f.i
 	@echo ... lib/analyzers/lexical_analyzer_f.s
@@ -673,6 +792,9 @@ help:
 	@echo ... lib/parsers/parser_algorithms/LR0.obj
 	@echo ... lib/parsers/parser_algorithms/LR0.i
 	@echo ... lib/parsers/parser_algorithms/LR0.s
+	@echo ... lib/parsers/parser_algorithms/LR1.obj
+	@echo ... lib/parsers/parser_algorithms/LR1.i
+	@echo ... lib/parsers/parser_algorithms/LR1.s
 	@echo ... lib/parsers/regex_utils/regex_parser.obj
 	@echo ... lib/parsers/regex_utils/regex_parser.i
 	@echo ... lib/parsers/regex_utils/regex_parser.s

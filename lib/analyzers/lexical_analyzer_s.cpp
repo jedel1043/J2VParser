@@ -11,10 +11,16 @@ namespace compiler::analyzers {
     }
 
     Token LexicalAnalyzerS::yylex() {
+        SkipWS();
         if (isInEnd())
             return current_token_ = {"$", "$"};
+
+        if(automata_.Compute(automata_.initial_state(), *str_pos_) == -1)
+            return current_token_ = {"ANY", std::string(1, *str_pos_++)};
+
         std::string token_name;
         std::string lexeme;
+
         int actual_state = automata_.initial_state();
 
         while (actual_state != -1) {

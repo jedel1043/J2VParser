@@ -211,6 +211,8 @@ namespace compiler::grammar {
         std::set<std::vector<std::string>> operator[](const std::string &index) const;
 
         std::pair<std::string, std::vector<std::string>> GetRuleFromIndex(int index);
+
+        void InsertTerminal(const std::string &new_symbol);
     };
 
     std::ostream &operator<<(std::ostream &ostream, const GrammarArray &obj);

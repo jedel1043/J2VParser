@@ -25,3 +25,4 @@ enable_testing()
 
 add_executable(LL1_parser app/src/LL1_parser.cpp ${SOURCES})
 add_executable(LR0_parser app/src/LR0_parser.cpp ${SOURCES})
+add_executable(LR1_parser app/src/LR1_parser.cpp ${SOURCES})

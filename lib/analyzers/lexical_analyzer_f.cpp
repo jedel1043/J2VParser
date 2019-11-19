@@ -8,13 +8,18 @@ namespace compiler::analyzers {
             LexicalAnalyzer(std::move(automata), skip_whitespace), input_file_(inputFile) {}
 
     Token LexicalAnalyzerF::yylex() {
+        char c = SkipWS();
         if (isInEnd())
             return current_token_ = {"$", "$"};
+
+        if(automata_.Compute(automata_.initial_state(), c) == -1) {
+            input_file_->FetchChar();
+            return current_token_ = {"ANY", std::string(1, c)};
+        }
+
+        int actual_state = automata_.initial_state();
         std::string token_name;
         std::string lexeme;
-        char c = input_file_->GetChar();
-        int actual_state = automata_.initial_state();
-
         while (actual_state != -1) {
             if (isInEnd() || isEOS(c))
                 break;

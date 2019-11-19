@@ -14,10 +14,8 @@ namespace compiler::parsers {
 
     class LL1 {
     private:
-        std::map<std::pair<std::string, std::string>, std::variant<std::string, std::pair<std::vector<std::string>, int>>> function_;
-        std::set<std::string> terminals_;
-        std::set<std::string> non_terminals_;
-        std::string axiom_;
+        std::map<std::pair<std::string, std::string>, int> function_;
+        grammar::GrammarArray grammar_;
         analyzers::LexicalAnalyzer &tokenizer_;
 
         void PrintParsingTable();

@@ -44,14 +44,24 @@ namespace compiler::grammar {
         if (actual_token == "VAR")
             return actual_token.lexeme;
         else if (actual_token == "APOS") {
-            if (scanner_.yylex() == "ANY") {
-                std::string saver = scanner_.current_token().lexeme;
-                if (scanner_.yylex() == "APOS")
-                    return saver;
-                else
-                    SyntaxError(error::MissingApostrophe);
-            } else
+            std::string saver;
+            while (scanner_.yylex() != "APOS" && scanner_.current_token() != "$")
+                saver += scanner_.current_token().lexeme;
+            if(scanner_.current_token() == "$")
+                SyntaxError(error::MissingApostrophe);
+            if(saver.empty())
                 SyntaxError(error::MissingSymbol);
+            return saver;
+        }
+        else if (actual_token == "QM") {
+            std::string saver;
+            while (scanner_.yylex() != "QM" && scanner_.current_token() != "$")
+                saver += scanner_.current_token().lexeme;
+            if(scanner_.current_token() == "$")
+                SyntaxError(error::MissingQuotationMark);
+            if(saver.empty())
+                SyntaxError(error::MissingSymbol);
+            return saver;
         }
         SyntaxError(error::UnknownSymbol);
         return "ERROR";

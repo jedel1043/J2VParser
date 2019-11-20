@@ -7,6 +7,35 @@
 
 namespace compiler::parsers {
 
+    std::string LR0::Item::to_string() const {
+        std::string output;
+        output += ".- " + variable + " -> ";
+        int i = 0;
+        for (const auto &str : rule) {
+            if (point == i)
+                output += ". ";
+            output += str + " ";
+            i++;
+        }
+        output.pop_back();
+        if (point == rule.size())
+            output += " .";
+        return output;
+    }
+
+    std::string LR0::Item::GetFullString() const {
+        auto result = variable;
+        int i = 0;
+        for (const auto &symbol : rule) {
+            if (point == i++)
+                result += ".";
+            result += symbol;
+        }
+        if (point == rule.size())
+            result += ".";
+        return result;
+    }
+
     LR0::ItemSet LR0::ItemsClosure(const Item &item_input, ItemSet &calculated) {
         if (calculated.count(item_input))
             return {};
@@ -47,8 +76,7 @@ namespace compiler::parsers {
     }
 
     LR0::LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar) :
-            tokenizer_(tokenizer),
-            grammar_(augment_grammar? parser.ParseGrammar().GetAugmentedGrammar() : parser.ParseGrammar()) {
+            Parser(tokenizer, augment_grammar ? parser.ParseGrammar().GetAugmentedGrammar() : parser.ParseGrammar()) {
         grammar_.InsertTerminal("$");
         std::vector<std::tuple<std::string, ItemSet, ItemSet>> states_function = {};
 
@@ -74,7 +102,7 @@ namespace compiler::parsers {
 
             for (const auto &symbol : symbol_set) {
                 ItemSet new_state = ItemsClosure(goTo(actual_state, symbol));
-                if(!new_state.empty()) {
+                if (!new_state.empty()) {
                     if (!states_set.count(new_state)) {
                         pending.push(new_state);
                         states_set.insert(new_state);
@@ -88,6 +116,7 @@ namespace compiler::parsers {
 
     void LR0::CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function) {
         std::map<ItemSet, int> states_index;
+        std::set<int> analyzed;
 
         std::vector<std::string> axiom_rule = *grammar_[grammar_.axiom()].begin();
         auto accept_item = Item(grammar_.axiom(), axiom_rule, 1);
@@ -106,18 +135,50 @@ namespace compiler::parsers {
                 function_[{states_index[initial_state], symbol}] = {'s', states_index[next_state]};
             else
                 function_[{states_index[initial_state], symbol}] = {'g', states_index[next_state]};
-            if (next_state.count(accept_item)) {
+            if(next_state.count(accept_item)) {
                 function_[{states_index[next_state], "$"}] = {'a', -1};
-
                 continue;
             }
-            for (const auto &item : next_state) {
-                if (item.point == item.rule.size()) {
-                    for (const auto &terminal : grammar_.terminals())
-                        function_[{states_index[next_state], terminal}] =
-                                {'r', grammar_.GetRuleIndex(item.variable, item.rule)};
+            if(!analyzed.count(states_index[next_state])) {
+                analyzed.insert(states_index[next_state]);
+                if (next_state.size() == 1) {
+                    const auto &item = *next_state.begin();
+                    if (item.point == item.rule.size()) {
+                        for (const auto &terminal : grammar_.terminals()) {
+                            function_[{states_index[next_state], terminal}] =
+                                    {'r', grammar_.GetRuleIndex(item.variable, item.rule)};
+                        }
+                    }
+                } else {
+                    std::set<int> symbol_r;
+                    std::set<std::string> symbol_s;
+                    for (const auto &item : next_state) {
+                        if (item.point == item.rule.size())
+                            symbol_r.insert(grammar_.GetRuleIndex(item.variable, item.rule));
+                        else if (grammar_.terminals().count(item.PointSymbol()))
+                            symbol_s.insert(item.PointSymbol());
+                    }
+                    if (symbol_r.size() > 1) {
+                        ThrowConflictError(Conflict::kReduceReduceConflict,
+                                           {next_state, states_index[next_state]}, symbol_r);
+                        number_of_conflicts_++;
+                    }
+                    if (!symbol_s.empty() && !symbol_r.empty()) {
+                        for (const auto &sym : symbol_s) {
+                            ThrowConflictError(Conflict::kShiftReduceConflict,
+                                               {next_state, states_index[next_state]},
+                                               symbol_r, sym);
+                            number_of_conflicts_++;
+                        }
+                    }
                 }
             }
+        }
+        if (number_of_conflicts_ > 0) {
+            std::cerr << "Found " + std::to_string(number_of_conflicts_) + " conflicts when creating the parsing table."
+                      << std::endl;
+            std::cerr << "Stopping parsing..." << std::endl << std::endl;
+            exit(-1);
         }
     }
 
@@ -127,7 +188,7 @@ namespace compiler::parsers {
         std::set<std::string> non_terminals = grammar_.non_terminals();
         symbol_set.insert(symbol_set.end(), terminals.rbegin(), terminals.rend());
         std::copy_if(non_terminals.begin(), non_terminals.end(),
-                     std::back_inserter(symbol_set), [this](auto val){return val != grammar_.axiom();});
+                     std::back_inserter(symbol_set), [this](auto val) { return val != grammar_.axiom(); });
 
         std::cout << std::endl << grammar_ << std::endl << std::endl;
 
@@ -155,7 +216,7 @@ namespace compiler::parsers {
             for (const std::string &symbol : symbol_set) {
                 try {
                     cell action = function_.at({i, symbol});
-                    if(action.first == 'a')
+                    if (action.first == 'a')
                         printf("        ACCEPT       |");
                     else
                         printf("          %c%-3d       |", action.first, action.second);
@@ -170,9 +231,9 @@ namespace compiler::parsers {
 
     bool LR0::Parse(bool verbose) {
         bool accept = false;
-        std::vector <std::string> stack = {"0"};
+        std::vector<std::string> stack = {"0"};
         std::string input;
-        if (verbose){
+        if (verbose) {
             PrintParsingTable();
             std::cout << "Parsing process:" << std::endl << std::endl;
             std::cout << " STACK";
@@ -193,14 +254,14 @@ namespace compiler::parsers {
         if (!grammar_.terminals().count(saver))
             saver = current_token.lexeme;
 
-        while(true){
-            try{
+        while (true) {
+            try {
                 auto action = function_.at({stoi(stack.back()), saver});
-                if(action.first == 'a'){
-                    if(verbose) {
+                if (action.first == 'a') {
+                    if (verbose) {
                         std::string stack_state;
                         std::string action_str = "ACCEPT";
-                        for(const auto& str : stack)
+                        for (const auto &str : stack)
                             stack_state += str + " ";
                         printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
                         for (int i = 0; i < 187; i++)
@@ -209,14 +270,13 @@ namespace compiler::parsers {
                     }
                     accept = true;
                     break;
-                }
-                else if(action.first == 's'){
-                    if(verbose) {
+                } else if (action.first == 's') {
+                    if (verbose) {
                         std::string stack_state;
                         std::string action_str;
                         action_str += action.first;
                         action_str += std::to_string(action.second);
-                        for(const auto& str : stack)
+                        for (const auto &str : stack)
                             stack_state += str + " ";
                         printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
                         for (int i = 0; i < 187; i++)
@@ -230,22 +290,21 @@ namespace compiler::parsers {
                     input += current_token.lexeme + " ";
                     if (!grammar_.terminals().count(saver))
                         saver = current_token.lexeme;
-                }
-                else if (action.first == 'r'){
+                } else if (action.first == 'r') {
                     auto rule = grammar_.GetRuleFromIndex(action.second);
 
                     int rule_size = 2 * (int) rule.second.size();
                     std::string var_symbol = rule.first;
 
-                    if(verbose) {
+                    if (verbose) {
                         std::string stack_state;
                         std::string action_str;
                         action_str += action.first;
                         action_str += std::to_string(action.second);
                         action_str += ": " + rule.first + " -> ";
-                        for(const auto& symbol : rule.second)
+                        for (const auto &symbol : rule.second)
                             action_str += symbol + " ";
-                        for(const auto& str : stack)
+                        for (const auto &str : stack)
                             stack_state += str + " ";
                         printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
                         for (int i = 0; i < 187; i++)
@@ -258,13 +317,13 @@ namespace compiler::parsers {
                     int last_state = stoi(stack.back());
                     stack.push_back(var_symbol);
                     action = function_.at({last_state, var_symbol});
-                    if(action.first == 'g'){
-                        if(verbose) {
+                    if (action.first == 'g') {
+                        if (verbose) {
                             std::string stack_state;
                             std::string action_str;
                             action_str += 'g';
                             action_str += std::to_string(action.second);
-                            for(const auto& str : stack)
+                            for (const auto &str : stack)
                                 stack_state += str + " ";
                             printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
                             for (int i = 0; i < 187; i++)
@@ -281,21 +340,46 @@ namespace compiler::parsers {
         return accept;
     }
 
-    std::ostream &operator<<(std::ostream &stream_in, const LR0::Item& obj){
-        std::cout << obj.variable << " -> ";
-        int i=0;
-        std::string out;
-        for(const auto& str : obj.rule){
-            if(obj.point == i)
-                out += ". ";
-            out += str + " ";
-            i++;
+    void LR0::ThrowConflictError(ConflictManager::Conflict c, const std::pair<ItemSet, int> &print_obj,
+                                 const std::set<int> &rule_set, const std::string &symbol) {
+        if (c == Conflict::kShiftReduceConflict) {
+            std::cerr << std::endl << "In state " << std::to_string(print_obj.second) << ":" << std::endl;
+            for (const auto &item : print_obj.first) {
+                std::cerr << "\t" << std::to_string(grammar_.GetRuleIndex(item.variable, item.rule))
+                          << item.to_string() << std::endl;
+            }
+            std::cerr << std::endl;
+            std::cerr << std::endl
+                      << "Found Shift/Reduce conflict for symbol '" + symbol + "' caused by production(s): "
+                      << std::endl;
+            for (int i : rule_set) {
+                auto rule_saver = grammar_.GetRuleFromIndex(i);
+                std::cerr << "\t" << std::to_string(i) + ".- " << rule_saver.first << +" -> ";
+                for (const auto &sym: rule_saver.second)
+                    std::cerr << sym + " ";
+                std::cerr << std::endl;
+            }
+            std::cerr << std::endl;
+        } else if (c == Conflict::kReduceReduceConflict) {
+            std::cerr << std::endl << "In state " << std::to_string(print_obj.second) << ":" << std::endl;
+            for (const auto &item : print_obj.first) {
+                std::cerr << "\t" << std::to_string(grammar_.GetRuleIndex(item.variable, item.rule))
+                          << item.to_string() << std::endl;
+            }
+            std::cerr << std::endl;
+            std::cerr << std::endl
+                      << "Found Reduce/Reduce conflict caused by production(s): "
+                      << std::endl;
+            for (int i : rule_set) {
+                auto rule_saver = grammar_.GetRuleFromIndex(i);
+                std::cerr << "\t" << std::to_string(i) + ".- " << rule_saver.first << +" -> ";
+                for (const auto &sym: rule_saver.second)
+                    std::cerr << sym + " ";
+                std::cerr << std::endl;
+            }
+            std::cerr << std::endl;
         }
-        out.pop_back();
-        if(obj.point == obj.rule.size())
-            out += ".";
-        std::cout << out;
-        return stream_in;
-    };
+    }
+
 } // namespace compiler::parsers
 

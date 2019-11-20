@@ -2,15 +2,18 @@
 #define COMPILER_LR0_H
 
 #include <utility>
-#include <unordered_set>
 
 #include "buffer.h"
+#include "parsers/parser_algorithms/parser.h"
+#include "parsers/parser_algorithms/conflict_man.h"
 #include "analyzers/lexical_analyzer.h"
 #include "parsers/grammar_utils/grammar_array.h"
 #include "parsers/grammar_utils/grammar_parser.h"
 
 namespace compiler::parsers {
-    class LR0 {
+
+    class LR0 : public Parser<std::map<std::pair<int, std::string>, std::pair<char, int>>>,
+                public ConflictManager{
     public:
         struct Item {
             std::string variable;
@@ -27,24 +30,19 @@ namespace compiler::parsers {
                     variable(std::move(var_input)), rule(std::move(rule_input)), point(0){
             };
 
-            [[nodiscard]] const std::string& PointSymbol() const {return rule.at(point);}
-
-            [[nodiscard]] std::string GetFullString() const {
-                auto result = variable;
-                int i = 0;
-                for(const auto& symbol : rule) {
-                    if(point== i++)
-                        result+= ".";
-                    result += symbol;
-                }
-                if (point == rule.size())
-                    result += ".";
-                return result;
+            bool operator==(const Item& obj) const{
+                return GetFullString() == obj.GetFullString();
             }
 
             bool operator<(const Item& obj) const{
                 return GetFullString() < obj.GetFullString();
             }
+
+            [[nodiscard]] const std::string& PointSymbol() const {return rule.at(point);}
+
+            [[nodiscard]] std::string GetFullString() const;
+
+            [[nodiscard]] std::string to_string() const;
 
         };
 
@@ -52,18 +50,15 @@ namespace compiler::parsers {
                 LR0(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
 
         LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true);
-        bool Parse(bool verbose = false);
+        bool Parse(bool verbose) override;
 
     private:
         using ItemSet = std::set<Item>;
         using cell = std::pair<char, int>;
 
-        std::map<std::pair<int, std::string>, cell> function_;
-        grammar::GrammarArray grammar_;
-        analyzers::LexicalAnalyzer &tokenizer_;
         int states_number_=0;
 
-        void PrintParsingTable();
+        void PrintParsingTable() override;
 
         ItemSet ItemsClosure(const Item &item_input, ItemSet &calculated);
 
@@ -72,10 +67,11 @@ namespace compiler::parsers {
         ItemSet goTo(const ItemSet &input_items, const std::string &input_symbol);
 
         void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
+
+        void ThrowConflictError(Conflict c, const std::pair<ItemSet, int> &print_obj, const std::set<int> &rule_set,
+                const std::string &symbol = "");
     };
 
-    std::ostream &operator<<(std::ostream &stream_in, const LR0::Item& obj);
-
-} // namespace compiler::parsers
+} // namespace const comp&iler::parsers
 
 #endif //COMPILER_LR0_H

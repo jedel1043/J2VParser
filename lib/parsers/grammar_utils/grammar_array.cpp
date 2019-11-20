@@ -7,29 +7,30 @@ namespace compiler::grammar {
     std::ostream &operator<<(std::ostream &ostream, const GrammarArray &obj) {
         ostream << "Axiom:\t" << obj.axiom_ << std::endl;
         ostream << "Rules:" << std::endl;
-        int i = 0;
-        for (const auto &rules : obj.rules_array_) {
-            for (const auto &rule : rules.second) {
-                ostream << "\t" << i << ".-\t" << rules.first << "\t:\t";
-                for (const std::string &word : rule) {
-                    ostream << word << " ";
-                }
-                ostream << std::endl;
-                i++;
+        for (int i = 0; i < obj.index_rule_.size(); ++i) {
+            auto rule = obj.GetRuleFromIndex(i);
+            ostream << "\t" << i << ".-\t" << rule.first << "\t:\t";
+            for (const std::string &word : rule.second) {
+                ostream << word << " ";
             }
+            ostream << std::endl;
         }
         ostream << std::endl << "Terminal symbols:\t{";
+        std::string out;
         for (const auto &symbol : obj.terminals_)
-            ostream << symbol << " ";
-        ostream << "}" << std::endl;
+            out += symbol + ", ";
+        out.pop_back(); out.pop_back();
+        ostream << out << "}" << std::endl;
         ostream << std::endl << "Non-terminal symbols:\t{";
+        out = "";
         for (const auto &symbol : obj.non_terminals_)
-            ostream << symbol << " ";
-        ostream << "}" << std::endl;
+            out += symbol + ", ";
+        out.pop_back(); out.pop_back();
+        ostream << out << "}" << std::endl;
         return ostream;
     }
 
-    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index) const {
+    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index){
         return rules_array_.at(index);
     }
 
@@ -81,10 +82,13 @@ namespace compiler::grammar {
         return rules_array_.at(variable);
     }
 
-    bool GrammarArray::canGenerateEpsilon(const std::string &variable) {
+    bool GrammarArray::canGenerateEpsilon(const std::string &variable, std::set<std::string> &calculated) {
+        if(calculated.count(variable))
+            return false;
+        calculated.insert(variable);
         if (non_terminals_.count(variable)) {
             for (const auto &rule : GetVariableRules(variable)) {
-                if (rule.front() == "#" || canGenerateEpsilon(rule.front()))
+                if (rule.front() == "#" || canGenerateEpsilon(rule.front(), calculated))
                     return true;
             }
             return false;
@@ -92,13 +96,19 @@ namespace compiler::grammar {
         return false;
     }
 
+    bool GrammarArray::canGenerateEpsilon(const std::string &variable) {
+        std::set<std::string> empty_set;
+        return canGenerateEpsilon(variable, empty_set);
+    }
+
     std::set<std::string> GrammarArray::First(const std::vector<std::string> &expression_vector) {
+        std::set<std::string> calculated = {};
         std::string front_elem = expression_vector.front();
         if (terminals_.count(front_elem) || front_elem == "#")
             return {front_elem};
         std::set<std::string> first_result;
         for (const auto &str : expression_vector) {
-            auto first_saver = First(str);
+            auto first_saver = First(str, calculated);
             first_result.insert(first_saver.begin(), first_saver.end());
             if (!first_saver.count("#")) {
                 first_result.erase("#");
@@ -108,9 +118,12 @@ namespace compiler::grammar {
         return first_result;
     }
 
-    std::set<std::string> GrammarArray::First(const std::string &expression) {
+    std::set<std::string> GrammarArray::First(const std::string &expression, std::set<std::string> &calculated) {
+        if(calculated.count(expression))
+            return {};
         if (terminals_.count(expression) || expression == "#")
             return {expression};
+        calculated.insert(expression);
         std::set<std::string> first_result;
         std::set<std::vector<std::string>> rules = GetVariableRules(expression);
         if (canGenerateEpsilon(expression)) {
@@ -120,9 +133,7 @@ namespace compiler::grammar {
         for (const auto &rule : rules) {
             int i = 0;
             for (const auto &var : rule) {
-                if (var == expression)
-                    continue;
-                std::set<std::string> aux = First(var);
+                std::set<std::string> aux = First(var, calculated);
                 first_result.insert(aux.begin(), aux.end());
                 if (!canGenerateEpsilon(var))
                     break;
@@ -184,6 +195,10 @@ namespace compiler::grammar {
     }
 
     std::pair<std::string, std::vector<std::string>> GrammarArray::GetRuleFromIndex(int index) {
+        return index_rule_[index];
+    }
+
+    std::pair<std::string, std::vector<std::string>> GrammarArray::GetRuleFromIndex(int index) const {
         return index_rule_[index];
     }
 

@@ -1,59 +1,37 @@
-#include "parsers/parser_algorithms/SLR1.h"
-
-#include <algorithm>
-#include <iterator>
 #include <stack>
-
+#include <algorithm>
+#include <parsers/parser_algorithms/LR1.h>
+#include "parsers/parser_algorithms/LALR.h"
 
 namespace compiler::parsers {
 
-    std::string SLR1::Item::to_string() const {
-        std::string output;
-        output += ".- " + variable + " -> ";
-        int i = 0;
-        for (const auto &str : rule) {
-            if (point == i)
-                output += ". ";
-            output += str + " ";
-            i++;
-        }
-        output.pop_back();
-        if (point == rule.size())
-            output += " .";
-        return output;
-    }
-
-    std::string SLR1::Item::GetFullString() const {
-        auto result = variable;
-        int i = 0;
-        for (const auto &symbol : rule) {
-            if (point == i++)
-                result += ".";
-            result += symbol;
-        }
-        if (point == rule.size())
-            result += ".";
-        return result;
-    }
-
-    SLR1::ItemSet SLR1::ItemsClosure(const Item &item_input, ItemSet &calculated) {
+    LALR::ItemSet LALR::ItemsClosure(const Item &item_input, ItemSet &calculated) {
         if (calculated.count(item_input))
             return {};
         calculated.insert(item_input);
         ItemSet closure_result = {item_input};
-        if (item_input.point < item_input.rule.size() && grammar_.non_terminals().count(item_input.PointSymbol())) {
-            auto rules = grammar_[item_input.PointSymbol()];
+        if (item_input.lr0_item.point < item_input.lr0_item.rule.size() &&
+            grammar_.non_terminals().count(item_input.lr0_item.PointSymbol())) {
+            auto rules = grammar_[item_input.lr0_item.PointSymbol()];
             for (const auto &rule : rules) {
-                Item item_saver(item_input.PointSymbol(), rule);
-                auto closure_saver = ItemsClosure(item_saver, calculated);
-                if (!closure_saver.empty())
-                    closure_result.insert(closure_saver.begin(), closure_saver.end());
+
+                std::vector<std::string> saver;
+                saver.insert(saver.end(), item_input.lr0_item.rule.begin() + item_input.lr0_item.point + 1,
+                             item_input.lr0_item.rule.end());
+                saver.push_back(item_input.token);
+
+                for (const auto &token : grammar_.First(saver)) {
+                    Item item_saver = {{item_input.lr0_item.PointSymbol(), rule, 0}, token};
+                    auto closure_saver = ItemsClosure(item_saver, calculated);
+                    if (!closure_saver.empty())
+                        closure_result.insert(closure_saver.begin(), closure_saver.end());
+                }
             }
         }
         return closure_result;
     }
 
-    SLR1::ItemSet SLR1::ItemsClosure(const ItemSet &input_items) {
+    LALR::ItemSet LALR::ItemsClosure(const ItemSet &input_items) {
         ItemSet closure_result = {}, calculated = {};
         for (const auto &item : input_items) {
             auto closure_saver = ItemsClosure(item, calculated);
@@ -63,63 +41,111 @@ namespace compiler::parsers {
         return closure_result;
     }
 
-    SLR1::ItemSet SLR1::goTo(const ItemSet &input_items, const std::string &input_symbol) {
+    LALR::ItemSet LALR::goTo(const ItemSet &input_items, const std::string &input_symbol) {
         if (input_symbol == "$")
             return {};
         ItemSet goto_result = {};
         for (const Item &item : input_items) {
-            if (item.point < item.rule.size() && item.PointSymbol() == input_symbol)
-                goto_result.insert(Item(item.variable, item.rule, item.point + 1));
+            if (item.lr0_item.point < item.lr0_item.rule.size() && item.lr0_item.PointSymbol() == input_symbol)
+                goto_result.insert({{item.lr0_item.variable, item.lr0_item.rule, item.lr0_item.point + 1}, item.token});
         }
         goto_result = ItemsClosure(goto_result);
         return goto_result;
     }
 
-    SLR1::SLR1(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar) :
-            Parser(tokenizer, augment_grammar ? parser.ParseGrammar().GetAugmentedGrammar() : parser.ParseGrammar()) {
+    std::set<LALR::ItemSet> LALR::GenerateStates() {
         grammar_.InsertTerminal("$");
-        std::vector<std::tuple<std::string, ItemSet, ItemSet>> states_function = {};
 
         std::string ax_saver = grammar_.axiom();
         auto rule_saver = *grammar_[ax_saver].begin();
 
-        Item axiom(ax_saver, rule_saver);
+        Item axiom = {{ax_saver, rule_saver, 0}, "$"};
 
         auto first_state = ItemsClosure({axiom});
-        std::stack<ItemSet> pending;
-        pending.push(first_state);
+        std::stack<ItemSet> lr1_states;
+        lr1_states.push(first_state);
         std::set<ItemSet> states_set = {first_state};
 
-        while (!pending.empty()) {
-            ItemSet actual_state = pending.top();
-            pending.pop();
+        while (!lr1_states.empty()) {
+            ItemSet actual_state = lr1_states.top();
+            lr1_states.pop();
 
             std::set<std::string> symbol_set;
             for (const auto &item : actual_state) {
-                if (item.point < item.rule.size())
-                    symbol_set.insert(item.PointSymbol());
+                if (item.lr0_item.point < item.lr0_item.rule.size())
+                    symbol_set.insert(item.lr0_item.PointSymbol());
             }
 
             for (const auto &symbol : symbol_set) {
                 ItemSet new_state = ItemsClosure(goTo(actual_state, symbol));
                 if (!new_state.empty()) {
                     if (!states_set.count(new_state)) {
-                        pending.push(new_state);
+                        lr1_states.push(new_state);
                         states_set.insert(new_state);
                     }
-                    states_function.emplace_back(symbol, actual_state, new_state);
+                }
+            }
+        }
+        return states_set;
+    }
+
+    LALR::LALR(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar) :
+            Parser(tokenizer,
+                   augment_grammar ? parser.ParseGrammar().GetAugmentedGrammar() : parser.ParseGrammar()) {
+        grammar_.InsertTerminal("$");
+        std::vector<std::tuple<std::string, ItemSet, ItemSet>> states_function = {};
+        std::map<ItemSet, ItemSet> states_map;
+
+        auto lr1_states = GenerateStates();
+        std::set<ItemSet> real_states;
+        while (!lr1_states.empty()) {
+            auto actual_state = *lr1_states.begin();
+            std::set<ItemSet> repeated = {actual_state};
+            for (auto &state : lr1_states) {
+                std::set<LR0::Item> s1, s2;
+                for (auto &item : actual_state)
+                    s1.insert(item.lr0_item);
+                for (auto &item : state)
+                    s2.insert(item.lr0_item);
+                if (s1 == s2)
+                    repeated.insert(state);
+            }
+            ItemSet result;
+            for (auto &set : repeated) {
+                for (auto &item : set) {
+                    result.insert(item);
+                }
+            }
+            states_map[result] = result;
+            for(auto & set : repeated)
+                states_map[set] = result;
+            real_states.insert(result);
+            for (auto &state : repeated)
+                lr1_states.erase(state);
+        }
+
+        for (const auto &actual_state : real_states) {
+            std::set<std::string> symbol_set;
+            for (const auto &item : actual_state) {
+                if (item.lr0_item.point < item.lr0_item.rule.size())
+                    symbol_set.insert(item.lr0_item.PointSymbol());
+            }
+            for (const auto &symbol : symbol_set) {
+                ItemSet new_state = ItemsClosure(goTo(actual_state, symbol));
+                if (!new_state.empty()) {
+                    states_function.emplace_back(symbol, actual_state, states_map[new_state]);
                 }
             }
         }
         CreateParsingTable(states_function);
     }
 
-    void SLR1::CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function) {
+    void LALR::CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function) {
         std::map<ItemSet, int> states_index;
         std::set<int> analyzed;
 
         std::vector<std::string> axiom_rule = *grammar_[grammar_.axiom()].begin();
-        auto accept_item = Item(grammar_.axiom(), axiom_rule, 1);
+        Item accept_item = {{grammar_.axiom(), axiom_rule, 1}, "$"};
 
         for (const auto &action : states_function) {
             const auto&[symbol, initial_state, next_state] = action;
@@ -141,47 +167,51 @@ namespace compiler::parsers {
             }
             if (!analyzed.count(states_index[next_state])) {
                 analyzed.insert(states_index[next_state]);
-                std::set<int> symbol_r;
-                std::set<std::string> symbol_s;
-                std::set<std::string> follow;
 
+                std::map<std::string, int> symbol_r;
+                std::set<int> scanned_rules;
+                std::set<std::string> symbol_s;
                 for (const auto &item : next_state) {
-                    if (item.point == item.rule.size()) {
-                        symbol_r.insert(grammar_.GetRuleIndex(item.variable, item.rule));
-                        auto follow_sav = grammar_.Follow(item.variable);
-                        for (const auto &symbol : follow_sav) {
-                            if (follow.count(symbol)) {
-                                ThrowConflictError(Conflict::kReduceReduceConflict,
-                                                   {next_state, states_index[next_state]}, symbol_r);
-                                number_of_conflicts_++;
-                            } else {
-                                function_[{states_index[next_state], symbol}] =
-                                        {'r', grammar_.GetRuleIndex(item.variable, item.rule)};
-                            }
+                    if (item.lr0_item.point == item.lr0_item.rule.size()) {
+                        if (symbol_r.count(item.token) &&
+                            symbol_r[item.token] !=
+                            grammar_.GetRuleIndex(item.lr0_item.variable, item.lr0_item.rule)) {
+                            ThrowConflictError(Conflict::kReduceReduceConflict,
+                                               {next_state, states_index[next_state]},
+                                               scanned_rules);
+                            number_of_conflicts_++;
+                        } else {
+                            symbol_r[item.token] = grammar_.GetRuleIndex(item.lr0_item.variable,
+                                                                         item.lr0_item.rule);
+                            scanned_rules.insert(symbol_r[item.token]);
                         }
-                        follow.insert(follow_sav.begin(), follow_sav.end());
-                    } else if (grammar_.terminals().count(item.PointSymbol()))
-                        symbol_s.insert(item.PointSymbol());
+                    } else if (grammar_.terminals().count(item.lr0_item.PointSymbol()))
+                        symbol_s.insert(item.lr0_item.PointSymbol());
+                    if (item.lr0_item.point == item.lr0_item.rule.size())
+                        function_[{states_index[next_state], item.token}] =
+                                {'r', grammar_.GetRuleIndex(item.lr0_item.variable, item.lr0_item.rule)};
                 }
-                for (const auto &sym : symbol_s) {
-                    if (follow.count(sym)) {
+                for (const auto &item : symbol_s) {
+                    if (symbol_r.count(item)) {
                         ThrowConflictError(Conflict::kShiftReduceConflict,
                                            {next_state, states_index[next_state]},
-                                           symbol_r, sym);
+                                           {symbol_r[item]},
+                                           item);
                         number_of_conflicts_++;
                     }
                 }
             }
         }
         if (number_of_conflicts_ > 0) {
-            std::cerr << "Found " + std::to_string(number_of_conflicts_) + " conflicts when creating the parsing table."
+            std::cerr << "Found " + std::to_string(number_of_conflicts_) +
+                         " conflicts when creating the parsing table."
                       << std::endl;
             std::cerr << "Stopping parsing..." << std::endl << std::endl;
             exit(-1);
         }
     }
 
-    void SLR1::PrintParsingTable() {
+    void LALR::PrintParsingTable() {
         std::vector<std::string> symbol_set;
         std::set<std::string> terminals = grammar_.terminals();
         std::set<std::string> non_terminals = grammar_.non_terminals();
@@ -229,7 +259,8 @@ namespace compiler::parsers {
         std::cout << std::endl;
     }
 
-    bool SLR1::Parse(bool verbose) {
+
+    bool LALR::Parse(bool verbose) {
         bool accept = false;
         std::vector<std::string> stack = {"0"};
         std::string input;
@@ -325,7 +356,8 @@ namespace compiler::parsers {
                             action_str += std::to_string(action.second);
                             for (const auto &str : stack)
                                 stack_state += str + " ";
-                            printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
+                            printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(),
+                                   action_str.c_str());
                             for (int i = 0; i < 187; i++)
                                 std::cout << "-";
                             std::cout << std::endl;
@@ -340,14 +372,11 @@ namespace compiler::parsers {
         return accept;
     }
 
-    void SLR1::ThrowConflictError(ConflictManager::Conflict c, const std::pair<ItemSet, int> &print_obj,
+    void LALR::ThrowConflictError(ConflictManager::Conflict c, const std::pair<ItemSet, int> &print_obj,
                                   const std::set<int> &rule_set, const std::string &symbol) {
         if (c == Conflict::kShiftReduceConflict) {
             std::cerr << std::endl << "In state " << std::to_string(print_obj.second) << ":" << std::endl;
-            for (const auto &item : print_obj.first) {
-                std::cerr << "\t" << std::to_string(grammar_.GetRuleIndex(item.variable, item.rule))
-                          << item.to_string() << std::endl;
-            }
+            PrintItemSet(print_obj.first);
             std::cerr << std::endl;
             std::cerr << std::endl
                       << "Found Shift/Reduce conflict for symbol '" + symbol + "' caused by production(s): "
@@ -362,10 +391,7 @@ namespace compiler::parsers {
             std::cerr << std::endl;
         } else if (c == Conflict::kReduceReduceConflict) {
             std::cerr << std::endl << "In state " << std::to_string(print_obj.second) << ":" << std::endl;
-            for (const auto &item : print_obj.first) {
-                std::cerr << "\t" << std::to_string(grammar_.GetRuleIndex(item.variable, item.rule))
-                          << item.to_string() << std::endl;
-            }
+            PrintItemSet(print_obj.first);
             std::cerr << std::endl;
             std::cerr << std::endl
                       << "Found Reduce/Reduce conflict caused by production(s): "
@@ -378,6 +404,27 @@ namespace compiler::parsers {
                 std::cerr << std::endl;
             }
             std::cerr << std::endl;
+        }
+    }
+
+    void LALR::PrintItemSet(const LALR::ItemSet &set) {
+        std::vector<std::pair<LR0::Item, std::set<std::string>>> items;
+        for (const auto &it : set) {
+            if (!items.empty() && items.back().first == it.lr0_item)
+                items.back().second.insert(it.token);
+            else
+                items.push_back({it.lr0_item, {it.token}});
+        }
+        std::string result;
+        for (const auto &it : items) {
+            result = "\t\t" + std::to_string(grammar_.GetRuleIndex(it.first.variable, it.first.rule)) +
+                     it.first.to_string() + "\t\t{";
+            for (const auto &it2 : it.second)
+                result += it2 + ", ";
+            result.pop_back();
+            result.pop_back();
+            result += "}\n";
+            std::cout << result << std::endl;
         }
     }
 } // namespace compiler::parsers

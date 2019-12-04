@@ -1,6 +1,8 @@
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/LL1_parser.dir
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/rebuild_cache.dir
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/test.dir
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/LR0_parser.dir
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/LR1_parser.dir
-C:/Coding/Programones/Cpprogramones/lexical-analyzer/debug/CMakeFiles/edit_cache.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/rebuild_cache.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/LR0_parser.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/edit_cache.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/LALR_parser.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/LL1_parser.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/test.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/SLR1_parser.dir
+/home/jedel/SDK/Programones/Cpp/lexical-analyzer/debug/CMakeFiles/LR1_parser.dir

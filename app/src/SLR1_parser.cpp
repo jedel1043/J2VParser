@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "analyzers/lexical_analyzer_s.h"
-#include "parsers/parser_algorithms/LR0.h"
+#include "parsers/parser_algorithms/SLR1.h"
 #include "automata/nfa.h"
 #include "automata/dfa.h"
 #include "parsers/regex_utils/regex_scanner.h"
@@ -41,13 +41,13 @@ int main(int argc, char** argv) {
                 if(ifstream(argv[3]).good()) {
                     compiler::io_buffer::TextSourceBuffer input_file(argv[3]);
                     compiler::analyzers::LexicalAnalyzerF tokenizer(&input_file, analyzer);
-                    compiler::parsers::LR0 yacc(&input_grammar, tokenizer, augment_grammar);
+                    compiler::parsers::SLR1 yacc(&input_grammar, tokenizer, augment_grammar);
                     bool accepted = yacc.Parse(verbose);
                     cout << endl << "Accepted string? " << (accepted ? "true" : "false") << endl << endl;
                 }
                 else{
                     compiler::analyzers::LexicalAnalyzerS tokenizer(argv[3], analyzer);
-                    compiler::parsers::LR0 yacc(&input_grammar, tokenizer, augment_grammar);
+                    compiler::parsers::SLR1 yacc(&input_grammar, tokenizer, augment_grammar);
                     bool accepted = yacc.Parse(verbose);
                     cout << endl << "Accepted string? " << (accepted ? "true" : "false") << endl << endl;
                 }

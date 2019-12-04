@@ -1,6 +1,5 @@
-#ifndef COMPILER_LR0_H
-#define COMPILER_LR0_H
-
+#ifndef COMPILER_SLR1_H
+#define COMPILER_SLR1_H
 #include <utility>
 
 #include "buffer.h"
@@ -12,8 +11,8 @@
 
 namespace compiler::parsers {
 
-    class LR0 : public Parser<std::map<std::pair<int, std::string>, std::pair<char, int>>>,
-                public ConflictManager{
+    class SLR1 : public Parser<std::map<std::pair<int, std::string>, std::pair<char, int>>>,
+                 public ConflictManager{
     public:
         struct Item {
             std::string variable;
@@ -46,13 +45,13 @@ namespace compiler::parsers {
 
         };
 
-        LR0(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true) :
-                LR0(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
+        SLR1(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true) :
+                SLR1(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
 
-        LR0(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true);
+        SLR1(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar=true);
         bool Parse(bool verbose) override;
 
-    private:
+    protected:
         using ItemSet = std::set<Item>;
         using cell = std::pair<char, int>;
 
@@ -69,9 +68,8 @@ namespace compiler::parsers {
         virtual void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
 
         void ThrowConflictError(Conflict c, const std::pair<ItemSet, int> &print_obj, const std::set<int> &rule_set,
-                const std::string &symbol = "");
+                                const std::string &symbol = "");
     };
 
 } // namespace const compiler::parsers
-
-#endif //COMPILER_LR0_H
+#endif //COMPILER_SLR1_H

@@ -1,6 +1,2 @@
-G : S;
-S : S "+" P
-  | P;
-P : P "*" V
-  | V;
-V : NUM | ID;
+S : '(' L ')' | id;
+L : S ',' S |

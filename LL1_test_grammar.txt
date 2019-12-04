@@ -1,0 +1,9 @@
+G : LR;
+LR : R SC LRp;
+LRp : R SC LRp | ;
+R : LI C LD;
+LI : SYM;
+LD : LS LDp;
+LDp : OR LS LDp | ;
+LS : SYM LSp;
+LSp : SYM LSp | ;

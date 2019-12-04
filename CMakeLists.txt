@@ -4,6 +4,7 @@ project(Compiler)
 set(Compiler_VERSION_MAJOR 0)
 set(Compiler_VERSION_MINOR 1)
 set (CMAKE_CXX_STANDARD 17)
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 include(GNUInstallDirs)
 
@@ -25,4 +26,5 @@ enable_testing()
 
 add_executable(LL1_parser app/src/LL1_parser.cpp ${SOURCES})
 add_executable(LR0_parser app/src/LR0_parser.cpp ${SOURCES})
+add_executable(SLR1_parser app/src/SLR1_parser.cpp ${SOURCES})
 add_executable(LR1_parser app/src/LR1_parser.cpp ${SOURCES})

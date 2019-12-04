@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
                 compiler::io_buffer::TextSourceBuffer input_grammar(argv[1]);
                 compiler::io_buffer::TextSourceBuffer input_regex(argv[2]);
                 compiler::automata::DFA analyzer = compiler::automata::NFA::CalculateLexicalUnion(
-                        compiler::regex::RegexParser(compiler::regex::RegexScanner(&input_regex)).Parse()).ToDFA().Minimize();
+                        compiler::regex::RegexParser(compiler::regex::RegexScanner(&input_regex)).Parse()).ToDFA();
 
                 if(ifstream(argv[3]).good()) {
                     compiler::io_buffer::TextSourceBuffer input_file(argv[3]);

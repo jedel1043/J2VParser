@@ -61,6 +61,8 @@ namespace compiler::regex {
 
         virtual RegexToken GetNextToken();
 
+        [[nodiscard]] io_buffer::TextSourceBuffer *getSourceBuffer() const;
+
     };
 }// namespace compiler::regex
 #endif

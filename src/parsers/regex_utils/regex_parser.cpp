@@ -14,14 +14,14 @@ namespace compiler::regex {
     }
 
     automata::NFA RegexParser::Rule() {
-        automata::NFA new_automata;
+        automata::NFA new_automaton;
 
         if (regex_scanner_.current_token() == TokenCodeRegex::AT_BOL) {
             regex_scanner_.GetNextToken();
-            new_automata = automata::NFA::CreateSimpleNFA('\n');
-            Expr(new_automata);
+            new_automaton = automata::NFA::CreateSimpleNFA('\n');
+            Expr(new_automaton);
         } else {
-            Expr(new_automata);
+            Expr(new_automaton);
         }
 
         if (regex_scanner_.current_token() == TokenCodeRegex::AT_EOL) {
@@ -29,7 +29,7 @@ namespace compiler::regex {
             std::set<char> labels;
             labels.insert('\n');
             labels.insert('\r');
-            new_automata.Concatenation(automata::NFA::CreateSimpleNFA(labels));
+            new_automaton.Concatenation(automata::NFA::CreateSimpleNFA(labels));
         }
 
         regex_scanner_.GetNextToken();
@@ -38,29 +38,29 @@ namespace compiler::regex {
             action += regex_scanner_.current_token().lexeme;
             regex_scanner_.GetNextToken();
         }
-        new_automata.AddAcceptingValue(action);
+        new_automaton.AddAcceptingValue(action);
         regex_scanner_.GetNextToken();
-        return new_automata;
+        return new_automaton;
     }
 
-    void RegexParser::Expr(automata::NFA &automata) {
-        automata::NFA new_automata;
-        CatExpr(automata);
+    void RegexParser::Expr(automata::NFA &automaton) {
+        automata::NFA new_automaton;
+        CatExpr(automaton);
         while (regex_scanner_.current_token() == TokenCodeRegex::OR) {
             regex_scanner_.GetNextToken();
-            CatExpr(new_automata);
-            automata = automata.Union(new_automata);
+            CatExpr(new_automaton);
+            automaton = automaton.Union(new_automaton);
         }
     }
 
-    void RegexParser::CatExpr(automata::NFA &automata) {
-        automata::NFA new_automata;
+    void RegexParser::CatExpr(automata::NFA &automaton) {
+        automata::NFA new_automaton;
 
         if (isConcatenable(regex_scanner_.current_token()))
-            Factor(automata);
+            Factor(automaton);
         while (isConcatenable(regex_scanner_.current_token())) {
-            Factor(new_automata);
-            automata = automata.Concatenation(new_automata);
+            Factor(new_automaton);
+            automaton = automaton.Concatenation(new_automaton);
         }
     }
 
@@ -74,13 +74,13 @@ namespace compiler::regex {
             case TokenCodeRegex::CLOSURE:
             case TokenCodeRegex::PLUS_CLOSURE:
             case TokenCodeRegex::OPTIONAL:
-                SyntaxError(error::MissingExpression);
+                SyntaxError(error::MissingExpression, regex_scanner_.getSourceBuffer()->GetLineData());
                 return false;
             case TokenCodeRegex::CCL_END:
-                SyntaxError(error::MissingBracket);
+                SyntaxError(error::MissingBracket, regex_scanner_.getSourceBuffer()->GetLineData());
                 return false;
             case TokenCodeRegex::AT_BOL:
-                SyntaxError(error::MissingStartExpression);
+                SyntaxError(error::MissingStartExpression, regex_scanner_.getSourceBuffer()->GetLineData());
                 return false;
             default:
                 return true;
@@ -88,36 +88,37 @@ namespace compiler::regex {
 
     }
 
-    void RegexParser::Factor(automata::NFA &automata) {
-        Term(automata);
+    void RegexParser::Factor(automata::NFA &automaton) {
+        Term(automaton);
         if (regex_scanner_.current_token() == TokenCodeRegex::CLOSURE) {
-            automata = automata.KleeneClosure();
+            automaton = automaton.KleeneClosure();
             regex_scanner_.GetNextToken();
         } else if (regex_scanner_.current_token() == TokenCodeRegex::PLUS_CLOSURE) {
-            automata = automata.PlusClosure();
+            automaton = automaton.PlusClosure();
             regex_scanner_.GetNextToken();
         } else if (regex_scanner_.current_token() == TokenCodeRegex::OPTIONAL) {
-            automata = automata.Optional();
+            automaton = automaton.Optional();
             regex_scanner_.GetNextToken();
         }
     }
 
-    void RegexParser::Term(automata::NFA &automata) {
+    void RegexParser::Term(automata::NFA &automaton) {
         bool complement = false;
         if (regex_scanner_.current_token() == TokenCodeRegex::OPEN_PAREN) {
             regex_scanner_.GetNextToken();
-            Expr(automata);
+            Expr(automaton);
             if (regex_scanner_.current_token() == TokenCodeRegex::CLOSE_PAREN)
                 regex_scanner_.GetNextToken();
             else
-                SyntaxError(error::MissingCloseParenthesis);
+                SyntaxError(error::MissingCloseParenthesis, regex_scanner_.getSourceBuffer()->GetLineData());
         } else {
-            if (regex_scanner_.current_token() != TokenCodeRegex::ANY && regex_scanner_.current_token() != TokenCodeRegex::CCL_START) {
-                automata = automata::NFA::CreateSimpleNFA(regex_scanner_.current_token().lexeme);
+            if (regex_scanner_.current_token() != TokenCodeRegex::ANY &&
+                regex_scanner_.current_token() != TokenCodeRegex::CCL_START) {
+                automaton = automata::NFA::CreateSimpleNFA(regex_scanner_.current_token().lexeme);
                 regex_scanner_.GetNextToken();
             } else {
                 if (regex_scanner_.current_token() == TokenCodeRegex::ANY) {
-                    automata = automata::NFA::CreateSimpleNFA(any_char_);
+                    automaton = automata::NFA::CreateSimpleNFA(any_char_);
                 } else {
                     std::set<char> cs;
                     if (regex_scanner_.GetNextToken() == TokenCodeRegex::AT_BOL) {
@@ -127,7 +128,7 @@ namespace compiler::regex {
                     if (regex_scanner_.current_token() != TokenCodeRegex::CCL_END) {
                         Dash(cs);
                     } else {
-                        for (int c = 0; c <= ' '; c++)
+                        for (char c = 0; c <= ' '; c++)
                             cs.insert(c);
                     }
                     if (complement) {
@@ -136,9 +137,9 @@ namespace compiler::regex {
                             if (!cs.count((char) i))
                                 ccs.insert((char) i);
                         }
-                        automata = automata::NFA::CreateSimpleNFA(ccs);
+                        automaton = automata::NFA::CreateSimpleNFA(ccs);
                     } else {
-                        automata = automata::NFA::CreateSimpleNFA(cs);
+                        automaton = automata::NFA::CreateSimpleNFA(cs);
                     }
                 }
                 regex_scanner_.GetNextToken();
@@ -146,17 +147,17 @@ namespace compiler::regex {
         }
     }
 
-    void RegexParser::Dash(std::set<char> &automata) {
+    void RegexParser::Dash(std::set<char> &automaton) {
         char lastLexeme = 0;
         for (; regex_scanner_.current_token() != TokenCodeRegex::EOS &&
                regex_scanner_.current_token() != TokenCodeRegex::CCL_END; regex_scanner_.GetNextToken()) {
             if (regex_scanner_.current_token() != TokenCodeRegex::DASH) {
                 lastLexeme = regex_scanner_.current_token().lexeme;
-                automata.insert(lastLexeme);
+                automaton.insert(lastLexeme);
             } else {
                 regex_scanner_.GetNextToken();
                 for (; lastLexeme <= regex_scanner_.current_token().lexeme; ++lastLexeme)
-                    automata.insert(lastLexeme);
+                    automaton.insert(lastLexeme);
             }
         }
     }

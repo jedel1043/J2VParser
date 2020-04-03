@@ -36,7 +36,7 @@ namespace compiler::grammar {
                 rule_getter[index] = rule_input;
             }
 
-            [[nodiscard]] int size() const { return rule_getter.size(); }
+            [[nodiscard]] size_t size() const { return rule_getter.size(); }
 
             std::pair<std::string, std::vector<std::string>> &operator[](int index) {
                 return rule_getter[index];
@@ -161,15 +161,6 @@ namespace compiler::grammar {
          * @return The index of the rule associated with @p variable and @p rule in #rules_index.
          */
         int GetRuleIndex(const std::string &variable, const std::vector<std::string> &rule);
-
-        /*!
-         * @brief Converts the grammar to an augmented grammar.
-         * @details Adds a new rule @p new_axiom -> #axiom_ to convert the grammar into an augmented grammar.
-         * @param new_axiom If @p new_axiom is empty, the method will set #axiom_ to axiom_P.
-         * @attention If axiom_P is in #terminals_, the method will set #axiom_ to any "axiom_P____..." that is not in #terminals_,
-         * appending a '_' char at the end of @p new_axiom until it's not in #terminals. The same applies if @p new_axiom is not empty.
-         */
-        void ToAugmentedGrammar(std::string new_axiom = "");
 
         /*!
          * @brief Constructs a grammar equivalent to the augmented grammar of this grammar.

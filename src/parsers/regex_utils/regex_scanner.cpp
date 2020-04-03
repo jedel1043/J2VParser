@@ -44,7 +44,7 @@ namespace compiler::regex {
         char lexeme;
 
         if (current_token_ == TokenCodeRegex::EOS) {
-            if (in_quote_) SyntaxError(error::InvalidNewLine);
+            if (in_quote_) SyntaxError(error::InvalidNewLine, getSourceBuffer()->GetLineData());
             SkipWhiteSpace();
             if (source_buffer_->GetChar() == io_buffer::EOF_char) {
                 current_token_ = {TokenCodeRegex::END_OF_INPUT, io_buffer::EOF_char};
@@ -69,7 +69,7 @@ namespace compiler::regex {
         escape_ = (source_buffer_->GetChar() == '\\');
         if (escape_) source_buffer_->FetchChar();
         if (source_buffer_->GetChar() == io_buffer::EOF_char || source_buffer_->GetChar() == '\0')
-            SyntaxError(error::InvalidNewLine);
+            SyntaxError(error::InvalidNewLine, getSourceBuffer()->GetLineData());
 
         if (!in_quote_) {
             if (isspace(source_buffer_->GetChar())) {
@@ -88,5 +88,9 @@ namespace compiler::regex {
         current_token_ = {newToken, lexeme};
         source_buffer_->FetchChar();
         return current_token_;
+    }
+
+    io_buffer::TextSourceBuffer *RegexScanner::getSourceBuffer() const {
+        return source_buffer_;
     }
 }// namespace compiler::parsers::regex

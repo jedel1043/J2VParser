@@ -34,6 +34,17 @@ namespace compiler::automata {
                 states_.insert(j);
         }
 
+        DFA(std::set<int> states, std::set<char> alphabet, std::map<std::pair<int, char>, int> transitions,
+            int initial_state, std::set<int> accepting_states, std::map<int, std::string> tokens) :
+                states_(std::move(states)),
+                alphabet_(std::move(alphabet)),
+                transitions_(std::move(transitions)),
+                initial_state_(initial_state),
+                accepting_states_(std::move(accepting_states)),
+                tokens_(std::move(tokens)),
+                size_(states.size()) {
+        }
+
         void Print();
 
         void PrintToFile(const std::string &filename);

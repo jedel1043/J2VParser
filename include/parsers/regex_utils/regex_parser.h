@@ -18,21 +18,21 @@ namespace compiler::regex {
 
         automata::NFA Rule();
 
-        void Expr(automata::NFA &automata);
+        void Expr(automata::NFA &automaton);
 
-        void CatExpr(automata::NFA &automata);
+        void CatExpr(automata::NFA &automaton);
 
-        static bool isConcatenable(RegexToken);
+        bool isConcatenable(RegexToken);
 
-        void Factor(automata::NFA &automata);
+        void Factor(automata::NFA &automaton);
 
-        void Term(automata::NFA &automata);
+        void Term(automata::NFA &automaton);
 
-        void Dash(std::set<char> &automata);
+        void Dash(std::set<char> &automaton);
 
     public:
         explicit RegexParser(RegexScanner scanner) : regex_scanner_(std::move(scanner)) {
-            for (int i = ' '; i <= '}'; i++) any_char_.insert(i);
+            for (char i = ' '; i <= '}'; i++) any_char_.insert(i);
         }
 
         std::vector <automata::NFA> Parse() {

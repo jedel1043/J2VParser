@@ -66,7 +66,7 @@ namespace compiler::parsers {
 
         ItemSet goTo(const ItemSet &input_items, const std::string &input_symbol);
 
-        virtual void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
+        void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
 
         void ThrowConflictError(Conflict c, const std::pair<ItemSet, int> &print_obj, const std::set<int> &rule_set,
                 const std::string &symbol = "");

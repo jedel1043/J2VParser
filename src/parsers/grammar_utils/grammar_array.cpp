@@ -19,22 +19,23 @@ namespace compiler::grammar {
         std::string out;
         for (const auto &symbol : obj.terminals_)
             out += symbol + ", ";
-        out.pop_back(); out.pop_back();
+        out.pop_back();
+        out.pop_back();
         ostream << out << "}" << std::endl;
         ostream << std::endl << "Non-terminal symbols:\t{";
         out = "";
         for (const auto &symbol : obj.non_terminals_)
             out += symbol + ", ";
-        out.pop_back(); out.pop_back();
+        out.pop_back();
+        out.pop_back();
         ostream << out << "}" << std::endl;
         return ostream;
     }
 
-    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index){
+    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index) {
         return rules_array_.at(index);
     }
 
-//insercion a la coleccion de reglas.
     void GrammarArray::InsertRule(const std::string &variable, const std::vector<std::string> &rule) {
         non_terminals_.insert(variable);
         if (rules_array_.count(variable))
@@ -62,7 +63,7 @@ namespace compiler::grammar {
         terminals_.erase("#");
     }
 
-    void GrammarArray::InsertTerminal(const std::string &new_symbol){
+    void GrammarArray::InsertTerminal(const std::string &new_symbol) {
         terminals_.insert(new_symbol);
     }
 
@@ -70,7 +71,7 @@ namespace compiler::grammar {
     GrammarArray::GetRightSides(const std::string &variable) {
         std::set<std::pair<std::string, std::vector<std::string>>> left_vars;
         for (const auto &rules : rules_array_) {
-            for (const auto &rule : rules.second) {
+            for (auto rule : rules.second) {
                 if (std::find(rule.begin(), rule.end(), variable) != rule.end())
                     left_vars.insert({rules.first, rule});
             }
@@ -83,7 +84,7 @@ namespace compiler::grammar {
     }
 
     bool GrammarArray::canGenerateEpsilon(const std::string &variable, std::set<std::string> &calculated) {
-        if(calculated.count(variable))
+        if (calculated.count(variable))
             return false;
         calculated.insert(variable);
         if (non_terminals_.count(variable)) {
@@ -119,7 +120,7 @@ namespace compiler::grammar {
     }
 
     std::set<std::string> GrammarArray::First(const std::string &expression, std::set<std::string> &calculated) {
-        if(calculated.count(expression))
+        if (calculated.count(expression))
             return {};
         if (terminals_.count(expression) || expression == "#")
             return {expression};
@@ -200,17 +201,6 @@ namespace compiler::grammar {
 
     std::pair<std::string, std::vector<std::string>> GrammarArray::GetRuleFromIndex(int index) const {
         return index_rule_[index];
-    }
-
-    void GrammarArray::ToAugmentedGrammar(std::string new_axiom) {
-        if (new_axiom.empty())
-            new_axiom = axiom_ + "_p";
-
-        while (terminals_.count(new_axiom))
-            new_axiom += "_";
-        terminals_.insert("$");
-        InsertRule(new_axiom, {axiom_});
-        axiom_ = new_axiom;
     }
 
     GrammarArray GrammarArray::GetAugmentedGrammar(std::string new_axiom) {

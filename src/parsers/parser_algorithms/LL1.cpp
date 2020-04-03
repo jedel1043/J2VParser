@@ -1,6 +1,5 @@
 #include "parsers/parser_algorithms/LL1.h"
 
-#include <set>
 #include <iostream>
 #include <cstdio>
 #include <tuple>
@@ -52,7 +51,7 @@ namespace compiler::parsers {
 
         if (number_of_conflicts_ > 0) {
             std::cerr << "Found " + std::to_string(number_of_conflicts_) + " conflicts when creating the parsing table."
-            << std::endl;
+                      << std::endl;
             std::cerr << "Stopping parsing..." << std::endl << std::endl;
             exit(-1);
         }
@@ -212,7 +211,8 @@ namespace compiler::parsers {
             }
             std::cerr << std::endl;
         } else if (c == Conflict::kFirstFollowConflict) {
-            std::cerr <<  std::endl << "Found First/Follow conflict for symbol '" + symbol + "' caused by production(s): "
+            std::cerr << std::endl
+                      << "Found First/Follow conflict for symbol '" + symbol + "' caused by production(s): "
                       << std::endl;
             for (auto i : print_obj) {
                 const auto rule = grammar_.GetRuleFromIndex(i);

@@ -8,9 +8,7 @@
 #include <fstream>
 #include <vector>
 
-
 namespace compiler::automata {
-
     void DFA::Print() {
         std::cout << "Tokens:" << std::endl;
         for (const auto &token : tokens_)
@@ -18,9 +16,8 @@ namespace compiler::automata {
         std::cout << std::endl;
         int groupingLen = 25;
         int numberOfGroups = (int) alphabet_.size() / groupingLen;
-        std::set <std::set<char>> groups;
+        std::set<std::set<char>> groups;
         std::string out;
-
 
         for (int i = 0; i <= numberOfGroups; i++) {
             auto begin_char = alphabet_.begin();
@@ -41,30 +38,28 @@ namespace compiler::automata {
             for (const char c : temp)
                 printf("  %c  |", c);
             printf("\n------");
-            for (const char c : temp)
+            for (int j = 0; j < temp.size(); j++)
                 printf("------");
             printf("\n");
 
-            for (int i = 1; i <= size_; i++) {
-                if (accepting_states_.count(i) != 0)
+            for (int j = 1; j <= size_; j++) {
+                if (accepting_states_.count(j) != 0)
                     printf("*");
                 else
                     printf(" ");
-                if (initial_state_ == i)
+                if (initial_state_ == j)
                     printf(">");
                 else
                     printf(" ");
 
-                printf("%2d |", i);
-                for (const char c : temp) {
-                    printf(" %3d |", transitions_[std::make_pair(i, c)]);
-                }
+                printf("%2d |", j);
+                for (const char c : temp)
+                    printf(" %3d |", transitions_[std::make_pair(j, c)]);
                 printf("\n");
             }
             std::cout << "\n";
         }
     }
-
 
     void DFA::PrintToFile(const std::string &filename) {
         std::ofstream file(filename);
@@ -75,7 +70,7 @@ namespace compiler::automata {
             file << buffer;
         }
         file << "\n------";
-        for (const char c : alphabet_)
+        for (int i = 0; i < alphabet_.size(); i++)
             file << "------";
         file << "\n";
 
@@ -99,13 +94,17 @@ namespace compiler::automata {
             }
             file << "\n";
         }
+        file << std::endl;
+
+        for (const auto &elem : tokens_)
+            file << elem.first << ':' << elem.second << std::endl;
         file.close();
     }
 
     std::set<int> DFA::InverseTransition(const std::set<int> &new_states, char input_char) {
         std::set<int> result;
-        std::map < std::pair < int, char >, int > ::iterator
-        it;
+        std::map<std::pair<int, char>, int>::iterator
+                it;
         for (const int state : new_states) {
             for (it = transitions_.begin(); it != transitions_.end(); ++it) {
                 if (it->second == state && it->first.second == input_char)
@@ -116,7 +115,7 @@ namespace compiler::automata {
     }
 
     DFA DFA::Minimize() {
-        std::set <std::set<int>> P;
+        std::set<std::set<int>> P;
         std::map<int, std::string> new_tokens;
         P.insert({*accepting_states_.begin()});
         for (int state : accepting_states_) {
@@ -136,18 +135,18 @@ namespace compiler::automata {
                     P.insert({state});
             }
         }
-        std::set <std::set<int>> W;
+        std::set<std::set<int>> W;
         W.insert(P.begin(), P.end());
 
         std::set<int> intersection;
         std::set_difference(states_.begin(), states_.end(), accepting_states_.begin(), accepting_states_.end(),
-                       inserter(intersection, intersection.end()));
+                            inserter(intersection, intersection.end()));
         if (!intersection.empty())
             P.insert(intersection);
 
         while (!W.empty()) {
-            std::set < std::set < int >> ::iterator
-            it;
+            std::set<std::set<int >>::iterator
+                    it;
             it = W.begin();
             std::set<int> A = *it;
             W.erase(it);
@@ -183,8 +182,8 @@ namespace compiler::automata {
 
         int new_size = P.size();
         std::map<std::pair<int, char>, int> new_transitions;
-        std::map < std::pair < int, char >, int > ::iterator
-        itt;
+        std::map<std::pair<int, char>, int>::iterator
+                itt;
         for (itt = transitions_.begin(); itt != transitions_.end(); ++itt) {
             int from_state, to_state, current_class = 1;
             bool got_from = false, got_to = false;
@@ -203,8 +202,8 @@ namespace compiler::automata {
                 }
                 current_class++;
             }
-            new_transitions.insert(std::pair < std::pair < int, char > ,
-                                   int > (std::make_pair(from_state, itt->first.second), to_state));
+            new_transitions.insert(std::pair<std::pair<int, char>,
+                    int>(std::make_pair(from_state, itt->first.second), to_state));
         }
         int new_initial = 1;
         for (const std::set<int> &class_p : P) {
@@ -239,7 +238,7 @@ namespace compiler::automata {
     }
 
     int DFA::Compute(int state, char c) {
-        if(!transitions_.count(std::make_pair(state, c)))
+        if (!transitions_.count(std::make_pair(state, c)))
             return -1;
         return transitions_[std::make_pair(state, c)];
     }

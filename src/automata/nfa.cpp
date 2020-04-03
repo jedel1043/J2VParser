@@ -9,15 +9,15 @@ namespace compiler::automata {
 
     int NFA::state_counter_ = 1;
 
-    NFA::NFA() = default;
+    NFA::NFA() : initial_state_(-1) {}
 
     NFA::~NFA() = default;
 
     std::set<char> NFA::alphabet() {
-        std::map < std::pair < int, char >, std::set < int >> ::iterator it;
+        std::map<std::pair<int, char>, std::set<int >>::iterator it;
         std::set<char> alphabet;
         for (it = transitions_.begin(); it != transitions_.end(); ++it) {
-            char c = (char) it->first.second;
+            char c = it->first.second;
             if (c != '\0')
                 alphabet.insert(c);
         }
@@ -29,7 +29,7 @@ namespace compiler::automata {
             accepting_values_.insert(std::make_pair(accepting_state, value));
     }
 
-        std::string NFA::GetAcceptingValue(int state) {
+    std::string NFA::GetAcceptingValue(int state) {
         return accepting_values_.count(state) ? accepting_values_[state] : "";
     }
 
@@ -42,7 +42,7 @@ namespace compiler::automata {
         std::map<int, std::string> new_tokens;
 
         // Preparing the algorithm
-        std::vector <std::set<int>> old_states;
+        std::vector<std::set<int>> old_states;
         old_states.push_back(this->CalculateEpsilonClosure(initial_state_));
         std::queue<int> pending_states;
         pending_states.push(n);
@@ -58,24 +58,25 @@ namespace compiler::automata {
                 std::set<int> result = this->Compute(state_set, &str[0]);
 
                 if (result.empty()) {
-                    new_transition.insert(std::pair < std::pair < int, char > , int > (std::make_pair(dstate, c), -1));
+                    new_transition.insert(std::pair<std::pair<int, char>, int>(std::make_pair(dstate, c), -1));
                     continue;
                 }
 
                 auto it = find(old_states.begin(), old_states.end(), result);
                 if (it != old_states.end()) {
                     int state_index = (int) distance(old_states.begin(), it) + 1;
-                    new_transition.insert(std::pair < std::pair < int, char > , int > (std::make_pair(dstate, c), state_index));
+                    new_transition.insert(std::pair<std::pair<int, char>, int>(std::make_pair(dstate, c), state_index));
                 } else {
                     pending_states.push(++n);
                     old_states.push_back(result);
-                    new_transition.insert(std::pair < std::pair < int, char > , int > (std::make_pair(dstate, c), n));
+                    new_transition.insert(std::pair<std::pair<int, char>, int>(std::make_pair(dstate, c), n));
                 }
             }
 
             std::vector<int> intersection;
-            std::set_intersection(state_set.begin(), state_set.end(), accepting_states_.begin(), accepting_states_.end(),
-                             back_inserter(intersection));
+            std::set_intersection(state_set.begin(), state_set.end(), accepting_states_.begin(),
+                                  accepting_states_.end(),
+                                  back_inserter(intersection));
             if (!intersection.empty()) {
                 new_final_states.insert(dstate);
                 std::string token;
@@ -89,7 +90,7 @@ namespace compiler::automata {
         return DFA(n, new_alphabet, new_transition, 1, new_final_states, new_tokens);
     }
 
-    NFA::NFA(int size, int initial_state, const std::map <std::pair<int, char>, std::set<int>>& transitions,
+    NFA::NFA(int size, int initial_state, const std::map<std::pair<int, char>, std::set<int>> &transitions,
              const std::set<int> &accepting_states) {
         std::map<int, int> tmp_dic;
         for (int i = 0; i < size; i++) {
@@ -98,14 +99,14 @@ namespace compiler::automata {
             NFA::state_counter_++;
         }
 
-        for (const auto & transition : transitions) {
+        for (const auto &transition : transitions) {
             std::set<int> transition_states;
             for (int const t : transition.second)
                 transition_states.insert(tmp_dic[t]);
             this->transitions_.insert(
-                    std::pair < std::pair < int, char > ,
-                    std::set < int >> (std::make_pair(tmp_dic[transition.first.first], transition.first.second),
-                            transition_states));
+                    std::pair<std::pair<int, char>,
+                            std::set<int >>(std::make_pair(tmp_dic[transition.first.first], transition.first.second),
+                                            transition_states));
         }
         for (int const state : accepting_states)
             this->accepting_states_.insert(tmp_dic[state]);
@@ -177,54 +178,54 @@ namespace compiler::automata {
 
         std::set<int> intersection;
         std::set_intersection(result.begin(), result.end(), accepting_states_.begin(), accepting_states_.end(),
-                         inserter(intersection, intersection.begin()));
+                              inserter(intersection, intersection.begin()));
 
         return (!intersection.empty());
     }
 
     NFA NFA::CreateSimpleNFA(char c) {
-        std::map <std::pair<int, char>, std::set<int>> transitions;
+        std::map<std::pair<int, char>, std::set<int>> transitions;
         std::set<int> accepting_states;
 
         std::set<int> t;
         t.insert(1);
 
-        transitions.insert(std::pair < std::pair < int, char > , std::set < int >> (std::make_pair(0, c), t));
+        transitions.insert(std::pair<std::pair<int, char>, std::set<int >>(std::make_pair(0, c), t));
         accepting_states.insert(1);
 
         return NFA(2, 0, transitions, accepting_states);
     }
 
     NFA NFA::CreateSimpleNFA(char from, char to) {
-        std::map <std::pair<int, char>, std::set<int>> transitions;
+        std::map<std::pair<int, char>, std::set<int>> transitions;
         std::set<int> accepting_states;
 
         std::set<int> t;
         t.insert(1);
 
         for (char c = from; c <= to; c++)
-            transitions.insert(std::pair < std::pair < int, char > , std::set < int >> (std::make_pair(0, c), t));
+            transitions.insert(std::pair<std::pair<int, char>, std::set<int >>(std::make_pair(0, c), t));
         accepting_states.insert(1);
 
         return NFA(2, 0, transitions, accepting_states);
     }
 
     NFA NFA::CreateSimpleNFA(const std::set<char> &chars) {
-        std::map <std::pair<int, char>, std::set<int>> transitions;
+        std::map<std::pair<int, char>, std::set<int>> transitions;
         std::set<int> accepting_states;
 
         std::set<int> t;
         t.insert(1);
 
         for (auto c : chars)
-            transitions.insert(std::pair < std::pair < int, char > , std::set < int >> (std::make_pair(0, c), t));
+            transitions.insert(std::pair<std::pair<int, char>, std::set<int >>(std::make_pair(0, c), t));
         accepting_states.insert(1);
 
         return NFA(2, 0, transitions, accepting_states);
     }
 
     void NFA::AddTransition(int from, const std::set<int> &to, char symbol) {
-        this->transitions_.insert(std::pair < std::pair < int, char > , std::set < int >> (std::make_pair(from, symbol), to));
+        this->transitions_.insert(std::pair<std::pair<int, char>, std::set<int >>(std::make_pair(from, symbol), to));
     }
 
     NFA NFA::Concatenation(NFA concat_obj) {
@@ -280,7 +281,7 @@ namespace compiler::automata {
         return result;
     }
 
-    NFA NFA::CalculateLexicalUnion(const std::vector <NFA> &union_set) {
+    NFA NFA::CalculateLexicalUnion(const std::vector<NFA> &union_set) {
         NFA result;
         result.initial_state_ = NFA::state_counter();
         std::set<int> start_states;
@@ -381,9 +382,8 @@ namespace compiler::automata {
     std::string NFA::LexicalAccept(char *str, std::string &token, std::string &lexeme, std::string &str_result) {
         std::set<int> configuration;
         configuration.insert(this->initial_state_);
-//	char* text_ = str;
-        int input_pos = std::string(str).size() - 1, last_input_pos = 0;
-        bool flagLexeme = false;
+
+        size_t input_pos = std::string(str).size() - 1;
         std::set<int> intersection;
         char text[std::string(str).size()];
         strcpy(text, str);
@@ -396,7 +396,7 @@ namespace compiler::automata {
                 configuration = result;
                 intersection.clear();
                 std::set_intersection(result.begin(), result.end(), accepting_states_.begin(),
-                                 accepting_states_.end(), inserter(intersection, intersection.begin()));
+                                      accepting_states_.end(), inserter(intersection, intersection.begin()));
                 if (!intersection.empty()) {
                     for (int last_state : intersection)
                         token = accepting_values_[last_state];
@@ -425,8 +425,8 @@ namespace compiler::automata {
         ostream1 << std::endl;
 
         ostream1 << "Transition function: \n";
-        std::map < std::pair < int, char >, std::set < int >> ::const_iterator
-        it;
+        std::map<std::pair<int, char>, std::set<int >>::const_iterator
+                it;
         for (it = obj.transitions_.begin(); it != obj.transitions_.end(); ++it) {
             if (it->first.second == '\0')
                 ostream1 << "\t(" << it->first.first << ", ) => {";

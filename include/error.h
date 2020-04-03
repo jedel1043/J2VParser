@@ -9,6 +9,9 @@
 #define IO_ERROR_H
 
 #include <string>
+#include <array>
+#include <iostream>
+#include <tuple>
 
 namespace compiler::error {
 
@@ -40,7 +43,7 @@ namespace compiler::error {
         MissingQuotationMark = -18
     };
 
-    static const std::string abort_msg[19] = {
+    static const std::array<std::string_view, 19> abort_msg = {
             "",
             "Invalid command line arguments",
             "Failed to open source file",
@@ -60,7 +63,7 @@ namespace compiler::error {
             "Missing symbol between apostrophes",
             "Missing rule name",
             "Missing quotation mark in terminal Symbol"
-    };; /*!< Stores the extended description for every code in AbortCode*/
+    }; /*!< Stores the extended description for every code in AbortCode*/
 
 /*!
  * @brief Throws the @p error_code defined in abortMsg.
@@ -79,7 +82,7 @@ namespace compiler::error {
  * the input file e.g. MissingCloseParenthesis.
  * @param error_code Code in AbortCode to throw.
  */
-    void SyntaxError(AbortCode syntax_error_code);
+    void SyntaxError(AbortCode syntax_error_code, std::tuple<std::string, int, int> vals);
 
 } //namespace compiler::error
 #endif

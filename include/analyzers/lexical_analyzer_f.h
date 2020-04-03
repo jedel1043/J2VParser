@@ -20,6 +20,8 @@ namespace compiler::analyzers {
         char SkipWS() override;
 
         static bool isEOS(char c);
+
+        io_buffer::TextSourceBuffer *getInputFile() const;
     };
 } //namespace compiler::analyzers
 

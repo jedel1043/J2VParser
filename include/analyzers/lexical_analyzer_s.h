@@ -25,6 +25,8 @@ namespace compiler::analyzers {
         bool isInEnd() override;
 
         char SkipWS() override;
+
+        std::tuple<std::string, int> getStrData();
     };
 } //namespace compiler::analyzers
 

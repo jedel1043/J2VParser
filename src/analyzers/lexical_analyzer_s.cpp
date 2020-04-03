@@ -56,4 +56,9 @@ namespace compiler::analyzers {
         }
         return *str_pos_;
     }
+
+    std::tuple<std::string, int> LexicalAnalyzerS::getStrData() {
+        return {str_input_, str_pos_ - str_input_.begin()};
+    }
+
 } //namespace compiler::analyzers

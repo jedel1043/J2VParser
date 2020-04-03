@@ -53,5 +53,9 @@ namespace compiler::analyzers {
     bool LexicalAnalyzerF::isEOS(char c) {
         return isspace(c) || c == '\0';
     }
+
+    io_buffer::TextSourceBuffer *LexicalAnalyzerF::getInputFile() const {
+        return input_file_;
+    }
 } //namespace compiler::analyzers
 

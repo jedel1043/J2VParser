@@ -5,7 +5,6 @@ set(LibHeaders "")
 #       cog.outl("set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/%s)" % config.replace("\\", "/"))
 # ]]]
 set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/buffer.h)
-set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/common.h)
 set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/error.h)
 set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/analyzers/lexical_analyzer.h)
 set(LibHeaders ${LibHeaders} ${CMAKE_CURRENT_LIST_DIR}/analyzers/lexical_analyzer_f.h)

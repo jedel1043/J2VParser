@@ -1,6 +1,6 @@
-#include "parsers/regex_utils/regex_parser.h"
+#include "J2VParser/parsers/regex_utils/regex_parser.h"
+#include "J2VParser/error.h"
 
-#include <set>
 #include <string>
 
 namespace compiler::regex {
@@ -8,7 +8,8 @@ namespace compiler::regex {
     void RegexParser::Machine() {
         regex_scanner_.GetNextToken();
         lexical_nfa_.push_back(Rule());
-        while (regex_scanner_.current_token() != TokenCodeRegex::END_OF_INPUT && regex_scanner_.current_token() != TokenCodeRegex::EOS) {
+        while (regex_scanner_.current_token() != TokenCodeRegex::END_OF_INPUT &&
+               regex_scanner_.current_token() != TokenCodeRegex::EOS) {
             lexical_nfa_.push_back(Rule());
         }
     }

@@ -1,12 +1,9 @@
-#include "automata/dfa.h"
+#include "J2VParser/automata/dfa.h"
 
-#include <map>
-#include <set>
-#include <cstdio>
 #include <iostream>
 #include <algorithm>
 #include <fstream>
-#include <vector>
+
 
 namespace compiler::automata {
     void DFA::Print() {

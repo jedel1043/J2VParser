@@ -1,14 +1,21 @@
 set(AppSources "")
+# Get list of all sources in folder
 # [[[cog
 #    import cog, glob
 #    for config in glob.glob('**/*.cpp', recursive=True):
-#       cog.outl("set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/%s)" % config.replace("\\", "/"))
+#       cog.outl("set(AppSources ${AppSources} %s)" % config.replace("\\", "/"))
 # ]]]
-set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/src/LALR_parser.cpp)
-set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/src/LL1_parser.cpp)
-set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/src/LR0_parser.cpp)
-set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/src/LR1_parser.cpp)
-set(AppSources ${AppSources} ${CMAKE_CURRENT_LIST_DIR}/src/SLR1_parser.cpp)
+set(AppSources ${AppSources} LALR_parser.cpp)
+set(AppSources ${AppSources} LL1_parser.cpp)
+set(AppSources ${AppSources} LR0_parser.cpp)
+set(AppSources ${AppSources} LR1_parser.cpp)
+set(AppSources ${AppSources} SLR1_parser.cpp)
 # [[[end]]]
-set_property(GLOBAL PROPERTY GlobalAppSources ${AppSources})
+
+foreach (SrcFile ${AppSources})
+    get_filename_component(AppName ${SrcFile} NAME_WE)
+    add_executable(${AppName} ${SrcFile})
+    target_compile_features(${AppName} PRIVATE cxx_std_17)
+    target_link_libraries(${AppName} PRIVATE J2VParser_lib)
+endforeach ()
 

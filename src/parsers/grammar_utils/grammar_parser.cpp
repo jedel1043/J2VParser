@@ -1,4 +1,5 @@
-#include "parsers/grammar_utils/grammar_parser.h"
+#include "J2VParser/parsers/grammar_utils/grammar_parser.h"
+#include "J2VParser/error.h"
 
 namespace compiler::grammar {
 

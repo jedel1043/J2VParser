@@ -1,3 +1,6 @@
-[submodule "googletest"]
-	path = googletest
+[submodule "extern/googletest"]
+	path = extern/googletest
 	url = git@github.com:google/googletest.git
+[submodule "extern/that_style"]
+	path = extern/that_style
+	url = git@github.com:jl-wynen/that_style.git

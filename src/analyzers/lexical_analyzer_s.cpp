@@ -1,11 +1,9 @@
-#include "analyzers/lexical_analyzer_s.h"
-
-#include <utility>
+#include "J2VParser/analyzers/lexical_analyzer_s.h"
 
 namespace compiler::analyzers {
 
-    LexicalAnalyzerS::LexicalAnalyzerS(std::string strInput, automata::DFA automata, bool skip_whitespace) :
-            LexicalAnalyzer(std::move(automata), skip_whitespace),
+    LexicalAnalyzerS::LexicalAnalyzerS(std::string strInput, automata::DFA automaton, bool skip_whitespace) :
+            LexicalAnalyzer(std::move(automaton), skip_whitespace),
             str_input_(std::move(strInput)) {
         str_pos_ = str_input_.begin();
     }
@@ -15,13 +13,13 @@ namespace compiler::analyzers {
         if (isInEnd())
             return current_token_ = {"$", "$"};
 
-        if(automata_.Compute(automata_.initial_state(), *str_pos_) == -1)
+        if (automaton_.Compute(automaton_.initial_state(), *str_pos_) == -1)
             return current_token_ = {"ANY", std::string(1, *str_pos_++)};
 
         std::string token_name;
         std::string lexeme;
 
-        int actual_state = automata_.initial_state();
+        int actual_state = automaton_.initial_state();
 
         while (actual_state != -1) {
             if (isInEnd())
@@ -29,9 +27,9 @@ namespace compiler::analyzers {
             SkipWS();
 
             lexeme += *str_pos_;
-            actual_state = automata_.Compute(actual_state, *str_pos_);
-            if (automata_.accepting_states().count(actual_state))
-                token_name = automata_.tokens().at(actual_state);
+            actual_state = automaton_.Compute(actual_state, *str_pos_);
+            if (automaton_.accepting_states().count(actual_state))
+                token_name = automaton_.tokens().at(actual_state);
             str_pos_++;
         }
         if (actual_state == -1) {

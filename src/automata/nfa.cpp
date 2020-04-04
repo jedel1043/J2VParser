@@ -1,4 +1,4 @@
-#include "automata/nfa.h"
+#include "J2VParser/automata/nfa.h"
 
 #include <algorithm>
 #include <stack>
@@ -250,12 +250,12 @@ namespace compiler::automata {
         return result;
     }
 
-    NFA NFA::Union(NFA union_automata) {
+    NFA NFA::Union(NFA union_automaton) {
         // New NFA
         NFA result;
         // New composite states_
         result.states_.insert(this->states_.begin(), this->states_.end());
-        result.states_.insert(union_automata.states_.begin(), union_automata.states_.end());
+        result.states_.insert(union_automaton.states_.begin(), union_automaton.states_.end());
         // New initial state
         result.initial_state_ = NFA::state_counter();
         // New accepting states_
@@ -266,16 +266,16 @@ namespace compiler::automata {
         result.states_.insert(new_final_state);
         // New transition function
         result.transitions_.insert(this->transitions_.begin(), this->transitions_.end());
-        result.transitions_.insert(union_automata.transitions_.begin(), union_automata.transitions_.end());
+        result.transitions_.insert(union_automaton.transitions_.begin(), union_automaton.transitions_.end());
         std::set<int> thompson_union;
         thompson_union.insert(this->initial_state_);
-        thompson_union.insert(union_automata.initial_state_);
+        thompson_union.insert(union_automaton.initial_state_);
         result.AddTransition(result.initial_state_, thompson_union, '\0');
         std::set<int> thompson_union2;
         thompson_union2.insert(new_final_state);
         for (int const state : this->accepting_states_)
             result.AddTransition(state, thompson_union2, '\0');
-        for (int const state : union_automata.accepting_states_)
+        for (int const state : union_automaton.accepting_states_)
             result.AddTransition(state, thompson_union2, '\0');
 
         return result;
@@ -417,34 +417,34 @@ namespace compiler::automata {
         return "";
     }
 
-    std::ostream &operator<<(std::ostream &ostream1, const NFA &obj) {
-        ostream1 << "------------------------\n";
-        ostream1 << "States: ";
+    std::ostream &operator<<(std::ostream &ostream, const NFA &obj) {
+        ostream << "------------------------\n";
+        ostream << "States: ";
         for (int const state : obj.states_)
-            ostream1 << state << ", ";
-        ostream1 << std::endl;
+            ostream << state << ", ";
+        ostream << std::endl;
 
-        ostream1 << "Transition function: \n";
+        ostream << "Transition function: \n";
         std::map<std::pair<int, char>, std::set<int >>::const_iterator
                 it;
         for (it = obj.transitions_.begin(); it != obj.transitions_.end(); ++it) {
             if (it->first.second == '\0')
-                ostream1 << "\t(" << it->first.first << ", ) => {";
+                ostream << "\t(" << it->first.first << ", ) => {";
             else
-                ostream1 << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
+                ostream << "\t(" << it->first.first << ", " << it->first.second << ") => { ";
             for (int const element : it->second)
-                ostream1 << element << ", ";
-            ostream1 << "}\n";
+                ostream << element << ", ";
+            ostream << "}\n";
         }
 
-        ostream1 << "Initial state: " << obj.initial_state_ << std::endl;
-        ostream1 << "Accepting states_: ";
+        ostream << "Initial state: " << obj.initial_state_ << std::endl;
+        ostream << "Accepting states_: ";
         for (int const element : obj.accepting_states_)
-            ostream1 << element << ", ";
-        ostream1 << "\n";
+            ostream << element << ", ";
+        ostream << "\n";
 
-        ostream1 << "------------------------\n";
+        ostream << "------------------------\n";
 
-        return ostream1;
+        return ostream;
     }
 } //namespace compiler::automata

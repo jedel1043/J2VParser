@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "J2VParser/buffer.h"
 
 #include <string>
 #include <iostream>
@@ -56,10 +56,10 @@ namespace compiler::io_buffer {
     }
 
 
-    void ListPrinterBuffer::PutLine() {
-        text[kMaxPrintLineLength] = '\0';
-        std::cout << text << std::endl;
-        text[0] = '\0';
-        ++line_counter_;
-    }
+//    void ListPrinterBuffer::PutLine() {
+//        text[kMaxPrintLineLength] = '\0';
+//        std::cout << text << std::endl;
+//        text[0] = '\0';
+//        ++line_counter_;
+//    }
 } //namespace compiler::io_buffer

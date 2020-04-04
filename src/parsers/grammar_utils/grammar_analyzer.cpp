@@ -1,6 +1,4 @@
-#include "parsers/grammar_utils/grammar_analyzer.h"
-
-#include "parsers/regex_utils/regex_scanner.h"
+#include "J2VParser/parsers/grammar_utils/grammar_analyzer.h"
 
 namespace compiler::grammar {
 

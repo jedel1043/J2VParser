@@ -1,12 +1,8 @@
 #include "J2VParser/parsers/LL1.h"
 
-namespace compiler::parsers {
+namespace J2VParser::parsers {
 
-    LL1::LL1(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer) :
-            LL1(grammar::GrammarParser(input_file), tokenizer) {}
-
-    LL1::LL1(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer) :
-            Parser(tokenizer, parser.ParseGrammar()) {
+    void LL1::CreateParsingTable() {
         auto terminals = grammar_.terminals();
         terminals.insert("$");
 

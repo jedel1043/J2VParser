@@ -1,11 +1,11 @@
-#include "J2VParser/parsers/grammar_utils/grammar_analyzer.h"
+#include "J2VParser/parsers/grammar/grammar_scanner.h"
 
-namespace compiler::grammar {
+namespace J2VParser::grammar {
 
-    GrammarAnalyzer::GrammarAnalyzer(io_buffer::TextSourceBuffer *input_file) :
-            LexicalAnalyzerF(input_file, CreateAutomaton()) {}
+    GrammarScanner::GrammarScanner(io_buffer::TextSourceBuffer &sourceBuffer) :
+            LexicalAnalyzerF(sourceBuffer, CreateAutomaton()) {}
 
-    automata::DFA GrammarAnalyzer::CreateAutomaton() {
+    automata::DFA GrammarScanner::CreateAutomaton() {
         //defines all variables for the creation of the characteristic dfa
         std::set<int> states = {1, 2, 3, 4, 5, 6, 7, 8};
         std::set<int> accepting_states = {2, 3, 4, 5, 6, 7, 8};

@@ -1,10 +1,10 @@
-#include "J2VParser/parsers/regex_utils/regex_scanner.h"
+#include "J2VParser/analyzers/regex/regex_scanner.h"
 
 #include <cctype>
 
-namespace compiler::regex {
+namespace J2VParser::regex {
 
-    RegexScanner::RegexScanner(io_buffer::TextSourceBuffer *buffer) :
+    RegexScanner::RegexScanner(io_buffer::TextSourceBuffer &buffer) :
             source_buffer_(buffer), in_quote_(false), escape_(false), current_token_({TokenCodeRegex::EOS, '\0'}) {
         int i;
         for (i = 0; i <= 31; i++) char_code_map_[i] = TokenCodeRegex::TOKEN_ERROR;
@@ -35,62 +35,62 @@ namespace compiler::regex {
     }
 
     void RegexScanner::SkipWhiteSpace() {
-        char c = source_buffer_->GetChar();
+        char c = source_buffer_.GetChar();
         while (isspace(c) && c != io_buffer::EOF_char)
-            c = source_buffer_->FetchChar();
+            c = source_buffer_.FetchChar();
     }
 
     RegexToken RegexScanner::GetNextToken() {
         char lexeme;
 
         if (current_token_ == TokenCodeRegex::EOS) {
-            if (in_quote_) SyntaxError(error::InvalidNewLine, getSourceBuffer()->GetLineData());
+            if (in_quote_) SyntaxError(error::InvalidNewLine, getSourceBuffer().GetLineData());
             SkipWhiteSpace();
-            if (source_buffer_->GetChar() == io_buffer::EOF_char) {
+            if (source_buffer_.GetChar() == io_buffer::EOF_char) {
                 current_token_ = {TokenCodeRegex::END_OF_INPUT, io_buffer::EOF_char};
                 return current_token_;
             }
         }
 
-        if (source_buffer_->GetChar() == '\0') {
+        if (source_buffer_.GetChar() == '\0') {
             current_token_ = {TokenCodeRegex::EOS, '\0'};
-            source_buffer_->FetchChar();
+            source_buffer_.FetchChar();
             return current_token_;
         }
 
-        if (source_buffer_->GetChar() == '"') {
+        if (source_buffer_.GetChar() == '"') {
             in_quote_ = !in_quote_;
-            if (source_buffer_->FetchChar() == io_buffer::EOF_char || source_buffer_->GetChar() == '\0') {
+            if (source_buffer_.FetchChar() == io_buffer::EOF_char || source_buffer_.GetChar() == '\0') {
                 current_token_ = {TokenCodeRegex::EOS, '\0'};
                 return current_token_;
             }
         }
 
-        escape_ = (source_buffer_->GetChar() == '\\');
-        if (escape_) source_buffer_->FetchChar();
-        if (source_buffer_->GetChar() == io_buffer::EOF_char || source_buffer_->GetChar() == '\0')
-            SyntaxError(error::InvalidNewLine, getSourceBuffer()->GetLineData());
+        escape_ = (source_buffer_.GetChar() == '\\');
+        if (escape_) source_buffer_.FetchChar();
+        if (source_buffer_.GetChar() == io_buffer::EOF_char || source_buffer_.GetChar() == '\0')
+            SyntaxError(error::InvalidNewLine, getSourceBuffer().GetLineData());
 
         if (!in_quote_) {
-            if (isspace(source_buffer_->GetChar())) {
+            if (isspace(source_buffer_.GetChar())) {
                 current_token_ = {TokenCodeRegex::EOS, '\0'};
                 return current_token_;
             }
-            lexeme = source_buffer_->GetChar();
+            lexeme = source_buffer_.GetChar();
         } else {
-            lexeme = source_buffer_->GetChar();
+            lexeme = source_buffer_.GetChar();
         }
         TokenCodeRegex newToken = (in_quote_ || escape_) ? TokenCodeRegex::L : char_code_map_[lexeme];
-        if ((!in_quote_ || !escape_) && isspace(source_buffer_->GetChar())) {
+        if ((!in_quote_ || !escape_) && isspace(source_buffer_.GetChar())) {
             SkipWhiteSpace();
             return GetNextToken();
         }
         current_token_ = {newToken, lexeme};
-        source_buffer_->FetchChar();
+        source_buffer_.FetchChar();
         return current_token_;
     }
 
-    io_buffer::TextSourceBuffer *RegexScanner::getSourceBuffer() const {
+    io_buffer::TextSourceBuffer &RegexScanner::getSourceBuffer() const {
         return source_buffer_;
     }
 }// namespace compiler::parsers::regex

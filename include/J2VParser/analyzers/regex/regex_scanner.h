@@ -10,7 +10,7 @@
 
 #include "J2VParser/buffer.h"
 
-namespace compiler::regex {
+namespace J2VParser::regex {
 
     enum class TokenCodeRegex {
         EOS = 1,          // END OF STRING
@@ -45,14 +45,14 @@ namespace compiler::regex {
 
     class RegexScanner {
     private:
-        io_buffer::TextSourceBuffer *source_buffer_;
+        io_buffer::TextSourceBuffer &source_buffer_;
         bool in_quote_;
         bool escape_;
         RegexToken current_token_;
         std::array<TokenCodeRegex, 128> char_code_map_{};
 
     public:
-        explicit RegexScanner(io_buffer::TextSourceBuffer *buffer);
+        explicit RegexScanner(io_buffer::TextSourceBuffer &buffer);
 
         RegexToken current_token() { return current_token_; }
 
@@ -60,7 +60,7 @@ namespace compiler::regex {
 
         virtual RegexToken GetNextToken();
 
-        [[nodiscard]] io_buffer::TextSourceBuffer *getSourceBuffer() const;
+        [[nodiscard]] io_buffer::TextSourceBuffer &getSourceBuffer() const;
 
     };
 }// namespace compiler::regex

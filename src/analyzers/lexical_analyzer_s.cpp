@@ -1,12 +1,18 @@
 #include "J2VParser/analyzers/lexical_analyzer_s.h"
 
-namespace compiler::analyzers {
+namespace J2VParser::analyzers {
 
-    LexicalAnalyzerS::LexicalAnalyzerS(std::string strInput, automata::DFA automaton, bool skip_whitespace) :
+    LexicalAnalyzerS::LexicalAnalyzerS(const std::string &str_input,
+                                       automata::DFA automaton,
+                                       bool skip_whitespace) :
             LexicalAnalyzer(std::move(automaton), skip_whitespace),
-            str_input_(std::move(strInput)) {
-        str_pos_ = str_input_.begin();
-    }
+            str_input_(str_input) { str_pos_ = str_input_.begin(); }
+
+    LexicalAnalyzerS::LexicalAnalyzerS(const std::string &str_input,
+                                       io_buffer::TextSourceBuffer &regex_f,
+                                       bool skip_whitespace) :
+            LexicalAnalyzer(regex_f, skip_whitespace),
+            str_input_(str_input) { str_pos_ = str_input_.begin(); }
 
     Token LexicalAnalyzerS::yylex() {
         SkipWS();
@@ -39,13 +45,8 @@ namespace compiler::analyzers {
         return current_token_ = {token_name, lexeme};
     }
 
-    bool LexicalAnalyzerS::isInEnd() {
+    bool LexicalAnalyzerS::isInEnd() const {
         return str_pos_ == str_input_.end();
-    }
-
-    void LexicalAnalyzerS::set_str_input(const std::string &new_str) {
-        str_input_ = new_str;
-        str_pos_ = str_input_.begin();
     }
 
     char LexicalAnalyzerS::SkipWS() {

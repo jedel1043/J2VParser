@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace compiler::error {
+namespace J2VParser::error {
 
     void AbortTranslation(AbortCode error_code) {
         std::cerr << "Fatal translation error: " << abort_msg[-error_code] << std::endl;

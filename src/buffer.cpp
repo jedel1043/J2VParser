@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-namespace compiler::io_buffer {
+namespace J2VParser::io_buffer {
 
     char EOF_char = 0x7F;
 

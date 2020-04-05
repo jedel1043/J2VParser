@@ -7,40 +7,25 @@
 #include <vector>
 #include <set>
 
-#include "parser.h"
-#include "conflict_man.h"
 #include "J2VParser/buffer.h"
 #include "J2VParser/analyzers/lexical_analyzer.h"
-#include "J2VParser/parsers/grammar_utils/grammar_parser.h"
-#include "LR0.h"
+#include "J2VParser/parsers/grammar/grammar_array.h"
+#include "J2VParser/parsers/grammar/grammar_parser.h"
+#include "J2VParser/parsers/conflict_man.h"
+#include "J2VParser/parsers/items.h"
+#include "J2VParser/parsers/botup_parser.h"
 
-namespace compiler::parsers {
-    class LR1 : public Parser<std::map<std::pair<int, std::string>, std::pair<char, int>>> {
+namespace J2VParser::parsers {
+
+    class LR1 : public BotUpParser<LR1Item> {
     public:
-        LR1(io_buffer::TextSourceBuffer *input_file, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar = true)
-                :
-                LR1(grammar::GrammarParser(input_file), tokenizer, augment_grammar) {}
+        LR1(const grammar::GrammarArray &grammar_array, analyzers::LexicalAnalyzer &lexical_array,
+            bool augment_grammar = true);
 
-        LR1(grammar::GrammarParser parser, analyzers::LexicalAnalyzer &tokenizer, bool augment_grammar = true);
-
-        bool Parse(bool verbose) override;
+        LR1(io_buffer::TextSourceBuffer &input_file, analyzers::LexicalAnalyzer &tokenizer,
+            bool augment_grammar = true);
 
     private:
-        struct Item {
-            LR0::Item lr0_item;
-            std::string token;
-
-            bool operator<(const Item& obj) const{
-                return lr0_item.GetFullString() + token < obj.lr0_item.GetFullString() + obj.token;
-            }
-
-
-        };
-
-        using ItemSet = std::set<Item>;
-        using cell = std::pair<char, int>;
-
-        int states_number_=0;
 
         ItemSet ItemsClosure(const Item &item_input, ItemSet &calculated);
 
@@ -49,8 +34,6 @@ namespace compiler::parsers {
         ItemSet goTo(const ItemSet &input_items, const std::string &input_symbol);
 
         void CreateParsingTable(const std::vector<std::tuple<std::string, ItemSet, ItemSet>> &states_function);
-
-        void PrintParsingTable() override;
 
         void PrintItemSet(const ItemSet &set);
 

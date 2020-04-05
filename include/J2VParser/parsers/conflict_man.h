@@ -1,7 +1,7 @@
 #ifndef J2VP_CONFLICT_MAN_H
 #define J2VP_CONFLICT_MAN_H
 
-namespace compiler::parsers {
+namespace J2VParser::parsers {
     enum class Conflict {
         kFirstFirstConflict,
         kFirstFollowConflict,

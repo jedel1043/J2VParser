@@ -5,7 +5,10 @@
 #include <set>
 #include <utility>
 
-namespace compiler::automata {
+
+namespace J2VParser::automata {
+    class NFA;
+
     class DFA {
     private:
         int size_;
@@ -19,6 +22,8 @@ namespace compiler::automata {
         std::set<int> InverseTransition(const std::set<int> &new_states, char input_char);
 
         int Compute(const std::string &string_input);
+
+        explicit DFA(NFA automaton);
 
         DFA(int size, std::set<char> alphabet, std::map<std::pair<int, char>, int> transitions,
             int initial_state, std::set<int> accepting_states, std::map<int, std::string> tokens) :

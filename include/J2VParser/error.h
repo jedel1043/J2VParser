@@ -12,7 +12,7 @@
 #include <array>
 #include <tuple>
 
-namespace compiler::error {
+namespace J2VParser::error {
 
 /*!
  * @brief Error codes available to throw with functions AbortTranslation() and SyntaxError().

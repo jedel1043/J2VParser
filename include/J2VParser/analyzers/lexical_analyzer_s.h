@@ -5,24 +5,25 @@
 #include <utility>
 
 #include "J2VParser/analyzers/lexical_analyzer.h"
-#include "J2VParser/automata/dfa.h"
+#include "J2VParser/analyzers/automata/dfa.h"
 
-namespace compiler::analyzers {
+namespace J2VParser::analyzers {
     class LexicalAnalyzerS : public LexicalAnalyzer {
     private:
-        std::string str_input_;
-        std::string::iterator str_pos_;
+        const std::string &str_input_;
+        std::string::const_iterator str_pos_;
     public:
-        LexicalAnalyzerS(std::string strInput, automata::DFA automaton, bool skip_whitespace = true);
+        LexicalAnalyzerS(const std::string &str_input,
+                         automata::DFA automaton,
+                         bool skip_whitespace = true);
 
-        explicit LexicalAnalyzerS(automata::DFA automaton, bool skip_whitespace = true) :
-                LexicalAnalyzer(std::move(automaton), skip_whitespace) {};
-
-        void set_str_input(const std::string &new_str);
+        LexicalAnalyzerS(const std::string &str_input,
+                         io_buffer::TextSourceBuffer &regex_f,
+                         bool skip_whitespace = true);
 
         Token yylex() override;
 
-        bool isInEnd() override;
+        [[nodiscard]] bool isInEnd() const override;
 
         char SkipWS() override;
 

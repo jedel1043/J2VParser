@@ -19,7 +19,7 @@
 
 #include "J2VParser/error.h"
 
-namespace compiler::io_buffer {
+namespace J2VParser::io_buffer {
     extern char EOF_char;  /*!< End-Of-File character. */
 
     const int kMaxBufferSize = 256; //!< Max number of characters in a line in the file input.

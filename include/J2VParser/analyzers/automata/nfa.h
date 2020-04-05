@@ -7,18 +7,18 @@
 #include <utility>
 #include <iostream>
 
-#include "J2VParser/automata/dfa.h"
+#include "J2VParser/analyzers/automata/dfa.h"
 
-namespace compiler::automata {
-
+namespace J2VParser::automata {
     class NFA {
     private:
         static int state_counter_;
         std::set<int> states_;
         int initial_state_;
-        std::map <std::pair<int, char>, std::set<int>> transitions_;
+        std::map<std::pair<int, char>, std::set<int>> transitions_;
         std::set<int> accepting_states_;
         std::map<int, std::string> accepting_values_;
+
         std::set<int> ComputeNextStates(int state, char symbol = '\0');
 
         std::set<int> CalculateEpsilonClosure(int state);
@@ -36,7 +36,12 @@ namespace compiler::automata {
         }
 
     public:
-        NFA(int size, int initial_state, const std::map <std::pair<int, char>, std::set<int>>& transitions, const std::set<int> &accepting_states);
+        NFA();
+
+        NFA(int size,
+            int initial_state,
+            const std::map<std::pair<int, char>, std::set<int>> &transitions,
+            const std::set<int> &accepting_states);
 
         bool ComputeString(const std::string &str);
 
@@ -62,13 +67,9 @@ namespace compiler::automata {
 
         NFA Optional();
 
-        virtual ~NFA();
-
         friend std::ostream &operator<<(std::ostream &ostream1, const NFA &obj);
 
         void AddAcceptingValue(const std::string &value);
-
-        NFA();
 
         std::string GetAcceptingValue(int state);
 

@@ -1,8 +1,8 @@
-#include "J2VParser/parsers/grammar_utils/grammar_array.h"
+#include "J2VParser/parsers/grammar/grammar_array.h"
 
 #include <algorithm>
 
-namespace compiler::grammar {
+namespace J2VParser::grammar {
 
     std::ostream &operator<<(std::ostream &ostream, const GrammarArray &obj) {
         ostream << "Axiom:\t" << obj.axiom_ << std::endl;
@@ -32,7 +32,7 @@ namespace compiler::grammar {
         return ostream;
     }
 
-    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index) {
+    std::set<std::vector<std::string>> GrammarArray::operator[](const std::string &index) const {
         return rules_array_.at(index);
     }
 
@@ -68,7 +68,7 @@ namespace compiler::grammar {
     }
 
     std::set<std::pair<std::string, std::vector<std::string>>>
-    GrammarArray::GetRightSides(const std::string &variable) {
+    GrammarArray::GetRightSides(const std::string &variable) const {
         std::set<std::pair<std::string, std::vector<std::string>>> left_vars;
         for (const auto &rules : rules_array_) {
             for (auto rule : rules.second) {
@@ -79,11 +79,11 @@ namespace compiler::grammar {
         return left_vars;
     }
 
-    std::set<std::vector<std::string>> GrammarArray::GetVariableRules(const std::string &variable) {
+    std::set<std::vector<std::string>> GrammarArray::GetVariableRules(const std::string &variable) const {
         return rules_array_.at(variable);
     }
 
-    bool GrammarArray::canGenerateEpsilon(const std::string &variable, std::set<std::string> &calculated) {
+    bool GrammarArray::canGenerateEpsilon(const std::string &variable, std::set<std::string> &calculated) const {
         if (calculated.count(variable))
             return false;
         calculated.insert(variable);
@@ -97,12 +97,12 @@ namespace compiler::grammar {
         return false;
     }
 
-    bool GrammarArray::canGenerateEpsilon(const std::string &variable) {
+    bool GrammarArray::canGenerateEpsilon(const std::string &variable) const {
         std::set<std::string> empty_set;
         return canGenerateEpsilon(variable, empty_set);
     }
 
-    std::set<std::string> GrammarArray::First(const std::vector<std::string> &expression_vector) {
+    std::set<std::string> GrammarArray::First(const std::vector<std::string> &expression_vector) const {
         std::set<std::string> calculated = {};
         std::string front_elem = expression_vector.front();
         if (terminals_.count(front_elem) || front_elem == "#")
@@ -119,7 +119,8 @@ namespace compiler::grammar {
         return first_result;
     }
 
-    std::set<std::string> GrammarArray::First(const std::string &expression, std::set<std::string> &calculated) {
+    std::set<std::string>
+    GrammarArray::First(const std::string &expression, std::set<std::string> &calculated) const {
         if (calculated.count(expression))
             return {};
         if (terminals_.count(expression) || expression == "#")
@@ -146,7 +147,8 @@ namespace compiler::grammar {
         return first_result;
     }
 
-    std::set<std::string> GrammarArray::Follow(const std::string &variable, std::set<std::string> &calculated) {
+    std::set<std::string>
+    GrammarArray::Follow(const std::string &variable, std::set<std::string> &calculated) const {
         if (calculated.count(variable))
             return {};
         std::set<std::string> follow_result;
@@ -174,7 +176,7 @@ namespace compiler::grammar {
         return follow_result;
     }
 
-    std::set<std::string> GrammarArray::Follow(const std::string &variable) {
+    std::set<std::string> GrammarArray::Follow(const std::string &variable) const {
         std::set<std::string> empty_set;
         return Follow(variable, empty_set);
     }
@@ -191,19 +193,15 @@ namespace compiler::grammar {
         return terminals_;
     }
 
-    int GrammarArray::GetRuleIndex(const std::string &variable, const std::vector<std::string> &rule) {
+    int GrammarArray::GetRuleIndex(const std::string &variable, const std::vector<std::string> &rule) const {
         return index_rule_[{variable, rule}];
-    }
-
-    std::pair<std::string, std::vector<std::string>> GrammarArray::GetRuleFromIndex(int index) {
-        return index_rule_[index];
     }
 
     std::pair<std::string, std::vector<std::string>> GrammarArray::GetRuleFromIndex(int index) const {
         return index_rule_[index];
     }
 
-    GrammarArray GrammarArray::GetAugmentedGrammar(std::string new_axiom) {
+    GrammarArray GrammarArray::GetAugmentedGrammar(std::string new_axiom) const {
         GrammarArray new_grammar = *this;
         if (new_axiom.empty())
             new_axiom = axiom_ + "_p";

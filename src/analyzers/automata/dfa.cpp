@@ -1,11 +1,12 @@
-#include "J2VParser/automata/dfa.h"
+#include "J2VParser/analyzers/automata/dfa.h"
 
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <J2VParser/analyzers/automata/nfa.h>
 
 
-namespace compiler::automata {
+namespace J2VParser::automata {
     void DFA::Print() {
         std::cout << "Tokens:" << std::endl;
         for (const auto &token : tokens_)
@@ -256,4 +257,6 @@ namespace compiler::automata {
         int result = Compute(str);
         return tokens_.count(result) ? tokens_[result] : "";
     }
+
+    DFA::DFA(NFA automaton) : DFA(automaton.ToDFA()) {}
 } //namespace compiler::automata

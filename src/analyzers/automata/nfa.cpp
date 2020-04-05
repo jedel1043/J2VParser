@@ -1,17 +1,15 @@
-#include "J2VParser/automata/nfa.h"
+#include "J2VParser/analyzers/automata/nfa.h"
 
 #include <algorithm>
 #include <stack>
 #include <cstring>
 #include <queue>
 
-namespace compiler::automata {
+namespace J2VParser::automata {
 
     int NFA::state_counter_ = 1;
 
     NFA::NFA() : initial_state_(-1) {}
-
-    NFA::~NFA() = default;
 
     std::set<char> NFA::alphabet() {
         std::map<std::pair<int, char>, std::set<int >>::iterator it;
@@ -231,7 +229,7 @@ namespace compiler::automata {
     NFA NFA::Concatenation(NFA concat_obj) {
         // New NFA
         NFA result;
-        // New composite states_
+        // New composite states
         result.states_.insert(this->states_.begin(), this->states_.end());
         result.states_.insert(concat_obj.states_.begin(), concat_obj.states_.end());
         // New initial state

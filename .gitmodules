@@ -1,6 +1,8 @@
 [submodule "extern/googletest"]
 	path = extern/googletest
 	url = git@github.com:google/googletest.git
+	ignore = dirty
 [submodule "extern/that_style"]
 	path = extern/that_style
 	url = git@github.com:jl-wynen/that_style.git
+	ignore = dirty

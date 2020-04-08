@@ -1,5 +1,5 @@
-#ifndef J2VP_CONFLICT_MAN_H
-#define J2VP_CONFLICT_MAN_H
+#ifndef J2VPARSER_CONFLICT_MAN_H
+#define J2VPARSER_CONFLICT_MAN_H
 
 namespace J2VParser::parsers {
     enum class Conflict {
@@ -10,4 +10,4 @@ namespace J2VParser::parsers {
     };
 } // namespace compiler::parsers
 
-#endif //J2VP_CONFLICT_MAN_H
+#endif //J2VPARSER_CONFLICT_MAN_H

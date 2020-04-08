@@ -3,9 +3,6 @@ project(J2VParser
         VERSION "0.1"
         DESCRIPTION "Some popular parser implementations"
         LANGUAGES CXX)
-#add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
-
-#include(GNUInstallDirs)
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -21,7 +18,7 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Note this needs to be done in the main CMakeLists
     # since it calls enable_testing, which must be in the
     # main CMakeLists.
-    message("Testing enabled.")
+    include(CTest)
     include(GoogleTest)
 
     # Docs only available if this is the main app
@@ -44,6 +41,11 @@ message("Cogging dir app")
 execute_process(COMMAND python -m cogapp -r CMakeLists.txt
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app)
 
+# Using cog lib to update files in tests folder
+message("Cogging dir tests")
+execute_process(COMMAND python -m cogapp -r CMakeLists.txt
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+
 # The compiled library code is here
 add_subdirectory(src)
 
@@ -54,38 +56,6 @@ add_subdirectory(app)
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
 if ((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
+    message("Testing enabled.")
     add_subdirectory(tests)
 endif ()
-
-
-#get_property(LibHeaders GLOBAL PROPERTY GlobalLibHeaders)
-#message("\nLibrary headers list:")
-#foreach (HeaderF ${LibHeaders})
-#    message("${HeaderF}")
-#endforeach ()
-
-#get_property(LibSources GLOBAL PROPERTY GlobalLibSources)
-#message("\nLibrary sources list:")
-#foreach (SourceF ${LibSources})
-#    message("${SourceF}")
-#endforeach ()
-
-#add_library(J2VParser ${LibSources} ${LibHeaders})
-#target_include_directories(J2VParser PRIVATE include)
-#
-#get_property(AppSources GLOBAL PROPERTY GlobalAppSources)
-#message("\nApp sources list:")
-#foreach (SrcFile ${AppSources})
-#    message("${SrcFile}")
-#    get_filename_component(AppName ${SrcFile} NAME_WE)
-#    add_executable(${AppName} ${SrcFile})
-#    target_include_directories(${AppName} PRIVATE include)
-#    target_link_libraries(${AppName} J2VParser)
-#endforeach()
-#
-#
-#if(${PROJECT_NAME} STREQUAL ${CMAKE_PROJECT_NAME})
-#    option(PackageTests "Build the tests" ON)
-#else()
-#    option(PackageTests "Build the tests" OFF)
-#endif()

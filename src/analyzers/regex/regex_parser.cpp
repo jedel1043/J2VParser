@@ -38,7 +38,7 @@ namespace J2VParser::regex {
 
             if (regex_scanner.current_token() == TokenCodeRegex::AT_BOL) {
                 regex_scanner.GetNextToken();
-                new_automaton = automata::NFA::CreateSimpleNFA('\n');
+                new_automaton = automata::NFA('\n');
                 Expr(regex_scanner, new_automaton);
             } else {
                 Expr(regex_scanner, new_automaton);
@@ -49,7 +49,7 @@ namespace J2VParser::regex {
                 std::set<char> labels;
                 labels.insert('\n');
                 labels.insert('\r');
-                new_automaton.Concatenation(automata::NFA::CreateSimpleNFA(labels));
+                new_automaton = new_automaton.Concat(automata::NFA(labels));
             }
 
             regex_scanner.GetNextToken();
@@ -80,20 +80,20 @@ namespace J2VParser::regex {
                 Factor(regex_scanner, automaton);
             while (isConcatenable(regex_scanner, regex_scanner.current_token())) {
                 Factor(regex_scanner, new_automaton);
-                automaton = automaton.Concatenation(new_automaton);
+                automaton = automaton.Concat(new_automaton);
             }
         }
 
         void Factor(RegexScanner &regex_scanner, automata::NFA &automaton) {
             Term(regex_scanner, automaton);
             if (regex_scanner.current_token() == TokenCodeRegex::CLOSURE) {
-                automaton = automaton.KleeneClosure();
+                automaton = automaton.KleeneClose();
                 regex_scanner.GetNextToken();
             } else if (regex_scanner.current_token() == TokenCodeRegex::PLUS_CLOSURE) {
-                automaton = automaton.PlusClosure();
+                automaton = automaton.PlusClose();
                 regex_scanner.GetNextToken();
             } else if (regex_scanner.current_token() == TokenCodeRegex::OPTIONAL) {
-                automaton = automaton.Optional();
+                automaton = automaton.Optionalize();
                 regex_scanner.GetNextToken();
             }
         }
@@ -110,11 +110,11 @@ namespace J2VParser::regex {
             } else {
                 if (regex_scanner.current_token() != TokenCodeRegex::ANY &&
                     regex_scanner.current_token() != TokenCodeRegex::CCL_START) {
-                    automaton = automata::NFA::CreateSimpleNFA(regex_scanner.current_token().lexeme);
+                    automaton = automata::NFA(regex_scanner.current_token().lexeme);
                     regex_scanner.GetNextToken();
                 } else {
                     if (regex_scanner.current_token() == TokenCodeRegex::ANY) {
-                        automaton = automata::NFA::CreateSimpleNFA(charset);
+                        automaton = automata::NFA(charset);
                     } else {
                         std::set<char> cs;
                         if (regex_scanner.GetNextToken() == TokenCodeRegex::AT_BOL) {
@@ -133,9 +133,9 @@ namespace J2VParser::regex {
                                 if (!cs.count((char) i))
                                     ccs.insert((char) i);
                             }
-                            automaton = automata::NFA::CreateSimpleNFA(ccs);
+                            automaton = automata::NFA(ccs);
                         } else {
-                            automaton = automata::NFA::CreateSimpleNFA(cs);
+                            automaton = automata::NFA(cs);
                         }
                     }
                     regex_scanner.GetNextToken();
@@ -183,17 +183,17 @@ namespace J2VParser::regex {
         }
     } // anonymous namespace
 
-    std::vector<automata::NFA> ParseRegex(io_buffer::TextSourceBuffer &source_buffer) {
+    automata::DFA ParseRegex(io_buffer::TextSourceBuffer &source_buffer) {
         RegexScanner scanner(source_buffer);
         return ParseRegex(scanner);
     }
 
-    std::vector<automata::NFA> ParseRegex(RegexScanner &regex_scanner) {
+    automata::DFA ParseRegex(RegexScanner &regex_scanner) {
         if (charset.empty())
             for (char i = ' '; i <= '}'; i++) charset.insert(i);
         std::vector<automata::NFA> lexical_nfa;
         Machine(regex_scanner, lexical_nfa);
-        return lexical_nfa;
+        return automata::NFA::CalculateLexicalUnion(lexical_nfa).ToDFA().Minimize();
     }
 
 } //namespace compiler::regex

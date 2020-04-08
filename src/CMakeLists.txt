@@ -14,6 +14,7 @@ set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/error.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/lexical_analyzer.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/lexical_analyzer_f.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/lexical_analyzer_s.h)
+set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/automata/automaton.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/automata/dfa.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/automata/nfa.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/analyzers/regex/regex_parser.h)
@@ -30,6 +31,8 @@ set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/parsers/SLR
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/parsers/grammar/grammar_array.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/parsers/grammar/grammar_parser.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/parsers/grammar/grammar_scanner.h)
+set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/utils/bimap.h)
+set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/utils/utils.h)
 # [[[end]]]
 
 set(SourceList "")

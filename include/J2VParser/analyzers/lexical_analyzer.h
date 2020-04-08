@@ -1,5 +1,5 @@
-#ifndef J2VP_LEXICAL_ANALYZER_H
-#define J2VP_LEXICAL_ANALYZER_H
+#ifndef J2VPARSER_LEXICAL_ANALYZER_H
+#define J2VPARSER_LEXICAL_ANALYZER_H
 
 #include <string>
 #include <utility>
@@ -32,7 +32,7 @@ namespace J2VParser::analyzers {
                 skip_whitespace_(skip_whitespace) {};
 
         LexicalAnalyzer(io_buffer::TextSourceBuffer &regex_f, bool skip_whitespace) :
-                automaton_(automata::NFA::CalculateLexicalUnion(regex::ParseRegex(regex_f)).ToDFA()),
+                automaton_(regex::ParseRegex(regex_f)),
                 skip_whitespace_(skip_whitespace) {};
 
         virtual Token yylex() = 0;
@@ -46,4 +46,4 @@ namespace J2VParser::analyzers {
 } //namespace compiler::analyzers
 
 
-#endif //J2VP_LEXICAL_ANALYZER_H
+#endif //J2VPARSER_LEXICAL_ANALYZER_H

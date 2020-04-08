@@ -1,5 +1,5 @@
-#ifndef COMPILER_LR0_H
-#define COMPILER_LR0_H
+#ifndef J2VPARSER_LR0_H
+#define J2VPARSER_LR0_H
 
 #include <string>
 #include <utility>
@@ -41,4 +41,4 @@ namespace J2VParser::parsers {
 
 } // namespace const compiler::parsers
 
-#endif //COMPILER_LR0_H
+#endif //J2VPARSER_LR0_H

@@ -1,5 +1,5 @@
-#ifndef J2VP_LALR_H
-#define J2VP_LALR_H
+#ifndef J2VPARSER_LALR_H
+#define J2VPARSER_LALR_H
 
 #include <string>
 #include <utility>
@@ -44,4 +44,4 @@ namespace J2VParser::parsers {
     };
 }
 
-#endif //J2VP_LALR_H
+#endif //J2VPARSER_LALR_H

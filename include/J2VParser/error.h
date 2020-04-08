@@ -5,8 +5,8 @@
  * grammar_parser.
  */
 
-#ifndef J2VP_ERROR_H
-#define J2VP_ERROR_H
+#ifndef J2VPARSER_ERROR_H
+#define J2VPARSER_ERROR_H
 
 #include <string>
 #include <array>
@@ -84,4 +84,4 @@ namespace J2VParser::error {
     void SyntaxError(AbortCode syntax_error_code, std::tuple<std::string, int, int> vals);
 
 } //namespace compiler::error
-#endif //J2VP_ERROR_H
+#endif //J2VPARSER_ERROR_H

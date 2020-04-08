@@ -1,5 +1,5 @@
-#ifndef J2VP_GRAMMAR_ANALYZER_H
-#define J2VP_GRAMMAR_ANALYZER_H
+#ifndef J2VPARSER_GRAMMAR_ANALYZER_H
+#define J2VPARSER_GRAMMAR_ANALYZER_H
 
 #include "J2VParser/analyzers/lexical_analyzer_f.h"
 #include "J2VParser/analyzers/automata/nfa.h"
@@ -15,4 +15,4 @@ namespace J2VParser::grammar {
     };
 } // namespace compiler::grammar
 
-#endif //J2VP_GRAMMAR_ANALYZER_H
+#endif //J2VPARSER_GRAMMAR_ANALYZER_H

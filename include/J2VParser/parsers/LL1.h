@@ -1,5 +1,5 @@
-#ifndef J2VP_LL1_H
-#define J2VP_LL1_H
+#ifndef J2VPARSER_LL1_H
+#define J2VPARSER_LL1_H
 
 #include <string>
 #include <utility>
@@ -15,8 +15,10 @@
 
 namespace J2VParser::parsers {
 
-    class LL1 : public Parser<std::map<std::pair<std::string, std::string>, int>> {
+    class LL1 : public Parser {
     private:
+        std::map<std::pair<std::string, std::string>, int> function_;
+
         void CreateParsingTable();
 
         void PrintParsingTable() override;
@@ -35,4 +37,4 @@ namespace J2VParser::parsers {
         bool Parse(bool verbose) override;
     };
 } // namespace compiler::parsers
-#endif //J2VP_LL1_H
+#endif //J2VPARSER_LL1_H

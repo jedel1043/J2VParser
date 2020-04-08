@@ -19,7 +19,7 @@ namespace J2VParser::analyzers {
         if (isInEnd())
             return current_token_ = {"$", "$"};
 
-        if (automaton_.Compute(automaton_.initial_state(), *str_pos_) == -1)
+        if (automaton_.at({automaton_.initial_state(), *str_pos_}) == -1)
             return current_token_ = {"ANY", std::string(1, *str_pos_++)};
 
         std::string token_name;
@@ -33,7 +33,7 @@ namespace J2VParser::analyzers {
             SkipWS();
 
             lexeme += *str_pos_;
-            actual_state = automaton_.Compute(actual_state, *str_pos_);
+            actual_state = automaton_.at({actual_state, *str_pos_});
             if (automaton_.accepting_states().count(actual_state))
                 token_name = automaton_.tokens().at(actual_state);
             str_pos_++;

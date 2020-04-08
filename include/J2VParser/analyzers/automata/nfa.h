@@ -1,6 +1,7 @@
-#ifndef J2VP_NFA_H
-#define J2VP_NFA_H
+#ifndef J2VPARSER_NFA_H
+#define J2VPARSER_NFA_H
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <set>
@@ -8,75 +9,74 @@
 #include <iostream>
 
 #include "J2VParser/analyzers/automata/dfa.h"
+#include "J2VParser/analyzers/automata/automaton.h"
 
 namespace J2VParser::automata {
-    class NFA {
-    private:
-        static int state_counter_;
-        std::set<int> states_;
-        int initial_state_;
-        std::map<std::pair<int, char>, std::set<int>> transitions_;
-        std::set<int> accepting_states_;
-        std::map<int, std::string> accepting_values_;
-
-        std::set<int> ComputeNextStates(int state, char symbol = '\0');
-
-        std::set<int> CalculateEpsilonClosure(int state);
-
-        std::set<int> CalculateEpsilonClosure(const std::set<int> &states_set);
-
-        std::set<int> Compute(const std::set<int> &states_set, char *string);
-
-        void AddTransition(int from, const std::set<int> &to, char symbol);
-
-        static int state_counter() {
-            int number = NFA::state_counter_;
-            NFA::state_counter_++;
-            return number;
-        }
-
+    class NFA : public Automaton {
     public:
-        NFA();
 
-        NFA(int size,
-            int initial_state,
-            const std::map<std::pair<int, char>, std::set<int>> &transitions,
-            const std::set<int> &accepting_states);
+        NFA() = default;
 
-        bool ComputeString(const std::string &str);
+        explicit NFA(Symbol c);
 
-        std::set<char> alphabet();
+        explicit NFA(Symbol c_begin, Symbol c_end);
 
-        DFA ToDFA();
+        explicit NFA(const std::string &input_str);
 
-        static NFA CreateSimpleNFA(char c);
-
-        static NFA CreateSimpleNFA(char from, char to);
-
-        static NFA CreateSimpleNFA(const std::set<char> &chars);
-
-        static NFA CalculateLexicalUnion(const std::vector <NFA> &union_set);
-
-        NFA Concatenation(NFA concat_obj);
-
-        NFA Union(NFA union_automaton);
-
-        NFA KleeneClosure();
-
-        NFA PlusClosure();
-
-        NFA Optional();
-
-        friend std::ostream &operator<<(std::ostream &ostream1, const NFA &obj);
+        explicit NFA(const SymbolSet &charset);
 
         void AddAcceptingValue(const std::string &value);
 
-        std::string GetAcceptingValue(int state);
+        [[nodiscard]] DFA ToDFA() const;
 
-        std::string LexicalAccept(char *str, std::string &token, std::string &lexeme, std::string &str_result);
+        [[nodiscard]] NFA Concat(const NFA &nfa_in) const;
+
+        [[nodiscard]] NFA Union(const NFA &nfa_in) const;
+
+        [[nodiscard]] NFA KleeneClose() const;
+
+        [[nodiscard]] NFA PlusClose() const;
+
+        [[nodiscard]] NFA Optionalize() const;
+
+        [[nodiscard]] StateSet at(Transition input_tran) const;
+
+        [[nodiscard]] StateSet at(const StateSet &states_set, Symbol symbol) const;
+
+        [[nodiscard]] StateSet ComputeString(const std::string &str) const;
+
+        [[nodiscard]] bool AcceptsString(const std::string &str) const override;
+
+        [[nodiscard]] Token Tokenize(const std::string &str) const override;
+
+        [[nodiscard]] SymbolSet alphabet() const;
+
+        [[nodiscard]] std::string GetAcceptingValue(State state) const;
+
+        static NFA CalculateLexicalUnion(const std::vector<NFA> &union_set);
+
+    private:
+        std::map<Transition, StateSet> transitions_;
+
+        NFA(StateSet states, State initial_state,
+            std::map<Transition, StateSet> transitions, StateSet accepting_states) :
+                Automaton(std::move(states), initial_state, std::move(accepting_states)),
+                transitions_(std::move(transitions)) {};
+
+        NFA(StateSet states, State initial_state, std::map<Transition, StateSet> transitions,
+            StateSet accepting_states, std::map<State, Token> tokens) :
+                Automaton(std::move(states), initial_state, std::move(accepting_states), std::move(tokens)),
+                transitions_(std::move(transitions)) {};
+
+        [[nodiscard]] StateSet CalculateEpsilonClosure(State state) const;
+
+        [[nodiscard]] StateSet CalculateEpsilonClosure(const StateSet &states_set) const;
+
+        [[nodiscard]] NFA ShiftStates(State shift_len) const;
+
+        void print(std::ostream &ostream) const override;
+
     };
 
-    std::ostream &operator<<(std::ostream &ostream, const NFA &obj);
-
 }// namespace compiler::automata
-#endif //J2VP_NFA_H
+#endif //J2VPARSER_NFA_H

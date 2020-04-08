@@ -1,70 +1,44 @@
-#ifndef J2VP_DFA_H
-#define J2VP_DFA_H
+#ifndef J2VPARSER_DFA_H
+#define J2VPARSER_DFA_H
 
 #include <map>
 #include <set>
 #include <utility>
 
+#include "J2VParser/analyzers/automata/automaton.h"
+
 
 namespace J2VParser::automata {
-    class NFA;
 
-    class DFA {
-    private:
-        int size_;
-        std::set<int> states_;
-        std::set<char> alphabet_;
-        std::map<std::pair<int, char>, int> transitions_;
-        int initial_state_;
-        std::set<int> accepting_states_;
-        std::map<int, std::string> tokens_;
+    class DFA : public Automaton {
     public:
-        std::set<int> InverseTransition(const std::set<int> &new_states, char input_char);
+        inline static int kColWPrint = 9;
 
-        int Compute(const std::string &string_input);
+        DFA(StateSet states, SymbolSet alphabet, std::map<Transition, State> transitions,
+            State initial_state, StateSet accepting_states, std::map<State, std::string> tokens) :
+                Automaton(std::move(states), initial_state,
+                          std::move(accepting_states), std::move(tokens)),
+                alphabet_(std::move(alphabet)), transitions_(std::move(transitions)) {}
 
-        explicit DFA(NFA automaton);
+        [[nodiscard]] State at(Transition input_tran) const;
 
-        DFA(int size, std::set<char> alphabet, std::map<std::pair<int, char>, int> transitions,
-            int initial_state, std::set<int> accepting_states, std::map<int, std::string> tokens) :
-                size_(size),
-                alphabet_(std::move(alphabet)),
-                transitions_(std::move(transitions)),
-                initial_state_(initial_state),
-                accepting_states_(std::move(accepting_states)),
-                tokens_(std::move(tokens)) {
-            for (int j = 1; j <= size; j++)
-                states_.insert(j);
-        }
+        [[nodiscard]] State ComputeString(const std::string &str) const;
 
-        DFA(std::set<int> states, std::set<char> alphabet, std::map<std::pair<int, char>, int> transitions,
-            int initial_state, std::set<int> accepting_states, std::map<int, std::string> tokens) :
-                states_(std::move(states)),
-                alphabet_(std::move(alphabet)),
-                transitions_(std::move(transitions)),
-                initial_state_(initial_state),
-                accepting_states_(std::move(accepting_states)),
-                tokens_(std::move(tokens)),
-                size_(states.size()) {
-        }
+        [[nodiscard]] Token Tokenize(const std::string &str) const override;
 
-        void Print();
+        [[nodiscard]] bool AcceptsString(const std::string &str) const override;
 
-        void PrintToFile(const std::string &filename);
+        DFA Minimize() const;
 
-        DFA Minimize();
+    private:
+        SymbolSet alphabet_;
+        std::map<Transition, State> transitions_;
 
-        std::string ComputeString(const std::string &str);
+        StateSet InverseTransition(const StateSet &input_sts, Symbol input_sym) const;
 
-        const std::set<int> &accepting_states();
-
-        const std::map<int, std::string> &tokens();
-
-        int initial_state();
-
-        int Compute(int state, char c);
+        void print(std::ostream &ostream) const override;
     };
 
-} //nampespace compiler::automata
+} //namespace compiler::automata
 
-#endif //J2VP_DFA_H
+#endif //J2VPARSER_DFA_H

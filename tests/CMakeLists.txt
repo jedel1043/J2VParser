@@ -10,17 +10,33 @@ mark_as_advanced(
 
 # Macro definition for testing J2VP libraries
 macro(package_add_test TestName)
-    # create an exectuable in which the tests will be stored
+    # create an executable in which the tests will be stored
     add_executable(${TestName} ${ARGN})
     # link the Google test infrastructure, mocking library, and a default main fuction to
     # the test executable.  Remove g_test_main if writing your own main function.
-    target_link_libraries(${TestName} gtest gmock gtest_main J2VParser)
+    target_link_libraries(${TestName} gtest gmock gtest_main J2VParser_lib)
     # gtest_discover_tests replaces gtest_add_tests,
     # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it
     gtest_discover_tests(${TestName}
-            # set a working directory so your project root so that you can find test data via paths relative to the project root
-            WORKING_DIRECTORY ${PROJECT_DIR}
-            PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_DIR}"
+            # set a working directory to your project root so that you can find test data via paths relative to the project root
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+            PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
             )
     set_target_properties(${TestName} PROPERTIES FOLDER tests)
 endmacro()
+
+#set(TestSources "")
+## Get list of all sources in folder
+## [[[cog
+##    import cog, glob
+##    for config in glob.glob('**/*.cpp', recursive=True):
+##       cog.outl("set(TestSources ${TestSources} %s)" % config.replace("\\", "/"))
+## ]]]
+set(TestSources ${TestSources} test_automata.cpp)
+## [[[end]]]
+package_add_test(TestNFA test_automata.cpp)
+
+#message(${TestSources})
+#foreach (TestFile ${TestSources})
+#    package_add_test(${TestFile})
+#endforeach ()

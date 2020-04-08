@@ -1,5 +1,5 @@
-#ifndef J2VP_LEXICAL_ANALYZER_F_H
-#define J2VP_LEXICAL_ANALYZER_F_H
+#ifndef J2VPARSER_LEXICAL_ANALYZER_F_H
+#define J2VPARSER_LEXICAL_ANALYZER_F_H
 
 #include "J2VParser/buffer.h"
 #include "J2VParser/analyzers/lexical_analyzer.h"
@@ -32,4 +32,4 @@ namespace J2VParser::analyzers {
 } //namespace compiler::analyzers
 
 
-#endif //J2VP_LEXICAL_ANALYZER_F_H
+#endif //J2VPARSER_LEXICAL_ANALYZER_F_H

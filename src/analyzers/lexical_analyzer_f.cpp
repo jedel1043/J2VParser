@@ -17,7 +17,7 @@ namespace J2VParser::analyzers {
         if (isInEnd())
             return current_token_ = {"$", "$"};
 
-        if (automaton_.Compute(automaton_.initial_state(), c) == -1) {
+        if (automaton_.at({automaton_.initial_state(), c}) == -1) {
             input_file_.FetchChar();
             return current_token_ = {"ANY", std::string(1, c)};
         }
@@ -29,7 +29,7 @@ namespace J2VParser::analyzers {
             if (isInEnd() || isEOS(c))
                 break;
             lexeme += c;
-            actual_state = automaton_.Compute(actual_state, c);
+            actual_state = automaton_.at({actual_state, c});
             if (automaton_.accepting_states().count(actual_state))
                 token_name = automaton_.tokens().at(actual_state);
             c = input_file_.FetchChar();

@@ -1,5 +1,5 @@
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef J2VPARSER_PARSER_H
+#define J2VPARSER_PARSER_H
 
 #include <utility>
 #include <set>
@@ -11,9 +11,9 @@
 
 namespace J2VParser::regex {
 
-    std::vector<automata::NFA> ParseRegex(io_buffer::TextSourceBuffer &source_buffer);
+    automata::DFA ParseRegex(io_buffer::TextSourceBuffer &source_buffer);
 
-    std::vector<automata::NFA> ParseRegex(RegexScanner &regex_scanner);
+    automata::DFA ParseRegex(RegexScanner &regex_scanner);
 } // namespace compiler::regex
 
-#endif
+#endif // J2VPARSER_PARSER_H

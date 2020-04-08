@@ -1,5 +1,5 @@
-#ifndef J2VP_PARSER_H
-#define J2VP_PARSER_H
+#ifndef J2VPARSER_PAR_H
+#define J2VPARSER_PAR_H
 
 #include <utility>
 
@@ -11,10 +11,8 @@
 #include "J2VParser/parsers/grammar/grammar_array.h"
 
 namespace J2VParser::parsers {
-    template<typename T>
     class Parser {
     protected:
-        T function_;
         grammar::GrammarArray grammar_;
         analyzers::LexicalAnalyzer &tokenizer_;
         int number_of_conflicts_ = 0;
@@ -32,4 +30,4 @@ namespace J2VParser::parsers {
         virtual void PrintParsingTable() = 0;
     };
 } // namespace compiler::parsers
-#endif //J2VP_PARSER_H
+#endif //J2VPARSER_PAR_H

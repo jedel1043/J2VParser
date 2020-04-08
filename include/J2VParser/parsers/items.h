@@ -1,5 +1,5 @@
-#ifndef J2VP_ITEMS_H
-#define J2VP_ITEMS_H
+#ifndef J2VPARSER_ITEMS_H
+#define J2VPARSER_ITEMS_H
 
 #include <string>
 #include <vector>
@@ -44,4 +44,4 @@ namespace J2VParser::parsers {
 
     std::ostream &operator<<(std::ostream &ostream, const LR1Item &obj);
 } // namespace J2VParser::parsers
-#endif //J2VP_ITEMS_H
+#endif //J2VPARSER_ITEMS_H

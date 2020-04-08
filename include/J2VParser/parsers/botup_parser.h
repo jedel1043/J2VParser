@@ -1,5 +1,5 @@
-#ifndef J2VP_BOTUP_PARSER_H
-#define J2VP_BOTUP_PARSER_H
+#ifndef J2VPARSER_BOTUP_PARSER_H
+#define J2VPARSER_BOTUP_PARSER_H
 
 #include "J2VParser/buffer.h"
 #include "J2VParser/parsers/parser.h"
@@ -11,11 +11,13 @@
 
 namespace J2VParser::parsers {
     template<typename U>
-    class BotUpParser : public Parser<std::map<std::pair<int, std::string>, std::pair<char, int>>> {
+    class BotUpParser : public Parser {
     protected:
         using cell = std::pair<char, int>;
         using Item = U;
         using ItemSet = std::set<Item>;
+
+        std::map<std::pair<int, std::string>, std::pair<char, int>> function_;
         int states_number_ = 0;
 
     public:
@@ -193,4 +195,4 @@ namespace J2VParser::parsers {
         }
     };
 } // namespace J2VParser::parsers
-#endif //J2VP_BOTUP_PARSER_H
+#endif //J2VPARSER_BOTUP_PARSER_H

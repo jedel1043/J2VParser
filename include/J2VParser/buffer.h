@@ -9,8 +9,8 @@
 * @date         2019/09/16 22:40:00
 */
 
-#ifndef J2VP_BUFFER_H
-#define J2VP_BUFFER_H
+#ifndef J2VPARSER_BUFFER_H
+#define J2VPARSER_BUFFER_H
 
 #include <fstream>
 #include <array>
@@ -134,4 +134,4 @@ namespace J2VParser::io_buffer {
 //
 //        extern ListPrinterBuffer list;
 } //namespace compiler
-#endif //J2VP_BUFFER_H
+#endif //J2VPARSER_BUFFER_H

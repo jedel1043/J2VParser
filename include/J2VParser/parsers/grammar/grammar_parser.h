@@ -1,5 +1,5 @@
-#ifndef J2VP_GRAMMAR_PARSER_H
-#define J2VP_GRAMMAR_PARSER_H
+#ifndef J2VPARSER_GRAMMAR_PARSER_H
+#define J2VPARSER_GRAMMAR_PARSER_H
 
 #include <string>
 
@@ -13,4 +13,4 @@ namespace J2VParser::grammar {
     GrammarArray ParseGrammar(GrammarScanner &grammarAnalyzer);
 } // namespace compiler::grammar
 
-#endif //J2VP_GRAMMAR_PARSER_H
+#endif //J2VPARSER_GRAMMAR_PARSER_H

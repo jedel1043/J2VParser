@@ -25,18 +25,23 @@ macro(package_add_test TestName)
     set_target_properties(${TestName} PROPERTIES FOLDER tests)
 endmacro()
 
-#set(TestSources "")
-## Get list of all sources in folder
-## [[[cog
-##    import cog, glob
-##    for config in glob.glob('**/*.cpp', recursive=True):
-##       cog.outl("set(TestSources ${TestSources} %s)" % config.replace("\\", "/"))
-## ]]]
+set(TestSources "")
+# Get list of all sources in folder
+# [[[cog
+#    import cog, glob, os
+#    for config in glob.glob('**/*.cpp', recursive=True):
+#       if os.name == 'nt':
+#           cog.outl("set(TestSources ${TestSources} %s)" % config.replace("\\", "/"))
+#       else:
+#           cog.outl("set(TestSources ${TestSources} %s)" % config)
+# ]]]
 set(TestSources ${TestSources} test_automata.cpp)
+set(TestSources ${TestSources} test_regex.cpp)
 ## [[[end]]]
-package_add_test(TestNFA test_automata.cpp)
 
-#message(${TestSources})
-#foreach (TestFile ${TestSources})
-#    package_add_test(${TestFile})
-#endforeach ()
+#package_add_test(TestAutomata test_automata.cpp)
+
+foreach (TestFile ${TestSources})
+    get_filename_component(TestName ${TestFile} NAME_WE)
+    package_add_test(${TestName} ${TestFile})
+endforeach ()

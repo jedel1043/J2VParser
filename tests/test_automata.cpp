@@ -54,9 +54,7 @@ namespace J2VParser::automata {
     class AutomataTest : public ::testing::Test {
     protected:
         AutomataTest() : tokenizer_tester(CreateTokenizer()),
-                         tokenizer_dtester(tokenizer_tester.ToDFA()),
-                         valid_strs({"ad", "fg!", "bdeee!", "fgfgfg"}),
-                         invalid_strs({"", "abd", "fg!!", "bddeee!", "fgfgf"}) {}
+                         tokenizer_dtester(tokenizer_tester.ToDFA()) {}
 
         NFA CreateTokenizer() {
             /*  Begin block automata initialization for tokenization */
@@ -101,8 +99,6 @@ namespace J2VParser::automata {
         NFA plus;
         const NFA tokenizer_tester;
         const DFA tokenizer_dtester;
-        const std::set<std::string> valid_strs;
-        const std::set<std::string> invalid_strs;
     };
 
 
@@ -120,6 +116,8 @@ namespace J2VParser::automata {
                 ).Concat(
                         automata::NFA('!').Optionalize()
                 );
+        const std::set<std::string> valid_strs = {"ad", "fg!", "bdeee!", "fgfgfg"};
+        const std::set<std::string> invalid_strs = {"", "abd", "fg!!", "bddeee!", "fgfgf"};
 
         const DFA custom_dtester = custom_tester.ToDFA();
 

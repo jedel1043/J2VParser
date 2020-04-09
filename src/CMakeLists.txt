@@ -5,9 +5,12 @@
 set(HeaderList "")
 # Get list of all headers in include/J2VParser
 # [[[cog
-#    import cog, glob
+#    import cog, glob, os
 #    for config in glob.glob('../include/J2VParser/**/*.h', recursive=True):
-#       cog.outl("set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}%s)" % config.replace("\\", "/").replace("..", ""))
+#       if os.name == 'nt':
+#           cog.outl("set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}%s)" % config.replace("\\", "/").replace("..", ""))
+#       else:
+#           cog.outl("set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}%s)" % config)
 # ]]]
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/buffer.h)
 set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/error.h)
@@ -38,9 +41,12 @@ set(HeaderList ${HeaderList} ${PROJECT_SOURCE_DIR}/include/J2VParser/utils/utils
 set(SourceList "")
 # Get list of all sources in folder
 # [[[cog
-#    import cog, glob
+#    import cog, glob, os
 #    for config in glob.glob('**/*.cpp', recursive=True):
-#       cog.outl("set(SourceList ${SourceList} %s)" % config.replace("\\", "/"))
+#       if os.name == 'nt':
+#           cog.outl("set(SourceList ${SourceList} %s)" % config.replace("\\", "/"))
+#       else:
+#           cog.outl("set(SourceList ${SourceList} %s)" % config)
 # ]]]
 set(SourceList ${SourceList} buffer.cpp)
 set(SourceList ${SourceList} error.cpp)

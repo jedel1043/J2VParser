@@ -222,11 +222,11 @@ INHERIT_DOCS           = YES
 
 SEPARATE_MEMBER_PAGES  = NO
 
-# The kTabSize tag can be used to set the number of spaces in a tab. Doxygen
+# The TAB_SIZE tag can be used to set the number of spaces in a tab. Doxygen
 # uses this value to replace tabs by spaces in code fragments.
 # Minimum value: 1, maximum value: 16, default value: 4.
 
-kTabSize               = 4
+TAB_SIZE               = 4
 
 # This tag can be used to specify a number of aliases that act as commands in
 # the documentation. An alias has the form:

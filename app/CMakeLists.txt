@@ -1,9 +1,12 @@
 set(AppSources "")
 # Get list of all sources in folder
 # [[[cog
-#    import cog, glob
+#    import cog, glob, os
 #    for config in glob.glob('**/*.cpp', recursive=True):
-#       cog.outl("set(AppSources ${AppSources} %s)" % config.replace("\\", "/"))
+#       if os.name == 'nt':
+#           cog.outl("set(AppSources ${AppSources} %s)" % config.replace("\\", "/"))
+#       else:
+#           cog.outl("set(AppSources ${AppSources} %s)" % config)
 # ]]]
 set(AppSources ${AppSources} LALR_parser.cpp)
 set(AppSources ${AppSources} LL1_parser.cpp)

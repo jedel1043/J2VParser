@@ -28,6 +28,8 @@ namespace J2VParser::parsers {
         bool Parse() { return Parse(false); }
 
         virtual void PrintParsingTable() = 0;
+
+        virtual ~Parser() = default;
     };
 } // namespace compiler::parsers
 #endif //J2VPARSER_PAR_H

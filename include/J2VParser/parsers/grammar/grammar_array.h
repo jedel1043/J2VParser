@@ -88,7 +88,7 @@ namespace J2VParser::grammar {
         /*!
          * @brief Constructs a grammar equivalent to the augmented grammar of this grammar.
          * @details Adds a new rule @p new_axiom -> #axiom_ to convert the grammar into an augmented grammar.
-         * @attention This does @b NOT modify the GrammarArray from where is called.
+         * @attention This does @b NOT modify the GrammarArray from where it is called.
          * @param new_axiom String to set #axiom_ to. If @p new_axiom is empty, the method will set #axiom_ to axiom_P.
          * @attention If axiom_P is in #terminals_, the method will set #axiom_ to any "axiom_P____..." that is not in #terminals_,
          * appending a '_' char at the end of @p new_axiom until it's not in #terminals. The same applies if @p new_axiom is not empty.

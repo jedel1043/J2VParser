@@ -14,9 +14,9 @@ namespace J2VParser::analyzers {
             LexicalAnalyzer(regex_f, skip_whitespace),
             str_input_(str_input) { str_pos_ = str_input_.begin(); }
 
-    Token LexicalAnalyzerS::yylex() {
+    Token LexicalAnalyzerS::jvly() {
         SkipWS();
-        if (isInEnd())
+        if (eos())
             return current_token_ = {"$", "$"};
 
         if (automaton_.at({automaton_.initial_state(), *str_pos_}) == -1)
@@ -28,7 +28,7 @@ namespace J2VParser::analyzers {
         int actual_state = automaton_.initial_state();
 
         while (actual_state != -1) {
-            if (isInEnd())
+            if (eos())
                 break;
             SkipWS();
 
@@ -45,7 +45,7 @@ namespace J2VParser::analyzers {
         return current_token_ = {token_name, lexeme};
     }
 
-    bool LexicalAnalyzerS::isInEnd() const {
+    bool LexicalAnalyzerS::eos() const {
         return str_pos_ == str_input_.end();
     }
 

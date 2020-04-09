@@ -11,8 +11,9 @@ namespace J2VParser::error {
 
     void SyntaxError(AbortCode syntax_error_code, std::tuple<std::string, int, int> vals) {
         std::string err_str = std::get<0>(vals);
-        unsigned long long int char_err_i = std::get<1>(vals);
-        int line_err_i = std::get<2>(vals);
+        int line_err_i = std::get<1>(vals);
+        int char_err_i = std::get<2>(vals);
+
         std::cerr << err_str << std::endl;
         std::cerr << std::string(char_err_i, ' ');
         std::cerr << "^~~~" << std::endl;

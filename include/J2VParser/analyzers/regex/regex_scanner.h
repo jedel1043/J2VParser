@@ -13,7 +13,7 @@
 namespace J2VParser::regex {
 
     enum class TokenCodeRegex {
-        EOS = 1,          // END OF STRING
+        EOS = 1,          // END OF STREAM
         ANY,              // .
         AT_BOL,           // ^
         AT_EOL,           // $

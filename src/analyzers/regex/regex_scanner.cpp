@@ -36,7 +36,7 @@ namespace J2VParser::regex {
 
     void RegexScanner::SkipWhiteSpace() {
         char c = source_buffer_.GetChar();
-        while (isspace(c) && c != io_buffer::EOF_char)
+        while (isspace(c) && !source_buffer_.eof())
             c = source_buffer_.FetchChar();
     }
 
@@ -44,10 +44,10 @@ namespace J2VParser::regex {
         char lexeme;
 
         if (current_token_ == TokenCodeRegex::EOS) {
-            if (in_quote_) SyntaxError(error::InvalidNewLine, getSourceBuffer().GetLineData());
+            if (in_quote_) SyntaxError(error::InvalidNewLine, getSourceBuffer().GetBufferStatus());
             SkipWhiteSpace();
-            if (source_buffer_.GetChar() == io_buffer::EOF_char) {
-                current_token_ = {TokenCodeRegex::END_OF_INPUT, io_buffer::EOF_char};
+            if (source_buffer_.eof()) {
+                current_token_ = {TokenCodeRegex::END_OF_INPUT, source_buffer_.GetChar()};
                 return current_token_;
             }
         }
@@ -60,7 +60,7 @@ namespace J2VParser::regex {
 
         if (source_buffer_.GetChar() == '"') {
             in_quote_ = !in_quote_;
-            if (source_buffer_.FetchChar() == io_buffer::EOF_char || source_buffer_.GetChar() == '\0') {
+            if (source_buffer_.FetchChar() == io_buffer::kEOFChar || source_buffer_.GetChar() == '\0') {
                 current_token_ = {TokenCodeRegex::EOS, '\0'};
                 return current_token_;
             }
@@ -68,8 +68,8 @@ namespace J2VParser::regex {
 
         escape_ = (source_buffer_.GetChar() == '\\');
         if (escape_) source_buffer_.FetchChar();
-        if (source_buffer_.GetChar() == io_buffer::EOF_char || source_buffer_.GetChar() == '\0')
-            SyntaxError(error::InvalidNewLine, getSourceBuffer().GetLineData());
+        if (source_buffer_.GetChar() == io_buffer::kEOFChar || source_buffer_.GetChar() == '\0')
+            SyntaxError(error::InvalidNewLine, getSourceBuffer().GetBufferStatus());
 
         if (!in_quote_) {
             if (isspace(source_buffer_.GetChar())) {

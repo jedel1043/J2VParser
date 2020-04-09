@@ -125,7 +125,7 @@ namespace J2VParser::parsers {
             std::cout << std::endl;
         }
 
-        auto current_token = tokenizer_.yylex();
+        auto current_token = tokenizer_.jvly();
         std::string saver = current_token.token_name;
         input += current_token.lexeme + " ";
         if (!terminals.count(saver))
@@ -155,7 +155,7 @@ namespace J2VParser::parsers {
                                 std::cout << "-";
                             std::cout << std::endl;
                         }
-                        current_token = tokenizer_.yylex();
+                        current_token = tokenizer_.jvly();
                         saver = current_token.token_name;
                         input += current_token.lexeme + " ";
                         if (!terminals.count(saver))

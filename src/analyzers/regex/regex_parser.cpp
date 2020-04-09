@@ -106,7 +106,7 @@ namespace J2VParser::regex {
                 if (regex_scanner.current_token() == TokenCodeRegex::CLOSE_PAREN)
                     regex_scanner.GetNextToken();
                 else
-                    SyntaxError(error::MissingCloseParenthesis, regex_scanner.getSourceBuffer().GetLineData());
+                    SyntaxError(error::MissingCloseParenthesis, regex_scanner.getSourceBuffer().GetBufferStatus());
             } else {
                 if (regex_scanner.current_token() != TokenCodeRegex::ANY &&
                     regex_scanner.current_token() != TokenCodeRegex::CCL_START) {
@@ -168,13 +168,13 @@ namespace J2VParser::regex {
                 case TokenCodeRegex::CLOSURE:
                 case TokenCodeRegex::PLUS_CLOSURE:
                 case TokenCodeRegex::OPTIONAL:
-                    SyntaxError(error::MissingExpression, regex_scanner.getSourceBuffer().GetLineData());
+                    SyntaxError(error::MissingExpression, regex_scanner.getSourceBuffer().GetBufferStatus());
                     return false;
                 case TokenCodeRegex::CCL_END:
-                    SyntaxError(error::MissingBracket, regex_scanner.getSourceBuffer().GetLineData());
+                    SyntaxError(error::MissingBracket, regex_scanner.getSourceBuffer().GetBufferStatus());
                     return false;
                 case TokenCodeRegex::AT_BOL:
-                    SyntaxError(error::MissingStartExpression, regex_scanner.getSourceBuffer().GetLineData());
+                    SyntaxError(error::MissingStartExpression, regex_scanner.getSourceBuffer().GetBufferStatus());
                     return false;
                 default:
                     return true;

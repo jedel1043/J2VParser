@@ -20,22 +20,22 @@ namespace J2VParser::grammar {
 
         void Rule(GrammarScanner &analyzer_, GrammarArray &new_grammar) {
             std::string left_s;
-            if (analyzer_.yylex() == "VAR") {
+            if (analyzer_.jvly() == "VAR") {
                 left_s = analyzer_.current_token().lexeme;
-                if (analyzer_.yylex() == "COLON") {
+                if (analyzer_.jvly() == "COLON") {
                     while (analyzer_.current_token() != "SEMICOLON")
                         RightSide(analyzer_, left_s, new_grammar);
-                } else SyntaxError(error::MissingColon, analyzer_.getInputFile().GetLineData());
+                } else SyntaxError(error::MissingColon, analyzer_.getInputFile().GetBufferStatus());
             } else if (analyzer_.current_token() == "$");
-            else SyntaxError(error::MissingRuleName, analyzer_.getInputFile().GetLineData());
+            else SyntaxError(error::MissingRuleName, analyzer_.getInputFile().GetBufferStatus());
         }
 
         void RightSide(GrammarScanner &analyzer_, const std::string &left_s, GrammarArray &new_grammar) {
             std::vector<std::string> right_s;
             analyzers::Token saver = analyzer_.current_token();
-            while (analyzer_.yylex() != "OR" && analyzer_.current_token() != "SEMICOLON") {
+            while (analyzer_.jvly() != "OR" && analyzer_.current_token() != "SEMICOLON") {
                 if (analyzer_.current_token() == "$" || analyzer_.current_token() == "COLON")
-                    SyntaxError(error::MissingSemicolon, analyzer_.getInputFile().GetLineData());
+                    SyntaxError(error::MissingSemicolon, analyzer_.getInputFile().GetBufferStatus());
                 right_s.push_back(Symbol(analyzer_));
                 saver = analyzer_.current_token();
             }
@@ -53,24 +53,24 @@ namespace J2VParser::grammar {
                 return actual_token.lexeme;
             else if (actual_token == "APOS") {
                 std::string saver;
-                while (analyzer_.yylex() != "APOS" && analyzer_.current_token() != "$")
+                while (analyzer_.jvly() != "APOS" && analyzer_.current_token() != "$")
                     saver += analyzer_.current_token().lexeme;
                 if (analyzer_.current_token() == "$")
-                    SyntaxError(error::MissingApostrophe, analyzer_.getInputFile().GetLineData());
+                    SyntaxError(error::MissingApostrophe, analyzer_.getInputFile().GetBufferStatus());
                 if (saver.empty())
-                    SyntaxError(error::MissingSymbol, analyzer_.getInputFile().GetLineData());
+                    SyntaxError(error::MissingSymbol, analyzer_.getInputFile().GetBufferStatus());
                 return saver;
             } else if (actual_token == "QM") {
                 std::string saver;
-                while (analyzer_.yylex() != "QM" && analyzer_.current_token() != "$")
+                while (analyzer_.jvly() != "QM" && analyzer_.current_token() != "$")
                     saver += analyzer_.current_token().lexeme;
                 if (analyzer_.current_token() == "$")
-                    SyntaxError(error::MissingQuotationMark, analyzer_.getInputFile().GetLineData());
+                    SyntaxError(error::MissingQuotationMark, analyzer_.getInputFile().GetBufferStatus());
                 if (saver.empty())
-                    SyntaxError(error::MissingSymbol, analyzer_.getInputFile().GetLineData());
+                    SyntaxError(error::MissingSymbol, analyzer_.getInputFile().GetBufferStatus());
                 return saver;
             }
-            SyntaxError(error::UnknownSymbol, analyzer_.getInputFile().GetLineData());
+            SyntaxError(error::UnknownSymbol, analyzer_.getInputFile().GetBufferStatus());
             return "ERROR";
         }
     } // anonymous namespace

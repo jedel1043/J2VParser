@@ -1,17 +1,14 @@
 /*!
 * @file         buffer.h
 * @brief        Classes for the file control and listing utils.
-* @details      The abstract classes InputBaseBuffer and OutputBaseBuffer are the base classes for
-*               reading and writing extern streams. TextSourceBuffer is a simple class, that inherits
-*               of InputBaseBuffer, which reads ofstream buffers. ListPrinterBuffer prints a line with
-*               its number line and groups lines in pages.
-* @author       José Luis Castro García
-* @date         2019/09/16 22:40:00
+* @details      The Template class BasicTextSourceBuffer is the base class for
+*               reading file streams.
 */
 
 #ifndef J2VPARSER_BUFFER_H
 #define J2VPARSER_BUFFER_H
 
+#include <string>
 #include <fstream>
 #include <array>
 #include <tuple>
@@ -20,81 +17,117 @@
 #include "J2VParser/error.h"
 
 namespace J2VParser::io_buffer {
-    extern char EOF_char;  /*!< End-Of-File character. */
-
-    const int kMaxBufferSize = 256; //!< Max number of characters in a line in the file input.
-//    const int kMaxPrintLineLength = 80;  //!< Max number of characters in a line in the file output.
-//    const int kMaxLinesPerPage = 50;  //!< Number of lines per page in the file output.
-
 /*!
-* @brief   Abstract class for the input buffer.
-* @details Reads a file line by line (for this purpose must define the method GetLine()) and gets
-*          character by character until it reaches the end of the file. It has the option of putting
-*          back a character on the buffer.
-*/
-    class TextSourceBuffer {
-    protected:
-        using line_array = std::array<char, kMaxBufferSize>;
-        using line_data = std::tuple<std::string, int, int>;
+ * @brief   Template class for the input buffer.
+ * @details The class template BasicTextSourceBuffer reads an input file
+ * char by char, according to the datatype specified. The class also
+ * stores the current read position on the file, allowing to obtain
+ * debug information when throwing parsing errors, for example.
+ * Two typedefs for common character types are provided
+ * - TextSourceBuffer (BasicTextSourceBuffer<char>)
+ * - WTextSourceBuffer (BasicTextSourceBuffer<wchar_t>)
+ */
+    template<class CharT>
+    class BasicTextSourceBuffer {
+    private:
+        using line = std::basic_string<CharT>;
+        using buffer_info = std::tuple<line, int, int>;
+        using line_iterator = typename line::const_iterator;
 
-        std::string file_name_;         //!< File name of the input stream.
-        std::fstream file_;             //!< Input stream.
-        line_array current_line_{};
-        line_array::const_iterator current_char_{}; //!< Current character read from the input stream.
-        int current_line_i_ = 1;    //!< Vertical position of TextSourceBuffer at the file input (line number).
-        int current_char_i_ = 1;         //!< Horizontal position of TextSourceBuffer at the file input (column number).
+
+        std::basic_ifstream<CharT> buffer_;    //!< Input stream.
+        line current_line_;    //!< Current line read from the input stream.
+        line_iterator current_char_;    //!< Current character read from the input stream.
+        int current_line_i_;    //!< Vertical position of TextSourceBuffer at the file input (line number).
+        int current_char_i_;    //!< Horizontal position of TextSourceBuffer at the file input (column number).
 
     public:
         /*!
         * @brief    Constructor for TextSourceBuffer
         * @param    fname File name of the input stream.
-        * @param    ac AbortCode in case there is an error opening the file.
         */
-        explicit TextSourceBuffer(const std::string &fname);
-
-        /*!
-        * @brief   Destructor for TextSourceBuffer. Close the input stream.
-        */
-        virtual ~TextSourceBuffer() { file_.close(); }
-
-        /*!
-        * @brief   Returns the current character from the text buffer.
-        * @return  The current caracter.
-        */
-        char GetChar() const { return current_char_ != nullptr ? *current_char_ : EOF_char; }
-
-            /*!
-            * @brief   Gets a new character from the text buffer.
-            * @details  If the next character of text buffer is the null character, it reads a new line and
-            *          updates the value of the text buffer.
-            * @see     GetLine()
-            * @return  The current caracter on the text buffer.
-            */
-            char FetchChar();
-
-        /*!
-        * @brief   Gets a new character from the text buffer.
-        * @details  If the next character of text buffer is the null character, it reads a new line and
-        *          updates the value of the text buffer.
-        * @warning If we call PutBackChar() after FetchChar() we will get a trash buffer.
-        * @see     GetLine()
-        * @return  The previous character on text buffer.
-        */
-        char PutBackChar();
-
-        line_data GetLineData() {
-            std::string out(std::begin(current_line_),
-                            std::find(current_line_.begin(), current_line_.end(), 0));
-            return {out, current_char_i_, current_line_i_};
+        explicit BasicTextSourceBuffer(const std::string &fname) :
+                current_line_i_(0), current_char_i_(0) {
+            buffer_.open(fname, std::fstream::in);
+            if (!buffer_) AbortTranslation(error::SourceFileOpenFailed);
+            FetchLine();
         }
 
+        /*!
+        * @brief   Return the current character from the text buffer.
+        * @return  The current caracter on the text buffer.
+        */
+        CharT GetChar() const {
+            return current_char_ != nullptr ? *current_char_ : std::char_traits<CharT>::eof();
+        };
+
+        /*!
+         * @brief   Get a new character from the text buffer.
+         * @details  If the next character of text buffer is the null character, fetch a new line and
+         * update the value of the text buffer.
+         * @see FetchLine()
+         * @see PutBackChar()
+         * @return  The next caracter on the text buffer.
+        */
+        CharT FetchChar() {
+            CharT eof = std::char_traits<CharT>::eof();
+            if (current_char_ == nullptr)
+                return eof;
+            if (++current_char_ == current_line_.end()) {
+                if (buffer_.eof()) {
+                    current_line_.erase();
+                    current_char_ = nullptr;
+                    return eof;
+                }
+                FetchLine();
+            } else
+                ++current_char_i_;
+            return *current_char_;
+        };
+
+        /*!
+         * @brief   Undo fetching a char.
+         * @warning Calling PutBackChar() after FetchLine() will cause undefined behavior.
+         * @warning Calling PutBackChar() after initialization will cause undefined behavior.
+         * @return  The previous character on the text buffer.
+         */
+        CharT PutBackChar() {
+            --current_char_;
+            --current_char_i_;
+            return *current_char_;
+        };
+
+        /*!
+         * @brief   Get info of the current buffer status.
+         * @return  A tuple containing current_line_, current_line_i
+         * and current_char_i.
+         */
+        buffer_info GetBufferStatus() const {
+            return {current_line_, current_line_i_, current_char_i_};
+        };
+
+        [[nodiscard]] bool eof() const { return current_char_ == nullptr; }
+
     private:
-
-        void FetchLine();
-
-        bool IsEOL();
+        /*!
+         * @brief Get a new line from the text buffer.
+         * @details current_char_ will always be set to the beginning of the fetched line
+         * excluding when fetching the last line and subsequent calls, where FetchLine() will set
+         * current_char_ = nullptr .
+         */
+        void FetchLine() {
+            if (buffer_.eof())
+                return;
+            std::getline(buffer_, current_line_);
+            ++current_line_;
+            current_char_i_ = 1;
+            current_char_ = current_line_.begin();
+        }
 
     };
+
+    using TextSourceBuffer = BasicTextSourceBuffer<char>;
+    using WTextSourceBuffer = BasicTextSourceBuffer<wchar_t>;
 
 //
 //        class OutputStreamBuffer {

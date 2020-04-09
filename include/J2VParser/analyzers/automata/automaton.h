@@ -33,6 +33,8 @@ namespace J2VParser::automata {
 
         friend std::ostream &operator<<(std::ostream &o, const Automaton &rhs);
 
+        virtual ~Automaton() = default;
+
     protected:
         StateSet states_;
         State initial_state_;

@@ -19,13 +19,13 @@ namespace J2VParser::analyzers {
                          io_buffer::TextSourceBuffer &regex_f,
                          bool skip_whitespace = true);
 
-        Token yylex() override;
+        Token jvly() override;
 
-        [[nodiscard]] bool isInEnd() const override;
+        [[nodiscard]] bool eos() const override;
 
         char SkipWS() override;
 
-        static bool isEOS(char c);
+        static bool isspace(char c);
 
         [[nodiscard]] io_buffer::TextSourceBuffer &getInputFile() const;
     };

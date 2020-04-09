@@ -35,13 +35,15 @@ namespace J2VParser::analyzers {
                 automaton_(regex::ParseRegex(regex_f)),
                 skip_whitespace_(skip_whitespace) {};
 
-        virtual Token yylex() = 0;
+        virtual Token jvly() = 0;
 
-        [[nodiscard]] virtual bool isInEnd() const = 0;
+        [[nodiscard]] virtual bool eos() const = 0;
 
         virtual char SkipWS() = 0;
 
         Token current_token() { return current_token_; };
+
+        virtual ~LexicalAnalyzer() = default;
     };
 } //namespace compiler::analyzers
 

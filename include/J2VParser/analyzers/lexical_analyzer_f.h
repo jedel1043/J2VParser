@@ -25,8 +25,6 @@ namespace J2VParser::analyzers {
 
         char SkipWS() override;
 
-        static bool isspace(char c);
-
         [[nodiscard]] io_buffer::TextSourceBuffer &getInputFile() const;
     };
 } //namespace compiler::analyzers

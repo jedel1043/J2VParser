@@ -13,6 +13,8 @@ namespace J2VParser::automata {
     NFA::NFA(Symbol c) : NFA({0, 1}, 0, {{{0, c}, {1}}}, {1}) {}
 
     NFA::NFA(Symbol c_begin, Symbol c_end) : NFA({0, 1}, 0, {}, {1}) {
+        if (c_begin > c_end)
+            std::swap(c_begin, c_end);
         for (Symbol c = c_begin; c <= c_end; c++)
             transitions_[{0, c}] = {1};
     }

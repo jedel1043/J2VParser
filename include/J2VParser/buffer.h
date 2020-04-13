@@ -34,7 +34,7 @@ namespace J2VParser::io_buffer {
         using buffer_info = std::tuple<line, int, int>;
         using line_iterator = typename line::const_iterator;
 
-
+        static const CharT eofChar = std::char_traits<CharT>::eof();
         std::basic_ifstream<CharT> buffer_;    //!< Input stream.
         line current_line_;    //!< Current line read from the input stream.
         line_iterator current_char_;    //!< Current character read from the input stream.
@@ -50,7 +50,8 @@ namespace J2VParser::io_buffer {
                 current_line_i_(0), current_char_i_(0) {
             buffer_.open(fname, std::fstream::in);
             if (!buffer_) AbortTranslation(error::SourceFileOpenFailed);
-            FetchLine();
+            current_line_ = "\n";
+            current_char_ = current_line_.begin();
         }
 
         /*!
@@ -58,7 +59,7 @@ namespace J2VParser::io_buffer {
         * @return  The current caracter on the text buffer.
         */
         CharT GetChar() const {
-            return current_char_ != nullptr ? *current_char_ : std::char_traits<CharT>::eof();
+            return !eof() ? *current_char_ : eofChar;
         };
 
         /*!
@@ -70,14 +71,12 @@ namespace J2VParser::io_buffer {
          * @return  The next caracter on the text buffer.
         */
         CharT FetchChar() {
-            CharT eof = std::char_traits<CharT>::eof();
-            if (current_char_ == nullptr)
-                return eof;
+            if (eof())
+                return eofChar;
             if (++current_char_ == current_line_.end()) {
                 if (buffer_.eof()) {
-                    current_line_.erase();
-                    current_char_ = nullptr;
-                    return eof;
+                    ++current_char_i_;
+                    return eofChar;
                 }
                 FetchLine();
             } else
@@ -106,7 +105,9 @@ namespace J2VParser::io_buffer {
             return {current_line_, current_line_i_, current_char_i_};
         };
 
-        [[nodiscard]] bool eof() const { return current_char_ == nullptr; }
+        [[nodiscard]] bool eof() const {
+            return current_char_ == current_line_.end() && buffer_.eof();
+        }
 
     private:
         /*!
@@ -119,7 +120,9 @@ namespace J2VParser::io_buffer {
             if (buffer_.eof())
                 return;
             std::getline(buffer_, current_line_);
-            ++current_line_;
+            if (!buffer_.eof())
+                current_line_ += '\n';
+            ++current_line_i_;
             current_char_i_ = 1;
             current_char_ = current_line_.begin();
         }

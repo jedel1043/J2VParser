@@ -39,10 +39,11 @@ namespace J2VParser::error {
         UnknownSymbol = -15,
         MissingSymbol = -16,
         MissingRuleName = -17,
-        MissingQuotationMark = -18
+        MissingQuotationMark = -18,
+        InvalidVarName = -19
     };
 
-    static const std::array<std::string_view, 19> abort_msg = {
+    static const std::array<std::string_view, 20> abort_msg = {
             "",
             "Invalid command line arguments",
             "Failed to open source file",
@@ -61,7 +62,8 @@ namespace J2VParser::error {
             "Found unknown expression when parsing symbol",
             "Missing symbol between apostrophes",
             "Missing rule name",
-            "Missing quotation mark in terminal Symbol"
+            "Missing quotation mark in terminal Symbol",
+            "Invalid variable name"
     }; /*!< Stores the extended description for every code in AbortCode*/
 
 /*!

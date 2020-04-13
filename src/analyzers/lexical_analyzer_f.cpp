@@ -13,33 +13,29 @@ namespace J2VParser::analyzers {
             LexicalAnalyzer(regex_f, skip_whitespace), input_file_(input_f) {}
 
     Token LexicalAnalyzerF::jvly() {
-        char c = SkipWS();
         if (eos())
             return current_token_ = {"$", "$"};
 
+        char c = SkipWS();
+
         if (automaton_.at({automaton_.initial_state(), c}) == -1) {
             input_file_.FetchChar();
-            return current_token_ = {"ANY", std::string(1, c)};
+            return current_token_ = {"ANY", {c}};
         }
 
-        int actual_state = automaton_.initial_state();
+        automata::Automaton::State actual_state = automaton_.initial_state();
         std::string token_name;
         std::string lexeme;
-        while (actual_state != -1) {
-            if (eos() || isspace(c))
+        while (true) {
+            actual_state = automaton_.at({actual_state, c});
+            if (actual_state == -1)
                 break;
             lexeme += c;
-            actual_state = automaton_.at({actual_state, c});
             if (automaton_.accepting_states().count(actual_state))
                 token_name = automaton_.tokens().at(actual_state);
             c = input_file_.FetchChar();
         }
-        if (isspace(c) && actual_state != -1)
-            SkipWS();
-        else if (!eos()) {
-            input_file_.PutBackChar();
-            lexeme.pop_back();
-        }
+        SkipWS();
         return current_token_ = {token_name, lexeme};
     }
 
@@ -49,14 +45,10 @@ namespace J2VParser::analyzers {
 
     char LexicalAnalyzerF::SkipWS() {
         if (skip_whitespace_) {
-            while (isspace(input_file_.GetChar()))
+            while (std::isspace(input_file_.GetChar()))
                 input_file_.FetchChar();
         }
         return input_file_.GetChar();
-    }
-
-    bool LexicalAnalyzerF::isspace(char c) {
-        return std::isspace(c) || c == '\0';
     }
 
     io_buffer::TextSourceBuffer &LexicalAnalyzerF::getInputFile() const {

@@ -1,4 +1,4 @@
-.              SYM
-";"            SC
-":"            C
-"|"            OR
+SYM     .
+SC      ;
+C       :
+OR     \|

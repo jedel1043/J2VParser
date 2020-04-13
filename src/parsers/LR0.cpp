@@ -46,7 +46,7 @@ namespace J2VParser::parsers {
 
     LR0::LR0(io_buffer::TextSourceBuffer &grammar_f, analyzers::LexicalAnalyzer &lexical_analyzer,
              bool augment_grammar) :
-            BotUpParser(grammar_f, lexical_analyzer, augment_grammar) {}
+            LR0(grammar::ParseGrammar(grammar_f), lexical_analyzer, augment_grammar) {}
 
     LR0::LR0(const grammar::GrammarArray &grammar_array, analyzers::LexicalAnalyzer &lexicalAnalyzer,
              bool augment_grammar) :

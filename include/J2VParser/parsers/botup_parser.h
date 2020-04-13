@@ -117,8 +117,7 @@ namespace J2VParser::parsers {
                             for (const auto &str : stack)
                                 stack_state += str + " ";
                             printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
-                            for (int i = 0; i < 187; i++)
-                                std::cout << "-";
+                            std::cout << std::string(187, '-');
                             std::cout << std::endl;
                         }
                         accept = true;
@@ -132,8 +131,7 @@ namespace J2VParser::parsers {
                             for (const auto &str : stack)
                                 stack_state += str + " ";
                             printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
-                            for (int i = 0; i < 187; i++)
-                                std::cout << "-";
+                            std::cout << std::string(187, '-');
                             std::cout << std::endl;
                         }
                         stack.push_back(saver);
@@ -160,8 +158,7 @@ namespace J2VParser::parsers {
                             for (const auto &str : stack)
                                 stack_state += str + " ";
                             printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(), action_str.c_str());
-                            for (int i = 0; i < 187; i++)
-                                std::cout << "-";
+                            std::cout << std::string(187, '-');
                             std::cout << std::endl;
                         }
 
@@ -180,8 +177,7 @@ namespace J2VParser::parsers {
                                     stack_state += str + " ";
                                 printf(" %-70s | \t%-70s | %s\n", stack_state.c_str(), input.c_str(),
                                        action_str.c_str());
-                                for (int i = 0; i < 187; i++)
-                                    std::cout << "-";
+                                std::cout << std::string(187, '-');
                                 std::cout << std::endl;
                             }
                             stack.push_back(std::to_string(action.second));

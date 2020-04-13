@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <set>
+#include <unordered_set>
+#include <unordered_map>
 
 namespace J2VParser::parsers {
 
@@ -43,5 +45,6 @@ namespace J2VParser::parsers {
     };
 
     std::ostream &operator<<(std::ostream &ostream, const LR1Item &obj);
+
 } // namespace J2VParser::parsers
 #endif //J2VPARSER_ITEMS_H

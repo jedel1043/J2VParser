@@ -35,14 +35,16 @@ int main(int argc, char **argv) {
                 }
                 io_buffer::TextSourceBuffer input_grammar(argv[1]);
                 io_buffer::TextSourceBuffer input_regex(argv[2]);
+                std::string input{argv[3]};
                 if (ifstream(argv[3]).good()) {
-                    io_buffer::TextSourceBuffer input_file(argv[3]);
+                    io_buffer::TextSourceBuffer input_file(input);
                     analyzers::LexicalAnalyzerF tokenizer(input_file, input_regex);
                     parsers::LR0 yacc(input_grammar, tokenizer, augment_grammar);
                     bool accepted = yacc.Parse(verbose);
                     cout << endl << "Accepted string? " << (accepted ? "true" : "false") << endl << endl;
                 } else {
-                    analyzers::LexicalAnalyzerS tokenizer(argv[3], input_regex);
+
+                    analyzers::LexicalAnalyzerS tokenizer(input, input_regex);
                     parsers::LR0 yacc(input_grammar, tokenizer, augment_grammar);
                     bool accepted = yacc.Parse(verbose);
                     cout << endl << "Accepted string? " << (accepted ? "true" : "false") << endl << endl;

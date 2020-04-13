@@ -48,7 +48,6 @@ set(SourceList "")
 #       else:
 #           cog.outl("set(SourceList ${SourceList} %s)" % config)
 # ]]]
-set(SourceList ${SourceList} buffer.cpp)
 set(SourceList ${SourceList} error.cpp)
 set(SourceList ${SourceList} analyzers/lexical_analyzer_f.cpp)
 set(SourceList ${SourceList} analyzers/lexical_analyzer_s.cpp)

@@ -15,33 +15,29 @@ namespace J2VParser::analyzers {
             str_input_(str_input) { str_pos_ = str_input_.begin(); }
 
     Token LexicalAnalyzerS::jvly() {
-        SkipWS();
         if (eos())
             return current_token_ = {"$", "$"};
 
-        if (automaton_.at({automaton_.initial_state(), *str_pos_}) == -1)
-            return current_token_ = {"ANY", std::string(1, *str_pos_++)};
+        char c = SkipWS();
 
+        if (automaton_.at({automaton_.initial_state(), c}) == -1) {
+            ++str_pos_;
+            return current_token_ = {"ANY", {c}};
+        }
+
+        automata::Automaton::State actual_state = automaton_.initial_state();
         std::string token_name;
         std::string lexeme;
-
-        int actual_state = automaton_.initial_state();
-
-        while (actual_state != -1) {
-            if (eos())
+        while (true) {
+            actual_state = automaton_.at({actual_state, c});
+            if (actual_state == -1)
                 break;
-            SkipWS();
-
-            lexeme += *str_pos_;
-            actual_state = automaton_.at({actual_state, *str_pos_});
+            lexeme += c;
             if (automaton_.accepting_states().count(actual_state))
                 token_name = automaton_.tokens().at(actual_state);
-            str_pos_++;
+            c = *++str_pos_;
         }
-        if (actual_state == -1) {
-            str_pos_--;
-            lexeme.pop_back();
-        }
+        SkipWS();
         return current_token_ = {token_name, lexeme};
     }
 

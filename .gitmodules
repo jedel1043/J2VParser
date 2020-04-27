@@ -6,5 +6,3 @@
 	path = extern/that_style
 	url = https://github.com/jl-wynen/that_style.git
 	ignore = dirty
-[submodule "bar1"]
-	branch = master
